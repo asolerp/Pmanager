@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
-import useUser from '../hooks/useUser'
 import { withFirebaseHOC } from '../config/Firebase'
 import { useStateValue } from '../config/User/UserContextManagement'
 
 function Home(props) {
   const [{ user }, dispatch] = useStateValue()
+
+  useEffect(() => {
+    props.navigation.setParams({ titulo: 'Alberto Soler', header: null })
+  }, [])
 
   const handleSignout = async () => {
     try {
@@ -47,11 +50,12 @@ const styles = StyleSheet.create({
 
 const HomeWithHOC = withFirebaseHOC(Home)
 
-HomeWithHOC.navigationOptions = {
-  title: 'Home',
+HomeWithHOC.navigationOptions = props => ({
+  headerMode: 'none',
+  title: props.navigation.getParam('titulo'),
   headerTitleStyle: {
     color: 'black',
   },
-}
+})
 
 export default HomeWithHOC
