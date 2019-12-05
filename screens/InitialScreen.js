@@ -14,7 +14,6 @@ function Initial(props) {
           console.log(user)
           if (user) {
             const userProfile = await props.firebase.getUserProfile(user.uid)
-            console.log(userProfile.data())
             dispatch({
               type: 'updateProfile',
               userProfile: userProfile.data(),

@@ -8,7 +8,7 @@ function Home(props) {
   const [{ user }, dispatch] = useStateValue()
 
   useEffect(() => {
-    props.navigation.setParams({ titulo: 'Alberto Soler', header: null })
+    props.navigation.setParams({ titulo: 'Alberto Soler', tabBar: false })
   }, [])
 
   const handleSignout = async () => {
@@ -50,12 +50,25 @@ const styles = StyleSheet.create({
 
 const HomeWithHOC = withFirebaseHOC(Home)
 
-HomeWithHOC.navigationOptions = props => ({
-  headerMode: 'none',
-  title: props.navigation.getParam('titulo'),
-  headerTitleStyle: {
-    color: 'black',
-  },
-})
+HomeWithHOC.navigationOptions = ({ navigation }) => {
+  console.log('[[PROPS]]', navigation)
+  const tabBarVisible = false
+
+  return {
+    tabBarVisible: navigation.getParam('tabBar'),
+  }
+  // if (props.navigation.getParam('showHeader')) {
+  //   return {
+  //     // title: props.navigation.getParam('titulo'),
+  //     // headerStyle: {
+  //     //   backgroundColor: '#f4511e',
+  //     // },
+  //   }
+  // }
+  // return {
+  //   header: null,
+  //   tabBarVisible: false,
+  // }
+}
 
 export default HomeWithHOC

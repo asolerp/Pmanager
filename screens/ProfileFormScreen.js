@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { ScrollView, StyleSheet, View, Alert } from 'react-native'
+import { ScrollView, KeyboardAvoidingView, StyleSheet, View, Alert } from 'react-native'
 import { Formik } from 'formik'
 import Constants from 'expo-constants'
 import * as ImagePicker from 'expo-image-picker'
 import * as Yup from 'yup'
 import * as Permissions from 'expo-permissions'
+import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
 import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
 import FormInput from '../components/form/FormInput'
 import FormButton from '../components/form/FormButton'
@@ -56,6 +57,11 @@ function ProfileForm(props) {
   const [imgProfile, setImgProfile] = useState(user.imgProfile)
 
   useEffect(() => {
+    console.log(user)
+    props.navigation.setParams({ title: user.name, showHeader: !user.firstLogin })
+  }, [])
+
+  useEffect(() => {
     getPermissionAsync()
   }, [])
 
@@ -83,7 +89,7 @@ function ProfileForm(props) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topWrapper}>
+      <HideWithKeyboard style={styles.topWrapper}>
         {user && (
           <BlurBackgroundWithAvatar
             backgroundUrl={imgProfile}
@@ -93,10 +99,10 @@ function ProfileForm(props) {
             size="xlarge"
           />
         )}
-      </View>
+      </HideWithKeyboard>
       <View style={styles.formWrapper}>
         <ScrollView style={{ marginTop: 10 }}>
-          <View style={styles.inputsWrapper}>
+          <KeyboardAvoidingView style={styles.inputsWrapper} behavior="position" enabled>
             <Formik
               initialValues={{ ...user }}
               onSubmit={(values, actions) => {
@@ -226,11 +232,29 @@ function ProfileForm(props) {
                 </>
               )}
             </Formik>
-          </View>
+          </KeyboardAvoidingView>
         </ScrollView>
       </View>
     </View>
   )
 }
 
-export default withFirebaseHOC(ProfileForm)
+const ProfileFormWithHOC = withFirebaseHOC(ProfileForm)
+
+ProfileFormWithHOC.navigationOptions = props => {
+  if (props.navigation.getParam('showHeader')) {
+    return {
+      title: props.navigation.getParam('title'),
+      headerTitleStyle: {
+        color: 'black',
+        fontSize: 20,
+      },
+    }
+  }
+  return {
+    header: null,
+    tabBarVisible: null,
+  }
+}
+
+export default ProfileFormWithHOC

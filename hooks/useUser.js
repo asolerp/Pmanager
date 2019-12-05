@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import firebase from 'firebase'
 
 function useUser(id) {
   // initialize our default state
-  const [error, setError] = React.useState(false)
-  const [loading, setLoading] = React.useState(true)
-  const [user, setUser] = React.useState(null)
+  const [error, setError] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(null)
   // when the id attribute changes (including mount)
   // subscribe to the recipe document and update
   // our state when it changes.

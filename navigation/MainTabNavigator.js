@@ -36,19 +36,36 @@ const ProfileStack = createStackNavigator(
   config
 )
 
-ProfileStack.navigationOptions = {
-  tabBarLabel: 'Profile',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
-  ),
+ProfileStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true
+  if (navigation.state.index > 0) {
+    tabBarVisible = false
+  }
+
+  return {
+    tabBarVisible,
+    tabBarLabel: 'Profile',
+    tabBarIcon: ({ focused }) => (
+      <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+    ),
+  }
 }
 
 ProfileStack.path = ''
 
-const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  ProfileStack,
-})
+const tabNavigator = createBottomTabNavigator(
+  {
+    HomeStack,
+    ProfileStack,
+  }
+  // {
+  //   defaultNavigationOptions: ({ navigation }) => {
+  //     return {
+  //       tabBarVisible: false,
+  //     }
+  //   },
+  // }
+)
 
 tabNavigator.path = ''
 

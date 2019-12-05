@@ -13,25 +13,6 @@ import ErrorMessage from '../components/form/ErrorMessage'
 import AppLogo from '../components/AppLogo'
 import { withFirebaseHOC } from '../config/Firebase'
 
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    backgroundColor: '#fff',
-    marginTop: 50,
-  },
-  inputsWrapper: {
-    width: '100%',
-    flexDirection: 'column',
-  },
-  logoContainer: {
-    marginBottom: 15,
-    alignItems: 'center',
-  },
-  buttonContainer: {
-    margin: 25,
-  },
-})
-
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .label('Email')
@@ -55,11 +36,9 @@ function Login(props) {
   }
 
   const handleOnLogin = async (values, actions) => {
-    // props.navigation.navigate('Main')
     const { email, password } = values
     try {
       const response = await props.firebase.loginWithEmail(email, password)
-      console.log(response)
       if (response.user) {
         props.navigation.navigate('Main')
       }
@@ -145,6 +124,25 @@ function Login(props) {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    backgroundColor: '#fff',
+    marginTop: 50,
+  },
+  inputsWrapper: {
+    width: '100%',
+    flexDirection: 'column',
+  },
+  logoContainer: {
+    marginBottom: 15,
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    margin: 25,
+  },
+})
 
 const LoginWithHOC = withFirebaseHOC(Login)
 

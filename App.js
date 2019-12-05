@@ -60,8 +60,6 @@ function App(props) {
     loadResourcesAsync()
   }, [])
 
-  console.log(isAssetsLoadingComplete)
-
   if (!isAssetsLoadingComplete) {
     return (
       <AppLoading
