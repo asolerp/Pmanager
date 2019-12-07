@@ -74,6 +74,7 @@ function Login(props) {
           <>
             <FormInput
               name="email"
+              label="Nombre de usuario"
               value={values.email}
               onChangeText={handleChange('email')}
               placeholder="Usuario"
@@ -85,6 +86,7 @@ function Login(props) {
             <ErrorMessage errorValue={touched.email && errors.email} />
             <FormInput
               name="password"
+              label="Contraseña"
               value={values.password}
               onChangeText={handleChange('password')}
               placeholder="Password"
@@ -130,6 +132,8 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#fff',
     marginTop: 50,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   inputsWrapper: {
     width: '100%',

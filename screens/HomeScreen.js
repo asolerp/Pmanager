@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { withFirebaseHOC } from '../config/Firebase'
 import { useStateValue } from '../config/User/UserContextManagement'
+import NumberSelector from '../components/form/NumberSelector'
 
 function Home(props) {
   const [{ user }, dispatch] = useStateValue()
@@ -23,6 +24,7 @@ function Home(props) {
     <View style={styles.container}>
       <Text style={styles.text}>Home</Text>
       <Text style={styles.text}>{user.name}</Text>
+      <NumberSelector />
       <Button
         title="Signout"
         onPress={handleSignout}
@@ -51,24 +53,18 @@ const styles = StyleSheet.create({
 const HomeWithHOC = withFirebaseHOC(Home)
 
 HomeWithHOC.navigationOptions = ({ navigation }) => {
-  console.log('[[PROPS]]', navigation)
-  const tabBarVisible = false
-
-  return {
-    tabBarVisible: navigation.getParam('tabBar'),
+  if (navigation.getParam('showHeader')) {
+    return {
+      title: navigation.getParam('titulo'),
+      headerStyle: {
+        backgroundColor: '#f4511e',
+      },
+    }
   }
-  // if (props.navigation.getParam('showHeader')) {
-  //   return {
-  //     // title: props.navigation.getParam('titulo'),
-  //     // headerStyle: {
-  //     //   backgroundColor: '#f4511e',
-  //     // },
-  //   }
-  // }
-  // return {
-  //   header: null,
-  //   tabBarVisible: false,
-  // }
+  return {
+    header: null,
+    tabBarVisible: false,
+  }
 }
 
 export default HomeWithHOC

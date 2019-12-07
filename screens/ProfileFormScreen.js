@@ -14,6 +14,7 @@ import ErrorMessage from '../components/form/ErrorMessage'
 import { useStateValue } from '../config/User/UserContextManagement'
 import { POSITIONS, MAIN_FOOT } from '../utils/constants/Player'
 import { withFirebaseHOC } from '../config/Firebase'
+import NumberSelector from '../components/form/NumberSelector'
 
 const styles = StyleSheet.create({
   container: {
@@ -58,7 +59,10 @@ function ProfileForm(props) {
 
   useEffect(() => {
     console.log(user)
-    props.navigation.setParams({ title: user.name, showHeader: !user.firstLogin })
+    props.navigation.setParams({
+      title: user.name,
+      showHeader: !user.firstLogin,
+    })
   }, [])
 
   useEffect(() => {
@@ -74,6 +78,23 @@ function ProfileForm(props) {
     })
     if (!result.cancelled) {
       setImgProfile(result.uri)
+    }
+  }
+
+  const addValue = type => {
+    console.log(user[type])
+    user[type] = String(Number(user[type]) + 1)
+  }
+
+  const onEmailChange = (e, setFieldValue) => {
+    console.log(e)
+    // const domain = e.target.value
+    // setFieldValue('age', domain)
+  }
+
+  const removeValue = type => {
+    if (Number(type) > 0) {
+      String(Number(type) - 1)
     }
   }
 
@@ -164,11 +185,15 @@ function ProfileForm(props) {
                     autoCapitalize="none"
                     onBlur={handleBlur('name')}
                   />
-                  <FormInput
+                  <NumberSelector
+                    label="Edad"
                     name="age"
                     value={values.age}
+                    addValue={ev => onEmailChange(ev, setFieldValue)}
+                    removeValue={() => removeValue()}
                     onChangeText={handleChange('age')}
-                    label="Edad"
+                  />
+                  {/* <FormInput
                     placeholder="Edad"
                     autoCapitalize="none"
                     onBlur={handleBlur('age')}
@@ -188,7 +213,7 @@ function ProfileForm(props) {
                     label="Peso"
                     placeholder="Peso (kg)"
                     onBlur={handleBlur('weight')}
-                  />
+                  /> */}
                   <View style={styles.numericInputs}>
                     <FormSelect
                       value={values.position}
