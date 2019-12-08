@@ -81,25 +81,17 @@ function ProfileForm(props) {
     }
   }
 
-  const addValue = type => {
-    console.log(user[type])
-    user[type] = String(Number(user[type]) + 1)
+  const addValue = (value, setFieldValue, input) => {
+    setFieldValue(input, String(Number(value) + 1))
   }
 
-  const onEmailChange = (e, setFieldValue) => {
-    console.log(e)
-    // const domain = e.target.value
-    // setFieldValue('age', domain)
-  }
-
-  const removeValue = type => {
-    if (Number(type) > 0) {
-      String(Number(type) - 1)
-    }
+  const removeValue = (value, setFieldValue, input) => {
+    setFieldValue(input, String(Number(value) - 1))
   }
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().label('Nombre'),
+    dorsal: Yup.string().label('Dorsal'),
     description: Yup.string().label('Descripción'),
     age: Yup.string().label('Edad'),
     height: Yup.string().label('Edad'),
@@ -127,7 +119,7 @@ function ProfileForm(props) {
             <Formik
               initialValues={{ ...user }}
               onSubmit={(values, actions) => {
-                const { age, name, height, weight, position, foot } = values
+                const { age, name, dorsal = 0, height, weight, position, foot } = values
                 const { uid } = props.firebase.currentUser()
                 props.firebase
                   .uriToBlob(imgProfile)
@@ -137,6 +129,7 @@ function ProfileForm(props) {
                     const userData = {
                       uid,
                       name,
+                      dorsal,
                       age,
                       height,
                       weight,
@@ -185,14 +178,57 @@ function ProfileForm(props) {
                     autoCapitalize="none"
                     onBlur={handleBlur('name')}
                   />
-                  <NumberSelector
-                    label="Edad"
-                    name="age"
-                    value={values.age}
-                    addValue={ev => onEmailChange(ev, setFieldValue)}
-                    removeValue={() => removeValue()}
-                    onChangeText={handleChange('age')}
-                  />
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                    }}
+                  >
+                    <NumberSelector
+                      label="Dorsal"
+                      name="dorsal"
+                      value={values.dorsal}
+                      addValue={value => addValue(value, setFieldValue, 'dorsal')}
+                      removeValue={value => removeValue(value, setFieldValue, 'dorsal')}
+                      onChangeText={handleChange('dorsal')}
+                      bgColor="#22508F"
+                    />
+                    <NumberSelector
+                      label="Edad"
+                      name="age"
+                      value={values.age}
+                      addValue={value => addValue(value, setFieldValue, 'age')}
+                      removeValue={value => removeValue(value, setFieldValue, 'age')}
+                      onChangeText={handleChange('age')}
+                      bgColor="#22508F"
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                      marginBottom: 10,
+                    }}
+                  >
+                    <NumberSelector
+                      label="Altura (cm)"
+                      name="height"
+                      value={values.height}
+                      addValue={value => addValue(value, setFieldValue, 'height')}
+                      removeValue={value => removeValue(value, setFieldValue, 'height')}
+                      onChangeText={handleChange('height')}
+                      bgColor="#22508F"
+                    />
+                    <NumberSelector
+                      label="Peso (kg)"
+                      name="weight"
+                      value={values.weight}
+                      addValue={value => addValue(value, setFieldValue, 'weight')}
+                      removeValue={value => removeValue(value, setFieldValue, 'weight')}
+                      onChangeText={handleChange('weight')}
+                      bgColor="#22508F"
+                    />
+                  </View>
                   {/* <FormInput
                     placeholder="Edad"
                     autoCapitalize="none"

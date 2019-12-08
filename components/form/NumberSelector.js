@@ -1,40 +1,31 @@
-import React, { useState } from 'react'
-import { TouchableOpacity, StyleSheet, View, Text, TextInput, Alert } from 'react-native'
+import React from 'react'
+import { TouchableOpacity, StyleSheet, View, Text, TextInput } from 'react-native'
 
-function NumberSelector({ label, addValue, removeValue, value, ...rest }) {
-  // const addValue = () => {
-  //   setValue(String(Number(value) + 1))
-  // }
-
-  // const removeValue = () => {
-  //   if (Number(value) > 0) {
-  //     setValue(String(Number(value) - 1))
-  //   }
-  // }
-
-  // const changeNumber = number => {
-  //   if (Number(number) > 0) {
-  //     setValue(String(number))
-  //   }
-  //   if (!number) {
-  //     setValue('0')
-  //   }
-  // }
-
+function NumberSelector({ label, addValue, removeValue, value, bgColor, ...rest }) {
   return (
     <View>
       <Text style={styles.label}>{label}</Text>
       <View style={styles.container}>
-        <TouchableOpacity onPress={removeValue}>
-          <View style={styles.button}>
+        <TouchableOpacity onPress={() => removeValue(value)}>
+          <View
+            style={[styles.button, bgColor && { backgroundColor: bgColor, borderColor: bgColor }]}
+          >
             <Text style={styles.symbol}>-</Text>
           </View>
         </TouchableOpacity>
-        <View style={styles.input}>
-          <TextInput style={styles.number} keyboardType="numeric" value={value} {...rest} />
+        <View style={[styles.input, bgColor && { borderColor: bgColor }]}>
+          <TextInput
+            style={styles.number}
+            keyboardType="numeric"
+            textAlign="center"
+            value={value}
+            {...rest}
+          />
         </View>
-        <TouchableOpacity onPress={value => addValue(value)}>
-          <View style={styles.button}>
+        <TouchableOpacity onPress={() => addValue(value)}>
+          <View
+            style={[styles.button, bgColor && { backgroundColor: bgColor, borderColor: bgColor }]}
+          >
             <Text style={styles.symbol}>+</Text>
           </View>
         </TouchableOpacity>
@@ -54,14 +45,16 @@ const styles = StyleSheet.create({
     width: 35,
     alignItems: 'center',
     borderColor: '#aaaaaa',
-    borderWidth: 1,
+    borderWidth: 2,
   },
   input: {
     padding: 10,
     width: 50,
-    alignItems: 'center',
+    alignContent: 'center',
     borderColor: '#aaaaaa',
     borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   number: {
     fontSize: 15,

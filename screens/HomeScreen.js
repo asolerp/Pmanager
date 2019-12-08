@@ -24,7 +24,7 @@ function Home(props) {
     <View style={styles.container}>
       <Text style={styles.text}>Home</Text>
       <Text style={styles.text}>{user.name}</Text>
-      <NumberSelector />
+      <NumberSelector bgColor="#22508F" />
       <Button
         title="Signout"
         onPress={handleSignout}
