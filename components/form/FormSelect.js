@@ -1,7 +1,6 @@
 import React from 'react'
 import RNPickerSelect from 'react-native-picker-select'
-import { Ionicons } from '@expo/vector-icons'
-import { Platform, StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -9,7 +8,7 @@ const styles = StyleSheet.create({
     borderColor: '#aaaaaa',
     padding: 10,
     marginBottom: 15,
-    height: 50,
+    height: 60,
     flex: 0.48,
     flexDirection: 'row',
     alignItems: 'center',
@@ -18,7 +17,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     flex: 0.4,
-    height: 50,
   },
   inputStyle: {
     fontSize: 16,
@@ -29,7 +27,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     color: 'black',
     paddingRight: 30,
-    height: 50,
   },
   label: {
     fontWeight: '400',

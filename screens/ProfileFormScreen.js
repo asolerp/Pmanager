@@ -15,6 +15,7 @@ import { useStateValue } from '../config/User/UserContextManagement'
 import { POSITIONS, MAIN_FOOT } from '../utils/constants/Player'
 import { withFirebaseHOC } from '../config/Firebase'
 import NumberSelector from '../components/form/NumberSelector'
+import Section from '../components/form/SectionTitle'
 
 const styles = StyleSheet.create({
   container: {
@@ -172,6 +173,7 @@ function ProfileForm(props) {
                 isSubmitting,
               }) => (
                 <>
+                  <Section title="Datos personales" />
                   <FormInput
                     name="name"
                     value={values.name}
@@ -192,12 +194,41 @@ function ProfileForm(props) {
                     autoCapitalize="none"
                     onBlur={handleBlur('name')}
                   />
+                  <FormSelect
+                    value={values.position}
+                    label="Posición"
+                    iconColor="black"
+                    iconSize="15"
+                    iconName="ios-arrow-down"
+                    values={POSITIONS}
+                    placeholder={{
+                      label: 'Posición',
+                      value: null,
+                      color: '#9EA0A4',
+                    }}
+                    onValueChange={itemValue => setFieldValue('position', itemValue)}
+                  />
+                  <FormSelect
+                    value={values.foot}
+                    label="Pierna"
+                    iconColor="black"
+                    iconSize="15"
+                    iconName="ios-arrow-down"
+                    values={MAIN_FOOT}
+                    placeholder={{
+                      label: 'Pierna principal',
+                      value: null,
+                      color: '#9EA0A4',
+                    }}
+                    onValueChange={itemValue => setFieldValue('foot', itemValue)}
+                  />
                   {/* <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-around',
                     }}
                   > */}
+                  <Section title="Características jugador" />
                   <NumberSelector
                     label="Dorsal"
                     name="dorsal"
@@ -265,34 +296,6 @@ function ProfileForm(props) {
                     onBlur={handleBlur('weight')}
                   /> */}
                   {/* <View style={styles.numericInputs}> */}
-                  <FormSelect
-                    value={values.position}
-                    label="Posición"
-                    iconColor="black"
-                    iconSize="15"
-                    iconName="ios-arrow-down"
-                    values={POSITIONS}
-                    placeholder={{
-                      label: 'Posición',
-                      value: null,
-                      color: '#9EA0A4',
-                    }}
-                    onValueChange={itemValue => setFieldValue('position', itemValue)}
-                  />
-                  <FormSelect
-                    value={values.foot}
-                    label="Pierna"
-                    iconColor="black"
-                    iconSize="15"
-                    iconName="ios-arrow-down"
-                    values={MAIN_FOOT}
-                    placeholder={{
-                      label: 'Pierna principal',
-                      value: null,
-                      color: '#9EA0A4',
-                    }}
-                    onValueChange={itemValue => setFieldValue('foot', itemValue)}
-                  />
                   {/* </View> */}
                   <View style={styles.buttonContainer}>
                     <FormButton
