@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ScrollView, KeyboardAvoidingView, StyleSheet, View, Alert } from 'react-native'
+import { Platform, ScrollView, KeyboardAvoidingView, StyleSheet, View, Alert } from 'react-native'
 import { Formik } from 'formik'
 import Constants from 'expo-constants'
 import * as ImagePicker from 'expo-image-picker'
@@ -115,11 +115,24 @@ function ProfileForm(props) {
       </HideWithKeyboard>
       <View style={styles.formWrapper}>
         <ScrollView style={{ marginTop: 10 }}>
-          <KeyboardAvoidingView style={styles.inputsWrapper} behavior="position" enabled>
+          <KeyboardAvoidingView
+            style={styles.inputsWrapper}
+            behavior={Platform.OS === 'ios' ? 'position' : 'padding'}
+            enabled
+          >
             <Formik
               initialValues={{ ...user }}
               onSubmit={(values, actions) => {
-                const { age, name, dorsal = 0, height, weight, position, foot } = values
+                const {
+                  age,
+                  name,
+                  dorsal = 0,
+                  description,
+                  height,
+                  weight,
+                  position,
+                  foot,
+                } = values
                 const { uid } = props.firebase.currentUser()
                 props.firebase
                   .uriToBlob(imgProfile)
@@ -130,6 +143,7 @@ function ProfileForm(props) {
                       uid,
                       name,
                       dorsal,
+                      description,
                       age,
                       height,
                       weight,
@@ -178,57 +192,57 @@ function ProfileForm(props) {
                     autoCapitalize="none"
                     onBlur={handleBlur('name')}
                   />
-                  <View
+                  {/* <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-around',
                     }}
-                  >
-                    <NumberSelector
-                      label="Dorsal"
-                      name="dorsal"
-                      value={values.dorsal}
-                      addValue={value => addValue(value, setFieldValue, 'dorsal')}
-                      removeValue={value => removeValue(value, setFieldValue, 'dorsal')}
-                      onChangeText={handleChange('dorsal')}
-                      bgColor="#22508F"
-                    />
-                    <NumberSelector
-                      label="Edad"
-                      name="age"
-                      value={values.age}
-                      addValue={value => addValue(value, setFieldValue, 'age')}
-                      removeValue={value => removeValue(value, setFieldValue, 'age')}
-                      onChangeText={handleChange('age')}
-                      bgColor="#22508F"
-                    />
-                  </View>
+                  > */}
+                  <NumberSelector
+                    label="Dorsal"
+                    name="dorsal"
+                    value={values.dorsal}
+                    addValue={value => addValue(value, setFieldValue, 'dorsal')}
+                    removeValue={value => removeValue(value, setFieldValue, 'dorsal')}
+                    onChangeText={handleChange('dorsal')}
+                    bgColor="#22508F"
+                  />
+                  <NumberSelector
+                    label="Edad"
+                    name="age"
+                    value={values.age}
+                    addValue={value => addValue(value, setFieldValue, 'age')}
+                    removeValue={value => removeValue(value, setFieldValue, 'age')}
+                    onChangeText={handleChange('age')}
+                    bgColor="#22508F"
+                  />
+                  {/* </View>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-around',
                       marginBottom: 10,
                     }}
-                  >
-                    <NumberSelector
-                      label="Altura (cm)"
-                      name="height"
-                      value={values.height}
-                      addValue={value => addValue(value, setFieldValue, 'height')}
-                      removeValue={value => removeValue(value, setFieldValue, 'height')}
-                      onChangeText={handleChange('height')}
-                      bgColor="#22508F"
-                    />
-                    <NumberSelector
-                      label="Peso (kg)"
-                      name="weight"
-                      value={values.weight}
-                      addValue={value => addValue(value, setFieldValue, 'weight')}
-                      removeValue={value => removeValue(value, setFieldValue, 'weight')}
-                      onChangeText={handleChange('weight')}
-                      bgColor="#22508F"
-                    />
-                  </View>
+                  > */}
+                  <NumberSelector
+                    label="Altura (cm)"
+                    name="height"
+                    value={values.height}
+                    addValue={value => addValue(value, setFieldValue, 'height')}
+                    removeValue={value => removeValue(value, setFieldValue, 'height')}
+                    onChangeText={handleChange('height')}
+                    bgColor="#22508F"
+                  />
+                  <NumberSelector
+                    label="Peso (kg)"
+                    name="weight"
+                    value={values.weight}
+                    addValue={value => addValue(value, setFieldValue, 'weight')}
+                    removeValue={value => removeValue(value, setFieldValue, 'weight')}
+                    onChangeText={handleChange('weight')}
+                    bgColor="#22508F"
+                  />
+                  {/* </View> */}
                   {/* <FormInput
                     placeholder="Edad"
                     autoCapitalize="none"
@@ -250,36 +264,36 @@ function ProfileForm(props) {
                     placeholder="Peso (kg)"
                     onBlur={handleBlur('weight')}
                   /> */}
-                  <View style={styles.numericInputs}>
-                    <FormSelect
-                      value={values.position}
-                      label="Posición"
-                      iconColor="black"
-                      iconSize="15"
-                      iconName="ios-arrow-down"
-                      values={POSITIONS}
-                      placeholder={{
-                        label: 'Posición',
-                        value: null,
-                        color: '#9EA0A4',
-                      }}
-                      onValueChange={itemValue => setFieldValue('position', itemValue)}
-                    />
-                    <FormSelect
-                      value={values.foot}
-                      label="Pierna"
-                      iconColor="black"
-                      iconSize="15"
-                      iconName="ios-arrow-down"
-                      values={MAIN_FOOT}
-                      placeholder={{
-                        label: 'Pierna principal',
-                        value: null,
-                        color: '#9EA0A4',
-                      }}
-                      onValueChange={itemValue => setFieldValue('foot', itemValue)}
-                    />
-                  </View>
+                  {/* <View style={styles.numericInputs}> */}
+                  <FormSelect
+                    value={values.position}
+                    label="Posición"
+                    iconColor="black"
+                    iconSize="15"
+                    iconName="ios-arrow-down"
+                    values={POSITIONS}
+                    placeholder={{
+                      label: 'Posición',
+                      value: null,
+                      color: '#9EA0A4',
+                    }}
+                    onValueChange={itemValue => setFieldValue('position', itemValue)}
+                  />
+                  <FormSelect
+                    value={values.foot}
+                    label="Pierna"
+                    iconColor="black"
+                    iconSize="15"
+                    iconName="ios-arrow-down"
+                    values={MAIN_FOOT}
+                    placeholder={{
+                      label: 'Pierna principal',
+                      value: null,
+                      color: '#9EA0A4',
+                    }}
+                    onValueChange={itemValue => setFieldValue('foot', itemValue)}
+                  />
+                  {/* </View> */}
                   <View style={styles.buttonContainer}>
                     <FormButton
                       onPress={handleSubmit}

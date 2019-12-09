@@ -6,6 +6,7 @@ import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
 import useUser from '../hooks/useUser'
 import { POSITIONS, MAIN_FOOT } from '../utils/constants/Player'
 import Stat from '../components/Stat'
+import PlayerDetail from '../components/PlayerDetail'
 
 const styles = StyleSheet.create({
   container: {
@@ -20,9 +21,8 @@ const styles = StyleSheet.create({
   },
   bottomWrapper: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     width: '100%',
+    padding: 10,
   },
 })
 
@@ -54,7 +54,8 @@ function Profile(props) {
                   flexDirection: 'row',
                   justifyContent: 'space-around',
                   width: '100%',
-                  marginTop: 20,
+                  marginTop: 0,
+                  background: 'red',
                 }}
               >
                 <Stat title="Dorsal" stat={user.data().dorsal} />
@@ -66,12 +67,20 @@ function Profile(props) {
         )}
       </View>
       <View style={styles.bottomWrapper}>
-        <Button
-          onPress={() => props.navigation.navigate('ProfileForm')}
-          title="Editar Perfil"
-          type="outline"
-        />
+        {user && (
+          <>
+            <PlayerDetail title="Descripción" subtitle={user.data().description} />
+            <PlayerDetail title="Descripción" subtitle={user.data().description} />
+            <Button
+              onPress={() => props.navigation.navigate('ProfileForm')}
+              title="Editar Perfil"
+              type="outline"
+            />
+          </>
+        )}
       </View>
+      {/* <View style={styles.bottomWrapper}>
+        </View> */}
     </View>
   )
 }

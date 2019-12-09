@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Input } from 'react-native-elements'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, View, Text, TextInput } from 'react-native'
 // import { Content, Item, Input, Label, Icon } from 'native-base'
 
 const FormInput = ({
@@ -17,10 +17,10 @@ const FormInput = ({
 }) => (
   <View style={styles.inputWrapper}>
     <Text style={styles.label}>{label}</Text>
-    <Input
-      inputContainerStyle={styles.inputStyle}
-      inputStyle={styles.input}
+    <TextInput
+      style={styles.input}
       placeholderTextColor="grey"
+      textAlign="right"
       name={name}
       placeholder={placeholder}
       {...rest}
@@ -30,6 +30,9 @@ const FormInput = ({
 
 const styles = StyleSheet.create({
   inputWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 15,
     borderWidth: 1,
     borderColor: '#aaaaaa',
@@ -40,10 +43,13 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 15,
-    margin: 0,
-    height: 10,
+    marginRight: 10,
+    height: 50,
     padding: 0,
     fontFamily: 'montserrat-regular',
+    width: '100%',
+    color: 'black',
+    flex: 1,
   },
   label: {
     fontWeight: '400',

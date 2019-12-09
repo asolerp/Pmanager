@@ -16,11 +16,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 10,
+    fontSize: 15,
     color: 'white',
   },
   stat: {
-    fontSize: 20,
+    fontSize: 25,
     color: 'white',
   },
 })
