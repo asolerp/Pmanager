@@ -1,9 +1,7 @@
 /* eslint react/prop-types: 0 */
 
 import React from 'react'
-import { Input } from 'react-native-elements'
 import { StyleSheet, View, Text, TextInput } from 'react-native'
-// import { Content, Item, Input, Label, Icon } from 'native-base'
 
 const FormInput = ({
   iconName,
@@ -13,16 +11,18 @@ const FormInput = ({
   name,
   placeholder,
   label,
+  value,
   ...rest
 }) => (
   <View style={styles.inputWrapper}>
-    <Text style={styles.label}>{label}</Text>
+    {value.length < 20 && <Text style={styles.label}>{label}</Text>}
     <TextInput
       style={styles.input}
       placeholderTextColor="grey"
       textAlign="right"
       name={name}
       placeholder={placeholder}
+      value={value}
       {...rest}
     />
   </View>

@@ -4,7 +4,7 @@ import { Button } from 'react-native-elements'
 import { withFirebaseHOC } from '../config/Firebase'
 import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
 import useUser from '../hooks/useUser'
-import { POSITIONS, MAIN_FOOT } from '../utils/constants/Player'
+import { POSITIONS, MAIN_FOOT } from '../constants/Player'
 import Stat from '../components/Stat'
 import PlayerDetail from '../components/PlayerDetail'
 

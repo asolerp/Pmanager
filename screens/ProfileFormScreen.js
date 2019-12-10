@@ -12,10 +12,11 @@ import FormButton from '../components/form/FormButton'
 import FormSelect from '../components/form/FormSelect'
 import ErrorMessage from '../components/form/ErrorMessage'
 import { useStateValue } from '../config/User/UserContextManagement'
-import { POSITIONS, MAIN_FOOT } from '../utils/constants/Player'
+import { POSITIONS, MAIN_FOOT, PLAYER_STATS } from '../constants/Player'
 import { withFirebaseHOC } from '../config/Firebase'
 import NumberSelector from '../components/form/NumberSelector'
 import Section from '../components/form/SectionTitle'
+import RadioSelector from '../components/form/RadioSelector'
 
 const styles = StyleSheet.create({
   container: {
@@ -273,6 +274,7 @@ function ProfileForm(props) {
                     onChangeText={handleChange('weight')}
                     bgColor="#22508F"
                   />
+                  <RadioSelector values={PLAYER_STATS} />
                   {/* </View> */}
                   {/* <FormInput
                     placeholder="Edad"

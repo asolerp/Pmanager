@@ -17,4 +17,11 @@ const MAIN_FOOT = [
   { label: 'Ambidiestro', value: 'ad' },
 ]
 
-export { POSITIONS, MAIN_FOOT }
+const PLAYER_STATS = [
+  { label: 'Excelente', value: 10 },
+  { label: 'Notable', value: 8 },
+  { label: 'Bien', value: 6 },
+  { label: 'Normal', value: 5 },
+]
+
+export { POSITIONS, MAIN_FOOT, PLAYER_STATS }
