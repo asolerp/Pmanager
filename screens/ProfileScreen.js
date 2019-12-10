@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import RadarChart from 'react-svg-radar-chart'
@@ -28,10 +28,6 @@ const styles = StyleSheet.create({
 })
 
 function Profile(props) {
-  useEffect(() => {
-    console.log('hola')
-  }, [])
-
   const { error, loading, user } = useUser(props.firebase.currentUser().uid)
 
   const getPositon = () => {
@@ -46,7 +42,7 @@ function Profile(props) {
     const data = [
       {
         data: {
-          Disparo: user.shot / 10,
+          Disparo: user.shoot / 10,
           Velocidad: user.speed / 10,
           Regate: user.dribbling / 10,
           Pase: user.pass / 10,
@@ -91,9 +87,9 @@ function Profile(props) {
         {user && (
           <>
             <PlayerDetail title="Descripción" subtitle={user.data().description} />
-            {/* {user && (
+            {user && (
               <RadarChart captions={LABEL_CHART} data={formatStats(user.data())} size={450} />
-            )} */}
+            )}
             <Button
               onPress={() => props.navigation.navigate('ProfileForm')}
               title="Editar Perfil"
