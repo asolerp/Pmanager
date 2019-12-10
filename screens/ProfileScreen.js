@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-elements'
+import RadarChart from 'react-svg-radar-chart'
 import { withFirebaseHOC } from '../config/Firebase'
 import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
 import useUser from '../hooks/useUser'
-import { POSITIONS, MAIN_FOOT } from '../constants/Player'
+import { POSITIONS, MAIN_FOOT, LABEL_CHART } from '../constants/Player'
 import Stat from '../components/Stat'
 import PlayerDetail from '../components/PlayerDetail'
 
@@ -27,6 +28,10 @@ const styles = StyleSheet.create({
 })
 
 function Profile(props) {
+  useEffect(() => {
+    console.log('hola')
+  }, [])
+
   const { error, loading, user } = useUser(props.firebase.currentUser().uid)
 
   const getPositon = () => {
@@ -35,6 +40,22 @@ function Profile(props) {
 
   const getMainFoot = () => {
     return MAIN_FOOT.find(foot => foot.value === user.data().foot)
+  }
+
+  const formatStats = user => {
+    const data = [
+      {
+        data: {
+          Disparo: user.shot / 10,
+          Velocidad: user.speed / 10,
+          Regate: user.dribbling / 10,
+          Pase: user.pass / 10,
+        },
+        meta: { color: 'blue' },
+      },
+    ]
+
+    return data
   }
 
   return (
@@ -70,7 +91,9 @@ function Profile(props) {
         {user && (
           <>
             <PlayerDetail title="Descripción" subtitle={user.data().description} />
-            <PlayerDetail title="Descripción" subtitle={user.data().description} />
+            {/* {user && (
+              <RadarChart captions={LABEL_CHART} data={formatStats(user.data())} size={450} />
+            )} */}
             <Button
               onPress={() => props.navigation.navigate('ProfileForm')}
               title="Editar Perfil"
@@ -79,8 +102,6 @@ function Profile(props) {
           </>
         )}
       </View>
-      {/* <View style={styles.bottomWrapper}>
-        </View> */}
     </View>
   )
 }

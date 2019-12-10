@@ -115,7 +115,7 @@ function ProfileForm(props) {
     position: Yup.string().required('Position requerida'),
     foot: Yup.string().required('Pie requerido'),
     shoot: Yup.string(),
-    velocity: Yup.string(),
+    speed: Yup.string(),
     dribbling: Yup.string(),
     pass: Yup.string(),
   })
@@ -154,7 +154,7 @@ function ProfileForm(props) {
                   position,
                   foot,
                   shoot,
-                  velocity,
+                  speed,
                   dribbling,
                   pass,
                 } = values
@@ -176,7 +176,7 @@ function ProfileForm(props) {
                       position,
                       foot,
                       shoot,
-                      velocity,
+                      speed,
                       dribbling,
                       pass,
                       imgProfile: downloadURL,
@@ -312,8 +312,8 @@ function ProfileForm(props) {
                   <RadioSelector
                     values={PLAYER_STATS}
                     label="Velocidad"
-                    index={PLAYER_STATS.findIndex(stat => stat.value === values.velocity)}
-                    selectedOption={value => selectOption(value, setFieldValue, 'velocity')}
+                    index={PLAYER_STATS.findIndex(stat => stat.value === values.speed)}
+                    selectedOption={value => selectOption(value, setFieldValue, 'speed')}
                   />
                   <RadioSelector
                     values={PLAYER_STATS}
