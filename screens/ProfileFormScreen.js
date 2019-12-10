@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Platform, ScrollView, KeyboardAvoidingView, StyleSheet, View, Alert } from 'react-native'
+import {
+  Platform,
+  ScrollView,
+  KeyboardAvoidingView,
+  StyleSheet,
+  View,
+  Text,
+  Alert,
+} from 'react-native'
 import { Formik } from 'formik'
 import Constants from 'expo-constants'
 import * as ImagePicker from 'expo-image-picker'
@@ -17,6 +25,7 @@ import { withFirebaseHOC } from '../config/Firebase'
 import NumberSelector from '../components/form/NumberSelector'
 import Section from '../components/form/SectionTitle'
 import RadioSelector from '../components/form/RadioSelector'
+import COUNTRIES from '../constants/Countries'
 
 const styles = StyleSheet.create({
   container: {
@@ -91,15 +100,24 @@ function ProfileForm(props) {
     setFieldValue(input, String(Number(value) - 1))
   }
 
+  const selectOption = (value, setFieldValue, input) => {
+    setFieldValue(input, value)
+  }
+
   const validationSchema = Yup.object().shape({
     name: Yup.string().label('Nombre'),
     dorsal: Yup.string().label('Dorsal'),
     description: Yup.string().label('Descripción'),
+    country: Yup.string().label('País'),
     age: Yup.string().label('Edad'),
     height: Yup.string().label('Edad'),
     weight: Yup.string().label('Edad'),
     position: Yup.string().required('Position requerida'),
     foot: Yup.string().required('Pie requerido'),
+    shoot: Yup.string(),
+    velocity: Yup.string(),
+    dribbling: Yup.string(),
+    pass: Yup.string(),
   })
 
   return (
@@ -130,10 +148,15 @@ function ProfileForm(props) {
                   name,
                   dorsal = 0,
                   description,
+                  country,
                   height,
                   weight,
                   position,
                   foot,
+                  shoot,
+                  velocity,
+                  dribbling,
+                  pass,
                 } = values
                 const { uid } = props.firebase.currentUser()
                 props.firebase
@@ -146,11 +169,16 @@ function ProfileForm(props) {
                       name,
                       dorsal,
                       description,
+                      country,
                       age,
                       height,
                       weight,
                       position,
                       foot,
+                      shoot,
+                      velocity,
+                      dribbling,
+                      pass,
                       imgProfile: downloadURL,
                     }
                     dispatch({
@@ -196,6 +224,20 @@ function ProfileForm(props) {
                     onBlur={handleBlur('name')}
                   />
                   <FormSelect
+                    value={values.country}
+                    label="País"
+                    iconColor="black"
+                    iconSize="15"
+                    iconName="ios-arrow-down"
+                    values={COUNTRIES}
+                    placeholder={{
+                      label: 'País',
+                      value: null,
+                      color: '#9EA0A4',
+                    }}
+                    onValueChange={itemValue => setFieldValue('country', itemValue)}
+                  />
+                  <FormSelect
                     value={values.position}
                     label="Posición"
                     iconColor="black"
@@ -223,12 +265,6 @@ function ProfileForm(props) {
                     }}
                     onValueChange={itemValue => setFieldValue('foot', itemValue)}
                   />
-                  {/* <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-around',
-                    }}
-                  > */}
                   <Section title="Características jugador" />
                   <NumberSelector
                     label="Dorsal"
@@ -248,14 +284,6 @@ function ProfileForm(props) {
                     onChangeText={handleChange('age')}
                     bgColor="#22508F"
                   />
-                  {/* </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-around',
-                      marginBottom: 10,
-                    }}
-                  > */}
                   <NumberSelector
                     label="Altura (cm)"
                     name="height"
@@ -274,31 +302,31 @@ function ProfileForm(props) {
                     onChangeText={handleChange('weight')}
                     bgColor="#22508F"
                   />
-                  <RadioSelector values={PLAYER_STATS} />
-                  {/* </View> */}
-                  {/* <FormInput
-                    placeholder="Edad"
-                    autoCapitalize="none"
-                    onBlur={handleBlur('age')}
+                  <Section title="Habilidad" />
+                  <RadioSelector
+                    values={PLAYER_STATS}
+                    label="Disparo"
+                    index={PLAYER_STATS.findIndex(stat => stat.value === values.shoot)}
+                    selectedOption={value => selectOption(value, setFieldValue, 'shoot')}
                   />
-                  <FormInput
-                    name="height"
-                    value={values.height}
-                    onChangeText={handleChange('height')}
-                    label="Altura (cm)"
-                    placeholder="Altura"
-                    onBlur={handleBlur('height')}
+                  <RadioSelector
+                    values={PLAYER_STATS}
+                    label="Velocidad"
+                    index={PLAYER_STATS.findIndex(stat => stat.value === values.velocity)}
+                    selectedOption={value => selectOption(value, setFieldValue, 'velocity')}
                   />
-                  <FormInput
-                    name="weight"
-                    value={values.weight}
-                    onChangeText={handleChange('weight')}
-                    label="Peso"
-                    placeholder="Peso (kg)"
-                    onBlur={handleBlur('weight')}
-                  /> */}
-                  {/* <View style={styles.numericInputs}> */}
-                  {/* </View> */}
+                  <RadioSelector
+                    values={PLAYER_STATS}
+                    label="Regate"
+                    index={PLAYER_STATS.findIndex(stat => stat.value === values.dribbling)}
+                    selectedOption={value => selectOption(value, setFieldValue, 'dribbling')}
+                  />
+                  <RadioSelector
+                    values={PLAYER_STATS}
+                    label="Pase"
+                    index={PLAYER_STATS.findIndex(stat => stat.value === values.pass)}
+                    selectedOption={value => selectOption(value, setFieldValue, 'pass')}
+                  />
                   <View style={styles.buttonContainer}>
                     <FormButton
                       onPress={handleSubmit}

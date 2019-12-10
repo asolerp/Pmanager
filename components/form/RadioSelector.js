@@ -5,7 +5,7 @@ import RadioForm from 'react-native-simple-radio-button'
 function RadioSelector(props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Hola</Text>
+      <Text style={styles.label}>{props.label}</Text>
       <View
         style={{
           justifyContent: 'center',
@@ -14,18 +14,15 @@ function RadioSelector(props) {
       >
         <RadioForm
           radio_props={props.values}
-          initial={0}
+          initial={props.index !== -1 ? props.index : 0}
           formHorizontal
           labelHorizontal={false}
           wrapStyle={{ alignItems: 'center' }}
-          buttonColor="#B6B6B6"
-          labelColor="#B6B6B6"
-          style={{
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            alignContent: 'center',
-            marginTop: 5,
-          }}
+          buttonColor="#00508F"
+          labelColor="#00508F"
+          selectedButtonColor="#00508F"
+          onPress={value => props.selectedOption(value)}
+          style={styles.radioButton}
         />
       </View>
     </View>
@@ -38,8 +35,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 15,
-    borderWidth: 1,
-    borderColor: '#aaaaaa',
   },
   label: {
     fontWeight: '400',
@@ -48,6 +43,13 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     fontSize: 15,
     fontFamily: 'montserrat-regular',
+  },
+  radioButton: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    alignContent: 'center',
+    paddingTop: 5,
+    paddingRight: 5,
   },
 })
 
