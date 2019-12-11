@@ -24,11 +24,6 @@ const PLAYER_STATS = [
   { label: 'Normal', value: 5 },
 ]
 
-const LABEL_CHART = {
-  shoot: 'Disparo',
-  speed: 'Velocidad',
-  dribbling: 'Regate',
-  pass: 'Pase',
-}
+const LABEL_CHART = ['Disparo', 'Velocidad', 'Regate', 'Pase']
 
 export { POSITIONS, MAIN_FOOT, PLAYER_STATS, LABEL_CHART }
