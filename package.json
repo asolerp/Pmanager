@@ -33,9 +33,11 @@
     "react-native-hide-with-keyboard": "1.2.0",
     "react-native-picker-select": "^6.3.3",
     "react-native-simple-radio-button": "^2.7.4",
+    "react-native-svg": "^9.13.6",
     "react-native-web": "^0.11.7",
     "react-navigation": "^3.12.0",
     "react-svg-radar-chart": "^1.2.0",
+    "victory-native": "^32.0.2",
     "yup": "0.27.0"
   },
   "devDependencies": {
