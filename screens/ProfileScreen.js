@@ -6,6 +6,7 @@ import { withFirebaseHOC } from '../config/Firebase'
 import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
 import useUser from '../hooks/useUser'
 import { POSITIONS, MAIN_FOOT, LABEL_CHART } from '../constants/Player'
+import COUNTRIES from '../constants/Countries'
 import Stat from '../components/Stat'
 import PlayerDetail from '../components/PlayerDetail'
 
@@ -35,7 +36,11 @@ function Profile(props) {
   }
 
   const getMainFoot = () => {
-    return MAIN_FOOT.find(foot => foot.value === user.data().foot)
+    return MAIN_FOOT.find(foot => foot.value === user.data().foot).label
+  }
+
+  const getCountryLabel = () => {
+    return COUNTRIES.find(country => country.value === user.data().country).label
   }
 
   const formatData = user => {
@@ -84,7 +89,9 @@ function Profile(props) {
         {user && (
           <>
             <PlayerDetail title="Descripción" subtitle={user.data().description} />
-            {/* <RadarChart labels={LABEL_CHART} data={formatData(user.data())} /> */}
+            <PlayerDetail title="Nacionalidad" subtitle={getCountryLabel()} />
+            <PlayerDetail title="Pie" subtitle={getMainFoot()} />
+            <RadarChart labels={LABEL_CHART} data={formatData(user.data())} />
             <Button
               onPress={() => props.navigation.navigate('ProfileForm')}
               title="Editar Perfil"

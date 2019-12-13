@@ -153,7 +153,14 @@ function ProfileForm(props) {
                   weight,
                   position,
                   foot,
-                  stats = {},
+                  stats = {
+                    shoot: 0,
+                    speed: 0,
+                    dribbling: 0,
+                    pass: 0,
+                    strength: 0,
+                    resistance: 0,
+                  },
                 } = values
                 const { uid } = props.firebase.currentUser()
                 props.firebase
@@ -317,30 +324,46 @@ function ProfileForm(props) {
                     }
                     selectedOption={value => selectOption(value, setFieldValue, 'stats.speed')}
                   />
-                  {/* <RadioSelector
+                  <RadioSelector
                     values={PLAYER_STATS}
                     label="Regate"
-                    index={PLAYER_STATS.findIndex(stat => stat.value === values.stats.dribbling)}
-                    selectedOption={value => selectOption(value, setFieldValue, 'dribbling')}
+                    index={
+                      values.stats
+                        ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.dribbling)
+                        : 0
+                    }
+                    selectedOption={value => selectOption(value, setFieldValue, 'stats.dribbling')}
                   />
                   <RadioSelector
                     values={PLAYER_STATS}
                     label="Pase"
-                    index={PLAYER_STATS.findIndex(stat => stat.value === values.stats.pass)}
-                    selectedOption={value => selectOption(value, setFieldValue, 'pass')}
+                    index={
+                      values.stats
+                        ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.pass)
+                        : 0
+                    }
+                    selectedOption={value => selectOption(value, setFieldValue, 'stats.pass')}
                   />
                   <RadioSelector
                     values={PLAYER_STATS}
                     label="Fuerza"
-                    index={PLAYER_STATS.findIndex(stat => stat.value === values.stats.strength)}
-                    selectedOption={value => selectOption(value, setFieldValue, 'strength')}
+                    index={
+                      values.stats
+                        ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.strength)
+                        : 0
+                    }
+                    selectedOption={value => selectOption(value, setFieldValue, 'stats.strength')}
                   />
                   <RadioSelector
                     values={PLAYER_STATS}
                     label="Resistencia"
-                    index={PLAYER_STATS.findIndex(stat => stat.value === values.stats.resistance)}
-                    selectedOption={value => selectOption(value, setFieldValue, 'resistance')}
-                  /> */}
+                    index={
+                      values.stats
+                        ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.resistance)
+                        : 0
+                    }
+                    selectedOption={value => selectOption(value, setFieldValue, 'stats.resistance')}
+                  />
                   <View style={styles.buttonContainer}>
                     <FormButton
                       onPress={handleSubmit}
