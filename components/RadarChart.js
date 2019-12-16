@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import 'react-native-svg'
+import Svg from 'react-native-svg'
 
 import { StyleSheet, View } from 'react-native'
 import { VictoryPolarAxis, VictoryChart, VictoryTheme, VictoryBar } from 'victory-native'
 
 export default function RadarChart(props) {
   return (
-    <View style={styles.container}>
+    <Svg style={styles.container}>
       <VictoryChart polar theme={VictoryTheme.material}>
         {props.labels.map((d, i) => {
           return (
@@ -22,7 +22,7 @@ export default function RadarChart(props) {
         })}
         <VictoryBar style={{ data: { fill: 'tomato', width: 25 } }} data={props.data} />
       </VictoryChart>
-    </View>
+    </Svg>
   )
 }
 

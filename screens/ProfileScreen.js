@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import RadarChart from '../components/RadarChart'
 import { withFirebaseHOC } from '../config/Firebase'
@@ -86,19 +86,21 @@ function Profile(props) {
         )}
       </View>
       <View style={styles.bottomWrapper}>
-        {user && (
-          <>
-            <PlayerDetail title="Descripción" subtitle={user.data().description} />
-            <PlayerDetail title="Nacionalidad" subtitle={getCountryLabel()} />
-            <PlayerDetail title="Pie" subtitle={getMainFoot()} />
-            <RadarChart labels={LABEL_CHART} data={formatData(user.data())} />
-            <Button
-              onPress={() => props.navigation.navigate('ProfileForm')}
-              title="Editar Perfil"
-              type="outline"
-            />
-          </>
-        )}
+        <ScrollView>
+          {user && (
+            <>
+              <PlayerDetail title="Descripción" subtitle={user.data().description} />
+              <PlayerDetail title="Nacionalidad" subtitle={getCountryLabel()} />
+              <PlayerDetail title="Pie" subtitle={getMainFoot()} />
+              <RadarChart labels={LABEL_CHART} data={formatData(user.data())} />
+              <Button
+                onPress={() => props.navigation.navigate('ProfileForm')}
+                title="Editar Perfil"
+                type="outline"
+              />
+            </>
+          )}
+        </ScrollView>
       </View>
     </View>
   )
