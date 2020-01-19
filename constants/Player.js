@@ -24,4 +24,6 @@ const PLAYER_STATS = [
   { label: 'Normal', value: 5 },
 ]
 
-export { POSITIONS, MAIN_FOOT, PLAYER_STATS }
+const LABEL_CHART = ['Disparo', 'Velocidad', 'Regate', 'Pase', 'Fuerza', 'Resistencia']
+
+export { POSITIONS, MAIN_FOOT, PLAYER_STATS, LABEL_CHART }
