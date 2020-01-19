@@ -30,15 +30,21 @@ const Firebase = {
       .firestore()
       .collection('users')
       .doc(`${userData.uid}`)
-      .set(userData)
+      .set({ email: userData.email, ...userData.metadata, profileFilled: false })
   },
 
   updateUserProfile: userData => {
+    const { email, metadata } = userData
+    const { lastSignInTime, creationTime } = metadata
     return firebase
       .firestore()
       .collection('users')
       .doc(`${userData.uid}`)
-      .set(userData)
+      .update({
+        email,
+        lastSignInTime,
+        creationTime,
+      })
   },
 
   getUserProfile: id => {

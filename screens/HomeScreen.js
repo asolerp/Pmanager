@@ -4,9 +4,10 @@ import { Button } from 'react-native-elements'
 import { withFirebaseHOC } from '../config/Firebase'
 import { useStateValue } from '../config/User/UserContextManagement'
 import NumberSelector from '../components/form/NumberSelector'
+import subscribeUserData from '../hooks/subscribeUserData'
 
 function Home(props) {
-  const [{ user }, dispatch] = useStateValue()
+  const { loading, user } = subscribeUserData()
 
   useEffect(() => {
     props.navigation.setParams({ titulo: 'Alberto Soler', tabBar: false })
@@ -23,7 +24,8 @@ function Home(props) {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Home</Text>
-      <Text style={styles.text}>{user.name}</Text>
+      {user && <Text style={styles.text}>{user.name}</Text>}
+
       <NumberSelector bgColor="#22508F" />
       <Button
         title="Signout"

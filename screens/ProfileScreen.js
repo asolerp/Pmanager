@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { withFirebaseHOC } from '../config/Firebase'
 import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
-import useUser from '../hooks/useUser'
+import subscribeUserData from '../hooks/subscribeUserData'
 import { POSITIONS, MAIN_FOOT } from '../constants/Player'
 import Stat from '../components/Stat'
 import PlayerDetail from '../components/PlayerDetail'
@@ -27,14 +27,14 @@ const styles = StyleSheet.create({
 })
 
 function Profile(props) {
-  const { error, loading, user } = useUser(props.firebase.currentUser().uid)
+  const { loading, user } = subscribeUserData()
 
   const getPositon = () => {
-    return POSITIONS.find(position => position.value === user.data().position)
+    return POSITIONS.find(position => position.value === user.position)
   }
 
   const getMainFoot = () => {
-    return MAIN_FOOT.find(foot => foot.value === user.data().foot)
+    return MAIN_FOOT.find(foot => foot.value === user.foot)
   }
 
   return (
@@ -43,9 +43,9 @@ function Profile(props) {
         {user && (
           <>
             <BlurBackgroundWithAvatar
-              backgroundUrl={user.data().imgProfile}
-              avatarUrl={user.data().imgProfile}
-              title={user.data().name}
+              backgroundUrl={user.imgProfile}
+              avatarUrl={user.imgProfile}
+              title={user.name}
               subtitle={getPositon().label}
               size="xlarge"
             >
@@ -58,9 +58,9 @@ function Profile(props) {
                   background: 'red',
                 }}
               >
-                <Stat title="Dorsal" stat={user.data().dorsal} />
-                <Stat title="Edad" stat={user.data().age} />
-                <Stat title="Altura" stat={user.data().height} />
+                <Stat title="Dorsal" stat={user.dorsal} />
+                <Stat title="Edad" stat={user.age} />
+                <Stat title="Altura" stat={user.height} />
               </View>
             </BlurBackgroundWithAvatar>
           </>
@@ -69,8 +69,8 @@ function Profile(props) {
       <View style={styles.bottomWrapper}>
         {user && (
           <>
-            <PlayerDetail title="Descripción" subtitle={user.data().description} />
-            <PlayerDetail title="Descripción" subtitle={user.data().description} />
+            <PlayerDetail title="Descripción" subtitle={user.description} />
+            <PlayerDetail title="Descripción" subtitle={user.description} />
             <Button
               onPress={() => props.navigation.navigate('ProfileForm')}
               title="Editar Perfil"

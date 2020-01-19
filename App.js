@@ -42,6 +42,7 @@ function App(props) {
         // remove this if you are not using it in your app
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
         'montserrat-regular': require('./assets/fonts/Montserrat-Regular.ttf'),
+        'montserrat-light': require('./assets/fonts/Montserrat-ExtraLight.ttf'),
       }),
     ])
   }

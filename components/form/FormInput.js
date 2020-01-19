@@ -18,8 +18,7 @@ const FormInput = ({
     {value.length < 20 && <Text style={styles.label}>{label}</Text>}
     <TextInput
       style={styles.input}
-      placeholderTextColor="grey"
-      textAlign="right"
+      placeholderTextColor="white"
       name={name}
       placeholder={placeholder}
       value={value}
@@ -31,25 +30,19 @@ const FormInput = ({
 const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 15,
     borderWidth: 1,
+    borderRadius: 50,
     borderColor: '#aaaaaa',
-    padding: 5,
-  },
-  inputStyle: {
-    borderBottomWidth: 0,
   },
   input: {
-    fontSize: 15,
-    marginRight: 10,
+    fontSize: 20,
+    borderRadius: 50,
     height: 50,
-    padding: 0,
     fontFamily: 'montserrat-regular',
+    color: 'white',
     width: '100%',
-    color: 'black',
-    flex: 1,
   },
   label: {
     fontWeight: '400',

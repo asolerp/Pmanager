@@ -4,27 +4,44 @@ import { Image } from 'react-native-elements'
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 0,
   },
+  logoContainer: {
+    marginBottom: 20,
+  },
   leftTitle: {
-    color: '#D21033',
+    color: '#CC1034',
     marginRight: 10,
-    fontSize: 30,
+    fontSize: 60,
+    fontWeight: '100',
+    fontFamily: 'montserrat-regular',
   },
   rightTitle: {
-    color: '#005293',
+    color: 'white',
     fontSize: 30,
+    fontFamily: 'montserrat-regular',
+  },
+  subtitle: {
+    marginTop: 10,
+    color: 'white',
+    fontSize: 15,
+    fontFamily: 'montserrat-light',
   },
 })
 
-const AppLogo = () => (
-  <View>
-    <Image source={require('../assets/images/panama.png')} style={{ width: 200, height: 300 }} />
+const AppLogo = ({ logo }) => (
+  <View style={styles.logoContainer}>
+    {logo && (
+      <Image source={require('../assets/images/panama.png')} style={{ width: 200, height: 300 }} />
+    )}
+
     <View style={styles.titleContainer}>
       <Text style={styles.leftTitle}>Panama</Text>
       <Text style={styles.rightTitle}>Manager</Text>
+      <Text style={styles.subtitle}>Tu aplicacion para organizar tus partidos</Text>
     </View>
   </View>
 )
