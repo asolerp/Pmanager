@@ -6,6 +6,7 @@ const styles = StyleSheet.create({
   wrapper: {
     borderWidth: 1,
     borderColor: '#aaaaaa',
+    borderRadius: 50,
     padding: 10,
     marginBottom: 15,
     height: 60,
@@ -56,7 +57,7 @@ const FormSelect = ({ values, label, iconName, iconSize, iconColor, ...rest }) =
               right: 10,
             },
             placeholder: {
-              color: 'black',
+              color: 'white',
               fontSize: 15,
               fontFamily: 'montserrat-regular',
             },

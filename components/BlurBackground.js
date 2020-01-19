@@ -13,6 +13,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  backgroundColor: {
     backgroundColor: 'rgba(63, 63, 63, .6)',
   },
   avatarWrapper: {
@@ -40,7 +42,7 @@ const styles = StyleSheet.create({
   },
 })
 
-function BlurBackgroundWithAvatar({ backgroundUrl, children }) {
+function BlurBackground({ backgroundUrl, children, center }) {
   return (
     <ImageBackground
       source={{
@@ -49,9 +51,9 @@ function BlurBackgroundWithAvatar({ backgroundUrl, children }) {
       blurRadius={6}
       style={styles.container}
     >
-      <View style={styles.topBackgroundImage}>{children}</View>
+      <View style={[center && styles.topBackgroundImage, styles.backgroundColor]}>{children}</View>
     </ImageBackground>
   )
 }
 
-export default BlurBackgroundWithAvatar
+export default BlurBackground

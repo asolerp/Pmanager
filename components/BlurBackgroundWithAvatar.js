@@ -1,6 +1,8 @@
-import React from 'react'
-import { ImageBackground, StyleSheet, View, Text } from 'react-native'
+import React, { useContext } from 'react'
+import { ImageBackground, StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Avatar } from 'react-native-elements'
+import { NavigationContext } from 'react-navigation'
 
 const styles = StyleSheet.create({
   container: {
@@ -41,6 +43,7 @@ const styles = StyleSheet.create({
 })
 
 function BlurBackgroundWithAvatar(props) {
+  const navigation = useContext(NavigationContext)
   return (
     <ImageBackground
       source={{
@@ -50,6 +53,14 @@ function BlurBackgroundWithAvatar(props) {
       style={styles.container}
     >
       <View style={styles.topBackgroundImage}>
+        {props.editableUser && (
+          <View style={{ position: 'absolute', right: 25, top: 50 }}>
+            <TouchableOpacity onPress={() => navigation && navigation.navigate('ProfileForm')}>
+              <MaterialCommunityIcons name="account-edit" size={32} color="white" />
+            </TouchableOpacity>
+          </View>
+        )}
+
         <View
           style={[
             styles.avatarWrapper,

@@ -12,9 +12,10 @@ const FormInput = ({
   placeholder,
   label,
   value,
+  style,
   ...rest
 }) => (
-  <View style={styles.inputWrapper}>
+  <View style={[styles.inputWrapper, style]}>
     {value.length < 20 && <Text style={styles.label}>{label}</Text>}
     <TextInput
       style={styles.input}

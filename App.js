@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Platform, StatusBar, StyleSheet, View } from 'react-native'
+import { YellowBox, Platform, StatusBar, StyleSheet, View } from 'react-native'
 import { AppLoading } from 'expo'
 import { Asset } from 'expo-asset'
 import * as Font from 'expo-font'
@@ -31,6 +31,7 @@ function App(props) {
 
   const loadResourcesAsync = async () => {
     await Promise.all([
+      YellowBox.ignoreWarnings(['Setting a timer']),
       Asset.loadAsync([
         require('./assets/images/robot-dev.png'),
         require('./assets/images/robot-prod.png'),

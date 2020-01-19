@@ -36,11 +36,11 @@ function Profile(props) {
   }
 
   const getMainFoot = () => {
-    return MAIN_FOOT.find(foot => foot.value === user.data().foot).label
+    return MAIN_FOOT.find(foot => foot.value === user.foot).label
   }
 
   const getCountryLabel = () => {
-    return COUNTRIES.find(country => country.value === user.data().country).label
+    return COUNTRIES.find(country => country.value === user.country).label
   }
 
   const formatData = user => {
@@ -63,6 +63,7 @@ function Profile(props) {
           <>
             <BlurBackgroundWithAvatar
               backgroundUrl={user.imgProfile}
+              editableUser
               avatarUrl={user.imgProfile}
               title={user.name}
               subtitle={getPositon().label}
@@ -89,15 +90,10 @@ function Profile(props) {
         <ScrollView>
           {user && (
             <>
-              <PlayerDetail title="Descripción" subtitle={user.data().description} />
+              <PlayerDetail title="Descripción" subtitle={user.description} />
               <PlayerDetail title="Nacionalidad" subtitle={getCountryLabel()} />
               <PlayerDetail title="Pie" subtitle={getMainFoot()} />
-              <RadarChart labels={LABEL_CHART} data={formatData(user.data())} />
-              <Button
-                onPress={() => props.navigation.navigate('ProfileForm')}
-                title="Editar Perfil"
-                type="outline"
-              />
+              <RadarChart labels={LABEL_CHART} data={formatData(user)} />
             </>
           )}
         </ScrollView>

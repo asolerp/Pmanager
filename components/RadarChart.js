@@ -6,29 +6,32 @@ import { VictoryPolarAxis, VictoryChart, VictoryTheme, VictoryBar } from 'victor
 
 export default function RadarChart(props) {
   return (
-    <Svg style={styles.container}>
-      <VictoryChart polar theme={VictoryTheme.material}>
-        {props.labels.map((d, i) => {
-          return (
-            <VictoryPolarAxis
-              dependentAxis
-              key={i}
-              label={d}
-              labelPlacement="perpendicular"
-              style={{ tickLabels: { fill: 'none' } }}
-              axisValue={d}
-            />
-          )
-        })}
-        <VictoryBar style={{ data: { fill: 'tomato', width: 25 } }} data={props.data} />
-      </VictoryChart>
-    </Svg>
+    <View>
+      <Svg style={styles.container}>
+        <VictoryChart polar theme={VictoryTheme.material}>
+          {props.labels.map((d, i) => {
+            return (
+              <VictoryPolarAxis
+                dependentAxis
+                key={i}
+                label={d}
+                labelPlacement="perpendicular"
+                style={{ tickLabels: { fill: 'none' } }}
+                axisValue={d}
+              />
+            )
+          })}
+          <VictoryBar style={{ data: { fill: 'tomato', width: 25 } }} data={props.data} />
+        </VictoryChart>
+      </Svg>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'flex-start',
+    marginLeft: -20,
   },
 })
