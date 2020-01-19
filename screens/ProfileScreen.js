@@ -1,10 +1,12 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-elements'
+import RadarChart from '../components/RadarChart'
 import { withFirebaseHOC } from '../config/Firebase'
 import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
 import useUser from '../hooks/useUser'
-import { POSITIONS, MAIN_FOOT } from '../constants/Player'
+import { POSITIONS, MAIN_FOOT, LABEL_CHART } from '../constants/Player'
+import COUNTRIES from '../constants/Countries'
 import Stat from '../components/Stat'
 import PlayerDetail from '../components/PlayerDetail'
 
@@ -34,7 +36,24 @@ function Profile(props) {
   }
 
   const getMainFoot = () => {
-    return MAIN_FOOT.find(foot => foot.value === user.data().foot)
+    return MAIN_FOOT.find(foot => foot.value === user.data().foot).label
+  }
+
+  const getCountryLabel = () => {
+    return COUNTRIES.find(country => country.value === user.data().country).label
+  }
+
+  const formatData = user => {
+    const data = [
+      { x: 'Disparo', y: user.stats.shoot * 10 },
+      { x: 'Velocidad', y: user.stats.speed * 10 },
+      { x: 'Regate', y: user.stats.dribbling * 10 },
+      { x: 'Pase', y: user.stats.pass * 10 },
+      { x: 'Fuerza', y: user.stats.strength * 10 },
+      { x: 'Resistencia', y: user.stats.resistance * 10 },
+    ]
+
+    return data
   }
 
   return (
@@ -67,20 +86,22 @@ function Profile(props) {
         )}
       </View>
       <View style={styles.bottomWrapper}>
-        {user && (
-          <>
-            <PlayerDetail title="Descripción" subtitle={user.data().description} />
-            <PlayerDetail title="Descripción" subtitle={user.data().description} />
-            <Button
-              onPress={() => props.navigation.navigate('ProfileForm')}
-              title="Editar Perfil"
-              type="outline"
-            />
-          </>
-        )}
+        <ScrollView>
+          {user && (
+            <>
+              <PlayerDetail title="Descripción" subtitle={user.data().description} />
+              <PlayerDetail title="Nacionalidad" subtitle={getCountryLabel()} />
+              <PlayerDetail title="Pie" subtitle={getMainFoot()} />
+              <RadarChart labels={LABEL_CHART} data={formatData(user.data())} />
+              <Button
+                onPress={() => props.navigation.navigate('ProfileForm')}
+                title="Editar Perfil"
+                type="outline"
+              />
+            </>
+          )}
+        </ScrollView>
       </View>
-      {/* <View style={styles.bottomWrapper}>
-        </View> */}
     </View>
   )
 }
