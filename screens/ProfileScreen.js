@@ -62,11 +62,18 @@ function Profile(props) {
         {user && (
           <>
             <BlurBackgroundWithAvatar
-              backgroundUrl={user.imgProfile}
+              user={user}
+              backgroundUrl={
+                user.imgProfile ||
+                'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg'
+              }
               editableUser
-              avatarUrl={user.imgProfile}
-              title={user.name}
-              subtitle={getPositon().label}
+              avatarUrl={
+                user.imgProfile ||
+                'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg'
+              }
+              title={user.name || ''}
+              subtitle={user.position ? getPositon().label : ''}
               size="xlarge"
             >
               <View
@@ -78,9 +85,9 @@ function Profile(props) {
                   background: 'red',
                 }}
               >
-                <Stat title="Dorsal" stat={user.dorsal} />
-                <Stat title="Edad" stat={user.age} />
-                <Stat title="Altura" stat={user.height} />
+                <Stat title="Dorsal" stat={user.dorsal || ''} />
+                <Stat title="Edad" stat={user.age || ''} />
+                <Stat title="Altura" stat={user.height || ''} />
               </View>
             </BlurBackgroundWithAvatar>
           </>
@@ -90,10 +97,10 @@ function Profile(props) {
         <ScrollView>
           {user && (
             <>
-              <PlayerDetail title="Descripción" subtitle={user.description} />
-              <PlayerDetail title="Nacionalidad" subtitle={getCountryLabel()} />
-              <PlayerDetail title="Pie" subtitle={getMainFoot()} />
-              <RadarChart labels={LABEL_CHART} data={formatData(user)} />
+              <PlayerDetail title="Descripción" subtitle={user.description || ''} />
+              <PlayerDetail title="Nacionalidad" subtitle={user.country ? getCountryLabel() : ''} />
+              <PlayerDetail title="Pie" subtitle={user.foot ? getMainFoot() : ''} />
+              {user.stats && <RadarChart labels={LABEL_CHART} data={formatData(user)} />}
             </>
           )}
         </ScrollView>

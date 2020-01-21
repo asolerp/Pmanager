@@ -33,7 +33,7 @@ const Firebase = {
       .set({ email: userData.email, ...userData.metadata, profileFilled: false })
   },
 
-  updateUserProfile: userData => {
+  updateLogin: userData => {
     const { email, metadata } = userData
     const { lastSignInTime, creationTime } = metadata
     return firebase
@@ -45,6 +45,14 @@ const Firebase = {
         lastSignInTime,
         creationTime,
       })
+  },
+
+  updateUserProfile: userData => {
+    return firebase
+      .firestore()
+      .collection('users')
+      .doc(`${userData.uid}`)
+      .set(userData)
   },
 
   getUserProfile: id => {

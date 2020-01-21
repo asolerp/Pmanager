@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { withFirebaseHOC } from '../config/Firebase'
-import { useStateValue } from '../config/User/UserContextManagement'
 import NumberSelector from '../components/form/NumberSelector'
 import subscribeUserData from '../hooks/subscribeUserData'
+import BlurBackground from '../components/BlurBackground'
 
 function Home(props) {
   const { loading, user } = subscribeUserData()
@@ -23,18 +23,23 @@ function Home(props) {
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home</Text>
-      {user && <Text style={styles.text}>{user.name}</Text>}
+      <BlurBackground
+        blur={2}
+        center
+        backgroundUrl="https://i.pinimg.com/originals/35/5e/06/355e06c94e6bf92cbaf0c015edf7eea3.jpg"
+      >
+        {loading && <ActivityIndicator size="small" color="white" />}
+        {user && <Text style={styles.text}>{user.name}</Text>}
 
-      <NumberSelector bgColor="#22508F" />
-      <Button
-        title="Signout"
-        onPress={handleSignout}
-        titleStyle={{
-          color: '#F57C00',
-        }}
-        type="clear"
-      />
+        <Button
+          title="Signout"
+          onPress={handleSignout}
+          titleStyle={{
+            color: 'white',
+          }}
+          type="clear"
+        />
+      </BlurBackground>
     </View>
   )
 }
@@ -48,7 +53,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 30,
-    fontFamily: 'montserrat-regular',
+    fontFamily: 'montserrat-light',
+    color: 'white',
   },
 })
 

@@ -71,17 +71,16 @@ function LoginScreen(props) {
       const { user } = await props.firebase.loginWithEmail(email, password)
       if (user) {
         console.log(user)
-        await props.firebase.updateUserProfile(user)
+        await props.firebase.updateLogin(user)
         setLoading(false)
       }
       props.navigation.navigate('App', { userUID: user.uid })
     } catch (error) {
       actions.setFieldError('general', error.message)
+      setLoading(false)
     } finally {
       actions.setSubmitting(false)
     }
-
-    // setLoading(true);
   }
 
   return (
