@@ -47,6 +47,8 @@ const styles = StyleSheet.create({
 })
 
 const FriendItem = ({ user }) => {
+  const { imgProfile, name, position } = user
+
   return (
     <View style={styles.itemWrapper}>
       <View style={styles.avatarWrapper}>
@@ -54,17 +56,16 @@ const FriendItem = ({ user }) => {
           rounded
           size="large"
           source={{
-            uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+            uri: imgProfile,
           }}
         />
       </View>
       <View style={styles.infoWrapper}>
-        <Text style={styles.title}>Hola</Text>
-        <Text style={styles.subtitle}>Adios</Text>
+        <Text style={styles.title}>{name}</Text>
       </View>
       <View style={styles.positionWrapper}>
         <View style={styles.positionLabel}>
-          <Text style={styles.positionText}>DC</Text>
+          <Text style={styles.positionText}>{position}</Text>
         </View>
       </View>
     </View>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import { StyleSheet, SafeAreaView, FlatList, View, Text } from 'react-native'
 import * as firebase from 'firebase'
 import BlurBackground from '../components/BlurBackground'
 import { withFirebaseHOC } from '../config/Firebase'
@@ -12,6 +12,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#fff',
+    justifyContent: 'flex-start',
+  },
+  listContainer: {
+    flex: 1,
+    width: '100%',
+    paddingTop: 50,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
 })
 
@@ -30,16 +38,24 @@ const FriendListScreen = props => {
   }, [])
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <BlurBackground
         blur={2}
         center
         backgroundUrl="https://i.pinimg.com/originals/35/5e/06/355e06c94e6bf92cbaf0c015edf7eea3.jpg"
       >
-        <FriendItem />
-        <Text>Amigos</Text>
+        {/* <FriendItem /> */}
+        <View style={styles.listContainer}>
+          {friends && (
+            <FlatList
+              data={friends}
+              renderItem={({ item }) => <FriendItem user={item} />}
+              keyExtractor={item => item.uid}
+            />
+          )}
+        </View>
       </BlurBackground>
-    </View>
+    </SafeAreaView>
   )
 }
 
