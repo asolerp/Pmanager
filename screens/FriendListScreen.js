@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
+import * as firebase from 'firebase'
 import BlurBackground from '../components/BlurBackground'
 import { withFirebaseHOC } from '../config/Firebase'
 import FriendItem from '../components/FriendItem'
+import 'firebase/auth'
+import 'firebase/firestore'
 
 const styles = StyleSheet.create({
   container: {
@@ -12,7 +15,20 @@ const styles = StyleSheet.create({
   },
 })
 
-const FriendListScreen = () => {
+const FriendListScreen = props => {
+  const [friends, setFriends] = useState()
+
+  useEffect(() => {
+    const friends = []
+    const getFriends = async () => {
+      await props.firebase.getUserFriends().then(querySnapshot => {
+        querySnapshot.forEach(doc => friends.push(doc.data()))
+      })
+      setFriends(friends)
+    }
+    getFriends()
+  }, [])
+
   return (
     <View style={styles.container}>
       <BlurBackground

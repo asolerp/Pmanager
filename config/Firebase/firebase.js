@@ -63,6 +63,27 @@ const Firebase = {
       .get()
   },
 
+  getUserFriends: () => {
+    // const user = firebase.auth().currentUser
+
+    return firebase
+      .firestore()
+      .collection('friendship')
+      .doc('4HoudaUe0jZhA6djsKbAKBFIko82')
+      .collection('friends')
+      .get()
+    // .then(querySnapshot => {
+    //   querySnapshot.forEach(doc => doc.data())
+    // })
+    // const user = firebase.auth().currentUser
+    // console.log(user.uid)
+    // return firebase
+    //   .firestore()
+    //   .collection('friendship')
+    //   .doc(`${user.uid}`)
+    //   .get()
+  },
+
   // storage
   uriToBlob: uri => {
     return new Promise((resolve, reject) => {
