@@ -2,6 +2,7 @@ import * as firebase from 'firebase'
 import 'firebase/auth'
 import 'firebase/firestore'
 import firebaseConfig from './firebaseConfig'
+import generateKeywords from '../../utils/keyGenerator'
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
@@ -44,6 +45,7 @@ const Firebase = {
         email,
         lastSignInTime,
         creationTime,
+        // keywords: generateKeywords('Carol'),
       })
   },
 

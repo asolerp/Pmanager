@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Platform, ScrollView, KeyboardAvoidingView, StyleSheet, View, Alert } from 'react-native'
 import { Formik } from 'formik'
-import Constants from 'expo-constants'
 import * as ImagePicker from 'expo-image-picker'
 import * as Yup from 'yup'
 import * as Permissions from 'expo-permissions'
@@ -68,21 +67,11 @@ const userEmpty = {
   },
 }
 
-const getPermissionAsync = async () => {
-  if (Constants.platform.ios) {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
-    if (status !== 'granted') {
-      Alert('Sorry, we need camera roll permissions to make this work!')
-    }
-  }
-}
-
 function ProfileForm(props) {
   const [user, setUser] = useState()
   const [imgProfile, setImgProfile] = useState('')
 
   useEffect(() => {
-    getPermissionAsync()
     const userData = props.navigation.getParam('user')
     console.log(userData)
     props.navigation.setParams({
