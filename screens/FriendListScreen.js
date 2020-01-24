@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, SafeAreaView, FlatList, View, ActivityIndicator } from 'react-native'
+import { StyleSheet, SafeAreaView, FlatList, View, Text } from 'react-native'
 import { SearchBar } from 'react-native-elements'
 import * as firebase from 'firebase'
 import BlurBackground from '../components/BlurBackground'
@@ -33,6 +33,10 @@ const styles = StyleSheet.create({
     // paddingTop: 15,
     paddingLeft: 10,
     paddingRight: 10,
+  },
+  noUsersText: {
+    color: 'white',
+    fontFamily: 'montserrat-light',
   },
 })
 
@@ -90,13 +94,17 @@ const FriendListScreen = props => {
             showLoading={loading}
           />
         </View>
-        {sFriends && (
+        {sFriends ? (
           <View style={styles.listContainer}>
             <FlatList
               data={sFriends}
               renderItem={({ item }) => <FriendItem user={item} />}
               keyExtractor={item => item.uid}
             />
+          </View>
+        ) : (
+          <View tyle={[styles.listContainer, { alignContent: 'center', alignItems: 'center' }]}>
+            <Text>No se han encontrado usuarios con ese nombre ...</Text>
           </View>
         )}
       </BlurBackground>
