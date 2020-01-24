@@ -76,6 +76,17 @@ const Firebase = {
       .get()
   },
 
+  searchByName: ({ search = '', limit = 50, lastNameOfLastPerson = '' } = {}) => {
+    return firebase
+      .firestore()
+      .collection('users')
+      .where('keywords', 'array-contains', search.toLowerCase())
+      .orderBy('name')
+      .startAfter(lastNameOfLastPerson)
+      .limit(limit)
+      .get()
+  },
+
   // storage
   uriToBlob: uri => {
     return new Promise((resolve, reject) => {

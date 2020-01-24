@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 5,
     borderRadius: 10,
+    marginBottom: 10,
   },
   avatarWrapper: {
     flex: 1,
