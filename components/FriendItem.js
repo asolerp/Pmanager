@@ -1,6 +1,7 @@
-import React from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import React, { useContext } from 'react'
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { Avatar } from 'react-native-elements'
+import { NavigationContext } from 'react-navigation'
 
 const styles = StyleSheet.create({
   itemWrapper: {
@@ -48,28 +49,31 @@ const styles = StyleSheet.create({
 })
 
 const FriendItem = ({ user }) => {
-  const { imgProfile, name, position } = user
+  const { imgProfile, name, position, uid } = user
+  const navigation = useContext(NavigationContext)
 
   return (
-    <View style={styles.itemWrapper}>
-      <View style={styles.avatarWrapper}>
-        <Avatar
-          rounded
-          size="large"
-          source={{
-            uri: imgProfile,
-          }}
-        />
-      </View>
-      <View style={styles.infoWrapper}>
-        <Text style={styles.title}>{name}</Text>
-      </View>
-      <View style={styles.positionWrapper}>
-        <View style={styles.positionLabel}>
-          <Text style={styles.positionText}>{position}</Text>
+    <TouchableOpacity onPress={() => navigation.navigate('FriendProfile', { friendUID: uid })}>
+      <View style={styles.itemWrapper}>
+        <View style={styles.avatarWrapper}>
+          <Avatar
+            rounded
+            size="large"
+            source={{
+              uri: imgProfile,
+            }}
+          />
+        </View>
+        <View style={styles.infoWrapper}>
+          <Text style={styles.title}>{name}</Text>
+        </View>
+        <View style={styles.positionWrapper}>
+          <View style={styles.positionLabel}>
+            <Text style={styles.positionText}>{position}</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 

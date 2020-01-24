@@ -73,7 +73,6 @@ function ProfileForm(props) {
 
   useEffect(() => {
     const userData = props.navigation.getParam('user')
-    console.log(userData)
     props.navigation.setParams({
       title: userData.name,
       showHeader: !userData.firstLogin,

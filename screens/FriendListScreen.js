@@ -36,7 +36,9 @@ const styles = StyleSheet.create({
   },
   noUsersText: {
     color: 'white',
-    fontFamily: 'montserrat-light',
+    fontFamily: 'montserrat-regular',
+    fontSize: 20,
+    textAlign: 'center',
   },
 })
 
@@ -66,7 +68,7 @@ const FriendListScreen = props => {
         await props.firebase
           .searchByName({ search: s })
           .then(querySnapshot => querySnapshot.forEach(doc => searchedUsers.push(doc.data())))
-        setSfriends(searchedUsers)
+          .then(() => setSfriends(searchedUsers))
       } catch (err) {
         console.log(err)
         setLoading(false)
@@ -103,8 +105,8 @@ const FriendListScreen = props => {
             />
           </View>
         ) : (
-          <View tyle={[styles.listContainer, { alignContent: 'center', alignItems: 'center' }]}>
-            <Text>No se han encontrado usuarios con ese nombre ...</Text>
+          <View style={[styles.listContainer, { justifyContent: 'center', alignItems: 'center' }]}>
+            <Text style={styles.noUsersText}>Usuario no encontrado ...</Text>
           </View>
         )}
       </BlurBackground>

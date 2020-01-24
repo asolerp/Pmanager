@@ -6,6 +6,7 @@ import TabBarIcon from '../components/TabBarIcon'
 import Home from '../screens/HomeScreen'
 import Profile from '../screens/ProfileScreen'
 import ProfileForm from '../screens/ProfileFormScreen'
+import FriendScreen from '../screens/FriendScreen'
 import FriendListScreen from '../screens/FriendListScreen'
 
 const config = Platform.select({
@@ -56,6 +57,7 @@ ProfileStack.path = ''
 
 const FriendListStack = createStackNavigator({
   FriendList: FriendListScreen,
+  FriendProfile: FriendScreen,
 })
 
 FriendListStack.navigationOptions = ({ navigation }) => {
