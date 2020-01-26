@@ -6,6 +6,8 @@ import TabBarIcon from '../components/TabBarIcon'
 import Home from '../screens/HomeScreen'
 import Profile from '../screens/ProfileScreen'
 import ProfileForm from '../screens/ProfileFormScreen'
+import FriendScreen from '../screens/FriendScreen'
+import FriendListScreen from '../screens/FriendListScreen'
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -22,7 +24,7 @@ const HomeStack = createStackNavigator(
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-person' : 'md-person'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-football' : 'md-football'} />
   ),
 }
 
@@ -53,10 +55,46 @@ ProfileStack.navigationOptions = ({ navigation }) => {
 
 ProfileStack.path = ''
 
+const FriendListStack = createStackNavigator({
+  FriendList: FriendListScreen,
+  FriendProfile: FriendScreen,
+})
+
+FriendListStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true
+  if (navigation.state.index > 0) {
+    tabBarVisible = false
+  }
+
+  return {
+    tabBarVisible,
+    tabBarLabel: 'Friends',
+    tabBarIcon: ({ focused }) => (
+      <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-people' : 'md-people'} />
+    ),
+  }
+}
+
+FriendListStack.path = ''
+
 const tabNavigator = createBottomTabNavigator(
   {
     HomeStack,
+    FriendListStack,
     ProfileStack,
+  },
+  {
+    tabBarOptions: {
+      activeTintColor: 'red',
+      inactiveTintColor: 'rgba(0,0,0,0.6)',
+      showLabel: false,
+      style: {
+        backgroundColor: 'rgba(20,20,20,0.7)',
+      },
+      activeTabStyle: {
+        backgroundColor: 'yellow',
+      },
+    },
   }
   // {
   //   defaultNavigationOptions: ({ navigation }) => {

@@ -9,7 +9,6 @@ import {
   Text,
 } from 'react-native'
 import { Formik } from 'formik'
-import Constants from 'expo-constants'
 import * as ImagePicker from 'expo-image-picker'
 import * as Yup from 'yup'
 import * as Permissions from 'expo-permissions'
@@ -19,7 +18,7 @@ import FormInput from '../components/form/FormInput'
 import FormButton from '../components/form/FormButton'
 import FormSelect from '../components/form/FormSelect'
 import ErrorMessage from '../components/form/ErrorMessage'
-import { useStateValue } from '../config/User/UserContextManagement'
+import subscribeUserData from '../hooks/subscribeUserData'
 import { POSITIONS, MAIN_FOOT, PLAYER_STATS } from '../constants/Player'
 import { withFirebaseHOC } from '../config/Firebase'
 import NumberSelector from '../components/form/NumberSelector'
@@ -57,29 +56,38 @@ const styles = StyleSheet.create({
   },
 })
 
-const getPermissionAsync = async () => {
-  if (Constants.platform.ios) {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
-    if (status !== 'granted') {
-      Alert('Sorry, we need camera roll permissions to make this work!')
-    }
-  }
+const userEmpty = {
+  age: 0,
+  name: '',
+  dorsal: 0,
+  description: '',
+  country: '',
+  height: 0,
+  weight: 0,
+  position: '',
+  foot: '',
+  stats: {
+    shoot: 0,
+    speed: 0,
+    dribbling: 0,
+    pass: 0,
+    strength: 0,
+    resistance: 0,
+  },
 }
 
 function ProfileForm(props) {
-  const [{ user }, dispatch] = useStateValue()
-  const [imgProfile, setImgProfile] = useState(user.imgProfile)
+  const [user, setUser] = useState()
+  const [imgProfile, setImgProfile] = useState('')
 
   useEffect(() => {
-    console.log(user)
+    const userData = props.navigation.getParam('user')
     props.navigation.setParams({
-      title: user.name,
-      showHeader: !user.firstLogin,
+      title: userData.name,
+      showHeader: !userData.firstLogin,
     })
-  }, [])
-
-  useEffect(() => {
-    getPermissionAsync()
+    setImgProfile(userData.imgProfile)
+    setUser(userData)
   }, [])
 
   const pickImage = async () => {

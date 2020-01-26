@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#fff',
   },
   inputsWrapper: {
     width: '100%',
@@ -47,22 +46,19 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
   },
-  buttonContainer: {},
+  signUpText: {
+    fontFamily: 'montserrat-light',
+    color: 'white',
+    fontSize: 15,
+    marginBottom: 15,
+    textAlign: 'center',
+  },
 })
 
 function LoginScreen(props) {
-  // const [passwordVisibility, setPasswordVisibility] = useState(true);
-  // const [rightIcon, setRightIcon] = useState('ios-eye');
   const [loading, setLoading] = useState(false)
 
-  // const goToSignup = () => props.navigation.navigate('Signup');
-
-  // const handlePasswordVisibility = () => {
-  //   setRightIcon(prevState =>
-  //     prevState === 'ios-eye' ? 'ios-eye-off' : 'ios-eye',
-  //   );
-  //   setPasswordVisibility(prevState => !prevState);
-  // };
+  const goToSignup = () => props.navigation.navigate('Signup')
 
   const handleOnLogin = async (values, actions) => {
     setLoading(true)
@@ -70,18 +66,16 @@ function LoginScreen(props) {
     try {
       const { user } = await props.firebase.loginWithEmail(email, password)
       if (user) {
-        console.log(user)
-        await props.firebase.updateUserProfile(user)
+        await props.firebase.updateLogin(user)
         setLoading(false)
       }
       props.navigation.navigate('App', { userUID: user.uid })
     } catch (error) {
       actions.setFieldError('general', error.message)
+      setLoading(false)
     } finally {
       actions.setSubmitting(false)
     }
-
-    // setLoading(true);
   }
 
   return (
@@ -131,16 +125,6 @@ function LoginScreen(props) {
                     iconColor="#2C384A"
                     textAlign="center"
                     onBlur={handleBlur('password')}
-                    // rightIcon={
-                    //   <TouchableOpacity onPress={handlePasswordVisibility}>
-                    //     <Icon
-                    //       type="ionicon"
-                    //       name={rightIcon}
-                    //       size={28}
-                    //       color="grey"
-                    //     />
-                    //   </TouchableOpacity>
-                    // }
                   />
                   <ErrorMessage errorValue={touched.password && errors.password} />
                 </View>
@@ -152,11 +136,12 @@ function LoginScreen(props) {
                     onPress={handleSubmit}
                     title="LOGIN"
                     buttonColor="#22508F"
-                    // disabled={!isValid || isSubmitting}
-                    // loading={isSubmitting}
                   />
                 </View>
                 <ErrorMessage errorValue={errors.general} />
+                <TouchableOpacity onPress={() => goToSignup()}>
+                  <Text style={styles.signUpText}>Aun no estoy registrado</Text>
+                </TouchableOpacity>
               </>
             )}
           </Formik>

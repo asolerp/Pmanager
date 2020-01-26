@@ -2,6 +2,7 @@ import * as firebase from 'firebase'
 import 'firebase/auth'
 import 'firebase/firestore'
 import firebaseConfig from './firebaseConfig'
+import generateKeywords from '../../utils/keyGenerator'
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
@@ -33,7 +34,7 @@ const Firebase = {
       .set({ email: userData.email, ...userData.metadata, profileFilled: false })
   },
 
-  updateUserProfile: userData => {
+  updateLogin: userData => {
     const { email, metadata } = userData
     const { lastSignInTime, creationTime } = metadata
     return firebase
@@ -44,7 +45,16 @@ const Firebase = {
         email,
         lastSignInTime,
         creationTime,
+        // keywords: generateKeywords('Carol'),
       })
+  },
+
+  updateUserProfile: userData => {
+    return firebase
+      .firestore()
+      .collection('users')
+      .doc(`${userData.uid}`)
+      .set(userData)
   },
 
   getUserProfile: id => {
@@ -52,6 +62,28 @@ const Firebase = {
       .firestore()
       .collection('users')
       .doc(`${id}`)
+      .get()
+  },
+
+  getUserFriends: () => {
+    const user = firebase.auth().currentUser
+
+    return firebase
+      .firestore()
+      .collection('friendship')
+      .doc(user.uid)
+      .collection('friends')
+      .get()
+  },
+
+  searchByName: ({ search = '', limit = 50, lastNameOfLastPerson = '' } = {}) => {
+    return firebase
+      .firestore()
+      .collection('users')
+      .where('keywords', 'array-contains', search.toLowerCase())
+      .orderBy('name')
+      .startAfter(lastNameOfLastPerson)
+      .limit(limit)
       .get()
   },
 
