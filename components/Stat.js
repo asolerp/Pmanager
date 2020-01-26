@@ -17,11 +17,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 15,
-    color: 'white',
+    color: 'black',
+    fontFamily: 'montserrat-light',
   },
   stat: {
     fontSize: 25,
-    color: 'white',
+    color: 'black',
+    fontFamily: 'montserrat-regular',
   },
 })
 

@@ -6,6 +6,7 @@ import { StyleSheet, View, Text, TextInput } from 'react-native'
 const FormInput = ({
   iconName,
   iconColor,
+  color = 'white',
   returnKeyType,
   keyboardType,
   name,
@@ -18,8 +19,8 @@ const FormInput = ({
   <View style={[styles.inputWrapper, style]}>
     {value.length < 20 && <Text style={styles.label}>{label}</Text>}
     <TextInput
-      style={styles.input}
-      placeholderTextColor="white"
+      style={[styles.input, { color }]}
+      placeholderTextColor={color}
       name={name}
       placeholder={placeholder}
       value={value}
@@ -42,7 +43,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 50,
     fontFamily: 'montserrat-regular',
-    color: 'white',
     width: '100%',
   },
   label: {

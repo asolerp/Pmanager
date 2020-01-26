@@ -12,14 +12,18 @@ function SectionTitle({ title }) {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'flex-start',
+    borderColor: '#CC1034',
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    backgroundColor: '#CC1034',
   },
   title: {
-    color: 'black',
+    color: 'white',
     fontSize: 20,
     paddingTop: 10,
     paddingBottom: 10,
     fontFamily: 'montserrat-regular',
-    fontWeight: 'bold',
+    textAlign: 'center',
   },
 })
 

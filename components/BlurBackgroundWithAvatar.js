@@ -28,11 +28,13 @@ const styles = StyleSheet.create({
   },
   title: {
     color: 'white',
+    fontFamily: 'montserrat-regular',
     fontSize: 20,
     marginTop: 10,
   },
   subtitle: {
     color: 'white',
+    fontFamily: 'montserrat-light',
     fontSize: 12,
   },
   infoWrapper: {
