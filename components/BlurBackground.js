@@ -42,13 +42,13 @@ const styles = StyleSheet.create({
   },
 })
 
-function BlurBackground({ backgroundUrl, children, center }) {
+function BlurBackground({ blur, backgroundUrl, children, center }) {
   return (
     <ImageBackground
       source={{
         uri: backgroundUrl,
       }}
-      blurRadius={6}
+      blurRadius={blur || 6}
       style={styles.container}
     >
       <View style={[center && styles.topBackgroundImage, styles.backgroundColor]}>{children}</View>

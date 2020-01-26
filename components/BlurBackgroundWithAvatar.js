@@ -55,7 +55,9 @@ function BlurBackgroundWithAvatar(props) {
       <View style={styles.topBackgroundImage}>
         {props.editableUser && (
           <View style={{ position: 'absolute', right: 25, top: 50 }}>
-            <TouchableOpacity onPress={() => navigation && navigation.navigate('ProfileForm')}>
+            <TouchableOpacity
+              onPress={() => navigation && navigation.navigate('ProfileForm', { user: props.user })}
+            >
               <MaterialCommunityIcons name="account-edit" size={32} color="white" />
             </TouchableOpacity>
           </View>

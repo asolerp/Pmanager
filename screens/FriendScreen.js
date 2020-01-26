@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import RadarChart from '../components/RadarChart'
@@ -28,8 +28,21 @@ const styles = StyleSheet.create({
   },
 })
 
-function Profile(props) {
-  const { loading, user } = subscribeUserData()
+function FriendScreen(props) {
+  const [user, setUser] = useState()
+
+  useEffect(() => {
+    const friendUID = props.navigation.getParam('friendUID')
+    const getFriendProfile = async uid => {
+      await props.firebase.getUserProfile(uid).then(doc => {
+        props.navigation.setParams({
+          title: doc.data().name,
+        })
+        setUser(doc.data())
+      })
+    }
+    getFriendProfile(friendUID)
+  }, [])
 
   const getPositon = () => {
     return POSITIONS.find(position => position.value === user.position)
@@ -67,7 +80,6 @@ function Profile(props) {
                 user.imgProfile ||
                 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg'
               }
-              editableUser
               avatarUrl={
                 user.imgProfile ||
                 'https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg'
@@ -109,9 +121,16 @@ function Profile(props) {
   )
 }
 
-const extendedComponent = withFirebaseHOC(Profile)
+const extendedComponent = withFirebaseHOC(FriendScreen)
 
-extendedComponent.navigationOptions = {
-  header: null,
+extendedComponent.navigationOptions = props => {
+  return {
+    title: props.navigation.getParam('title'),
+    headerTitleStyle: {
+      color: 'black',
+      fontSize: 20,
+    },
+  }
 }
+
 export default extendedComponent

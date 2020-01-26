@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { YellowBox, Platform, StatusBar, StyleSheet, View } from 'react-native'
 import { AppLoading } from 'expo'
 import { Asset } from 'expo-asset'
+import Constants from 'expo-constants'
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons'
 import AppNavigator from './navigation/AppNavigator'
@@ -45,7 +46,17 @@ function App(props) {
         'montserrat-regular': require('./assets/fonts/Montserrat-Regular.ttf'),
         'montserrat-light': require('./assets/fonts/Montserrat-ExtraLight.ttf'),
       }),
+      getPermissionAsync(),
     ])
+  }
+
+  const getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+      if (status !== 'granted') {
+        Alert('Sorry, we need camera roll permissions to make this work!')
+      }
+    }
   }
 
   const handleLoadingError = error => {
