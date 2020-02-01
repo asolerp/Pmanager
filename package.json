@@ -6,7 +6,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "devtools": "react-devtools"
   },
   "jest": {
     "preset": "jest-expo"
@@ -25,6 +26,7 @@
     "firebase": "6.6.0",
     "formik": "1.5.8",
     "react": "16.8.3",
+    "react-devtools": "^3",
     "react-dom": "16.8.3",
     "react-firebase-hooks": "^2.1.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",

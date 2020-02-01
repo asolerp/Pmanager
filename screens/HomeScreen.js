@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
+import { useStateValue } from '../config/User/UserContextManagement'
 import { withFirebaseHOC } from '../config/Firebase'
-import NumberSelector from '../components/form/NumberSelector'
 import subscribeUserData from '../hooks/subscribeUserData'
 import BlurBackground from '../components/BlurBackground'
 
 function Home(props) {
   const { loading, user } = subscribeUserData()
+  const [{ session }, dispatch] = useStateValue()
 
   useEffect(() => {
     props.navigation.setParams({ titulo: 'Alberto Soler', tabBar: false })
@@ -30,7 +31,7 @@ function Home(props) {
       >
         {loading && <ActivityIndicator size="small" color="white" />}
         {user && <Text style={styles.text}>{user.name}</Text>}
-
+        {session && <Text style={styles.text}>{session.uid}</Text>}
         <Button
           title="Signout"
           onPress={handleSignout}

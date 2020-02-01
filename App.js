@@ -10,8 +10,8 @@ import { UserProvider } from './config/User/UserContextManagement'
 import Firebase, { FirebaseProvider, withFirebaseHOC } from './config/Firebase'
 
 const initialUserState = {
-  user: {
-    name: 'alberto :)',
+  session: {
+    uid: undefined,
   },
 }
 
@@ -20,7 +20,7 @@ const userReducer = (state, action) => {
     case 'updateProfile':
       return {
         ...state,
-        user: action.userProfile,
+        session: action.userProfile,
       }
     default:
       return state

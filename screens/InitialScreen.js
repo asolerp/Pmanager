@@ -7,16 +7,16 @@ function Initial(props) {
 
   useEffect(() => {
     async function checkStatusAuth() {
-      console.log(props)
       try {
         // previously
         await props.firebase.checkUserAuth(async user => {
-          console.log(user)
           if (user) {
             const userProfile = await props.firebase.getUserProfile(user.uid)
             dispatch({
               type: 'updateProfile',
-              userProfile: userProfile.data(),
+              userProfile: {
+                uid: userProfile.data().uid,
+              },
             })
             if (userProfile.data().firstLogin) {
               // if first logged in
