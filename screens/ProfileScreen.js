@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   bottomWrapper: {
-    flex: 1,
+    flex: 2,
     width: '100%',
     padding: 10,
   },
@@ -75,7 +75,14 @@ function Profile(props) {
               title={user.name || ''}
               subtitle={user.position ? getPositon().label : ''}
               size="xlarge"
-            >
+            />
+          </>
+        )}
+      </View>
+      <View style={styles.bottomWrapper}>
+        <ScrollView>
+          {user && (
+            <>
               <View
                 style={{
                   flexDirection: 'row',
@@ -89,14 +96,6 @@ function Profile(props) {
                 <Stat title="Edad" stat={user.age || ''} />
                 <Stat title="Altura" stat={user.height || ''} />
               </View>
-            </BlurBackgroundWithAvatar>
-          </>
-        )}
-      </View>
-      <View style={styles.bottomWrapper}>
-        <ScrollView>
-          {user && (
-            <>
               <PlayerDetail title="Descripción" subtitle={user.description || ''} />
               <PlayerDetail title="Nacionalidad" subtitle={user.country ? getCountryLabel() : ''} />
               <PlayerDetail title="Pie" subtitle={user.foot ? getMainFoot() : ''} />

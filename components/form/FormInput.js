@@ -6,6 +6,7 @@ import { StyleSheet, View, Text, TextInput } from 'react-native'
 const FormInput = ({
   iconName,
   iconColor,
+  color = 'white',
   returnKeyType,
   keyboardType,
   name,
@@ -16,10 +17,14 @@ const FormInput = ({
   ...rest
 }) => (
   <View style={[styles.inputWrapper, style]}>
-    {value.length < 20 && <Text style={styles.label}>{label}</Text>}
+    {label && (
+      <View style={styles.labelWrapper}>
+        <Text style={styles.label}>{label}</Text>
+      </View>
+    )}
     <TextInput
-      style={styles.input}
-      placeholderTextColor="white"
+      style={[styles.input, { color }]}
+      placeholderTextColor={color}
       name={name}
       placeholder={placeholder}
       value={value}
@@ -35,21 +40,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderRadius: 50,
+    height: 60,
     borderColor: '#aaaaaa',
   },
   input: {
     fontSize: 20,
+    flex: 0.7,
     borderRadius: 50,
     height: 50,
     fontFamily: 'montserrat-regular',
-    color: 'white',
     width: '100%',
+  },
+  labelWrapper: {
+    flex: 0.3,
+    height: '100%',
+    backgroundColor: '#22508F',
+    borderTopLeftRadius: 50,
+    borderBottomLeftRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   label: {
     fontWeight: '400',
-    color: '#B6B6B6',
+    color: 'white',
     marginLeft: 10,
     marginBottom: 0,
+    textAlign: 'center',
     fontSize: 15,
     fontFamily: 'montserrat-regular',
   },

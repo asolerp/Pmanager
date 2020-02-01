@@ -7,6 +7,7 @@ import Home from '../screens/HomeScreen'
 import Profile from '../screens/ProfileScreen'
 import ProfileForm from '../screens/ProfileFormScreen'
 import FriendScreen from '../screens/FriendScreen'
+import NewMatchScreen from '../screens/NewMatchScreen'
 import FriendListScreen from '../screens/FriendListScreen'
 
 const config = Platform.select({
@@ -17,6 +18,7 @@ const config = Platform.select({
 const HomeStack = createStackNavigator(
   {
     Home,
+    NewMatch: NewMatchScreen,
   },
   config
 )
