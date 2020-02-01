@@ -32,6 +32,14 @@ function Home(props) {
         {user && <Text style={styles.text}>{user.name}</Text>}
 
         <Button
+          title="Nuevo partido"
+          onPress={() => props.navigation.navigate('NewMatch')}
+          titleStyle={{
+            color: 'white',
+          }}
+          type="clear"
+        />
+        <Button
           title="Signout"
           onPress={handleSignout}
           titleStyle={{

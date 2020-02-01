@@ -7,31 +7,35 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#aaaaaa',
     borderRadius: 50,
-    padding: 10,
     marginBottom: 15,
     height: 60,
-    flex: 0.48,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
   inputWrapper: {
     width: '100%',
-    alignItems: 'center',
-    flex: 0.4,
+    alignItems: 'flex-end',
+    flex: 0.7,
   },
   inputStyle: {
     fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
     borderWidth: 0.5,
-    borderColor: 'purple',
-    borderRadius: 8,
     color: 'black',
     paddingRight: 30,
   },
+  labelWrapper: {
+    flex: 0.3,
+    backgroundColor: '#22508F',
+    borderTopLeftRadius: 50,
+    borderBottomLeftRadius: 50,
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   label: {
     fontWeight: '400',
-    color: '#B6B6B6',
+    color: 'white',
     marginLeft: 10,
     marginBottom: 0,
     fontSize: 15,
@@ -45,7 +49,7 @@ const styles = StyleSheet.create({
 const FormSelect = ({ values, label, iconName, iconSize, iconColor, ...rest }) => {
   return (
     <View style={styles.wrapper}>
-      <View style={{ flex: 0.6 }}>
+      <View style={styles.labelWrapper}>
         <Text style={styles.label}>{label}</Text>
       </View>
       <View style={styles.inputWrapper}>

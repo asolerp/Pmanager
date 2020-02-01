@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import { ImageBackground, StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { Avatar } from 'react-native-elements'
 import { NavigationContext } from 'react-navigation'
+import AvatarWithPicker from './Avatar'
 
 const styles = StyleSheet.create({
   container: {
@@ -71,7 +71,7 @@ function BlurBackgroundWithAvatar(props) {
             props.children ? { justifyContent: 'flex-end' } : { justifyContent: 'center' },
           ]}
         >
-          <Avatar
+          <AvatarWithPicker
             rounded
             editButton={{
               name: 'photo-camera',
@@ -81,7 +81,7 @@ function BlurBackgroundWithAvatar(props) {
             }}
             containerStyle={styles.avatar}
             showEditButton={props.showEditButton}
-            onEditPress={props.onEditPress}
+            setImage={props.setImage}
             size={props.size}
             source={{
               uri: props.avatarUrl,

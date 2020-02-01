@@ -96,14 +96,6 @@ function Profile(props) {
                 <Stat title="Edad" stat={user.age || ''} />
                 <Stat title="Altura" stat={user.height || ''} />
               </View>
-            </>
-          </>
-        )}
-      </View>
-      <View style={styles.bottomWrapper}>
-        <ScrollView>
-          {user && (
-            <>
               <PlayerDetail title="Descripción" subtitle={user.description || ''} />
               <PlayerDetail title="Nacionalidad" subtitle={user.country ? getCountryLabel() : ''} />
               <PlayerDetail title="Pie" subtitle={user.foot ? getMainFoot() : ''} />
