@@ -1,5 +1,25 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'flex-start',
+    borderColor: '#f7f7f7',
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    backgroundColor: '#f7f7f7',
+  },
+  title: {
+    color: 'black',
+    fontSize: 15,
+    paddingTop: 10,
+    paddingLeft: 15,
+    paddingBottom: 10,
+    fontFamily: 'montserrat-regular',
+    fontWeight: '200',
+    textAlign: 'left',
+  },
+})
 
 function SectionTitle({ title }) {
   return (
@@ -8,23 +28,5 @@ function SectionTitle({ title }) {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'flex-start',
-    borderColor: '#CC1034',
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
-    backgroundColor: '#CC1034',
-  },
-  title: {
-    color: 'white',
-    fontSize: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
-    fontFamily: 'montserrat-regular',
-    textAlign: 'center',
-  },
-})
 
 export default SectionTitle

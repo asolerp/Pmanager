@@ -1,26 +1,33 @@
+// UI
 import React, { useState, useEffect } from 'react'
 import { Platform, ScrollView, KeyboardAvoidingView, StyleSheet, View } from 'react-native'
-import { Formik } from 'formik'
-import * as ImagePicker from 'expo-image-picker'
+// import * as ImagePicker from 'expo-image-picker'
 import * as Yup from 'yup'
-import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
-import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
+
+// Components
+import { Formik } from 'formik'
+// import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
+// import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
+import { getStatusBarHeight } from 'react-native-status-bar-height'
 import FormInput from '../components/form/FormInput'
 import FormButton from '../components/form/FormButton'
 import FormSelect from '../components/form/FormSelect'
 import ErrorMessage from '../components/form/ErrorMessage'
-import { POSITIONS, MAIN_FOOT, PLAYER_STATS } from '../constants/Player'
-import { withFirebaseHOC } from '../config/Firebase'
 import NumberSelector from '../components/form/NumberSelector'
 import Section from '../components/form/SectionTitle'
 import RadioSelector from '../components/form/RadioSelector'
+
+// Utils
+import { POSITIONS, MAIN_FOOT, PLAYER_STATS } from '../constants/Player'
 import COUNTRIES from '../constants/Countries'
+import { withFirebaseHOC } from '../config/Firebase'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: getStatusBarHeight(),
   },
   topWrapper: {
     flex: 2,
@@ -71,17 +78,17 @@ function ProfileForm(props) {
 
   useEffect(() => {
     const userData = props.navigation.getParam('user')
-    props.navigation.setParams({
-      title: userData.name,
-      showHeader: !userData.firstLogin,
-    })
+    // props.navigation.setParams({
+    //   title: userData.name,
+    //   showHeader: !userData.firstLogin,
+    // })
     setImgProfile(userData.imgProfile)
     setUser(userData)
   }, [])
 
-  const setImage = uri => {
-    setImgProfile(uri)
-  }
+  // const setImage = uri => {
+  //   setImgProfile(uri)
+  // }
 
   const addValue = (value, setFieldValue, input) => {
     setFieldValue(input, String(Number(value) + 1))
@@ -115,7 +122,7 @@ function ProfileForm(props) {
     <View style={styles.container}>
       {user && (
         <>
-          <HideWithKeyboard style={styles.topWrapper}>
+          {/* <HideWithKeyboard style={styles.topWrapper}>
             {user && (
               <BlurBackgroundWithAvatar
                 backgroundUrl={imgProfile}
@@ -125,7 +132,7 @@ function ProfileForm(props) {
                 size="xlarge"
               />
             )}
-          </HideWithKeyboard>
+          </HideWithKeyboard> */}
           <View style={styles.formWrapper}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} enabled>
               <Formik

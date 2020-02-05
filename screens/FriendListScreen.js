@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, SafeAreaView, FlatList, View, Text } from 'react-native'
 import { SearchBar } from 'react-native-elements'
-import * as firebase from 'firebase'
 import BlurBackground from '../components/BlurBackground'
 import { withFirebaseHOC } from '../config/Firebase'
 import FriendItem from '../components/FriendItem'
