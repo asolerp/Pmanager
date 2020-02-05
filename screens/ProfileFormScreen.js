@@ -15,6 +15,8 @@ import NumberSelector from '../components/form/NumberSelector'
 import Section from '../components/form/SectionTitle'
 import RadioSelector from '../components/form/RadioSelector'
 import COUNTRIES from '../constants/Countries'
+import PageBlank from '../components/PageBlank'
+import AvatarWithPicker from '../components/Avatar'
 
 const styles = StyleSheet.create({
   container: {
@@ -71,10 +73,6 @@ function ProfileForm(props) {
 
   useEffect(() => {
     const userData = props.navigation.getParam('user')
-    props.navigation.setParams({
-      title: userData.name,
-      showHeader: !userData.firstLogin,
-    })
     setImgProfile(userData.imgProfile)
     setUser(userData)
   }, [])
@@ -114,8 +112,30 @@ function ProfileForm(props) {
   return (
     <View style={styles.container}>
       {user && (
-        <>
-          <HideWithKeyboard style={styles.topWrapper}>
+        <PageBlank
+          title={user.name}
+          titleColor="black"
+          iconColor="black"
+          rightSide={
+            <AvatarWithPicker
+              rounded
+              editButton={{
+                name: 'photo-camera',
+                type: 'material',
+                color: 'black',
+                underlayColor: '#000',
+              }}
+              containerStyle={styles.avatar}
+              showEditButton
+              setImage={uri => setImage(uri)}
+              size="medium"
+              source={{
+                uri: imgProfile,
+              }}
+            />
+          }
+        >
+          {/* <HideWithKeyboard style={styles.topWrapper}>
             {user && (
               <BlurBackgroundWithAvatar
                 backgroundUrl={imgProfile}
@@ -125,7 +145,7 @@ function ProfileForm(props) {
                 size="xlarge"
               />
             )}
-          </HideWithKeyboard>
+          </HideWithKeyboard> */}
           <View style={styles.formWrapper}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} enabled>
               <Formik
@@ -385,7 +405,7 @@ function ProfileForm(props) {
               </Formik>
             </KeyboardAvoidingView>
           </View>
-        </>
+        </PageBlank>
       )}
     </View>
   )
