@@ -24,6 +24,7 @@ import { POSITIONS, MAIN_FOOT, PLAYER_STATS } from '../constants/Player'
 import COUNTRIES from '../constants/Countries'
 import PageBlank from '../components/PageBlank'
 import AvatarWithPicker from '../components/Avatar'
+import ChipSelector from '../components/form/ChipSelector'
 
 const styles = StyleSheet.create({
   container: {
@@ -100,21 +101,21 @@ function ProfileForm(props) {
     setFieldValue(input, value)
   }
 
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().label('Nombre'),
-    dorsal: Yup.string().label('Dorsal'),
-    description: Yup.string().label('Descripción'),
-    country: Yup.string().label('País'),
-    age: Yup.string().label('Edad'),
-    height: Yup.string().label('Edad'),
-    weight: Yup.string().label('Edad'),
-    position: Yup.string().required('Position requerida'),
-    foot: Yup.string().required('Pie requerido'),
-    shoot: Yup.string(),
-    speed: Yup.string(),
-    dribbling: Yup.string(),
-    pass: Yup.string(),
-  })
+  // const validationSchema = Yup.object().shape({
+  //   name: Yup.string().label('Nombre'),
+  //   dorsal: Yup.string().label('Dorsal'),
+  //   description: Yup.string().label('Descripción'),
+  //   country: Yup.string().label('País'),
+  //   age: Yup.string().label('Edad'),
+  //   height: Yup.string().label('Edad'),
+  //   weight: Yup.string().label('Edad'),
+  //   position: Yup.string().required('Position requerida'),
+  //   foot: Yup.string().required('Pie requerido'),
+  //   shoot: Yup.string(),
+  //   speed: Yup.string(),
+  //   dribbling: Yup.string(),
+  //   pass: Yup.string(),
+  // })
 
   return (
     <View style={styles.container}>
@@ -166,7 +167,7 @@ function ProfileForm(props) {
                     country,
                     height,
                     weight,
-                    position,
+                    positions,
                     foot,
                     stats = {
                       shoot: 0,
@@ -192,7 +193,7 @@ function ProfileForm(props) {
                         age,
                         height,
                         weight,
-                        position,
+                        positions,
                         foot,
                         stats,
                         imgProfile: downloadURL,
@@ -201,7 +202,6 @@ function ProfileForm(props) {
                     })
                     .then(() => props.navigation.navigate('Profile'))
                 }}
-                validationSchema={validationSchema}
               >
                 {({
                   handleChange,
@@ -209,7 +209,6 @@ function ProfileForm(props) {
                   handleSubmit,
                   setFieldValue,
                   errors,
-                  isValid,
                   handleBlur,
                   isSubmitting,
                 }) => (
@@ -238,6 +237,7 @@ function ProfileForm(props) {
                         placeholder="Que tipo de jugador eres?"
                         multiline
                         numberOfLines={4}
+                        textAlignVertical="top"
                         autoCapitalize="none"
                         textAlign="left"
                         color="black"
@@ -260,7 +260,14 @@ function ProfileForm(props) {
                         }}
                         onValueChange={itemValue => setFieldValue('country', itemValue)}
                       />
-                      <FormSelect
+                      <ChipSelector
+                        multiple
+                        value={values.positions}
+                        values={POSITIONS}
+                        label="Posición"
+                        onValueChange={itemValue => setFieldValue('positions', itemValue)}
+                      />
+                      {/* <FormSelect
                         value={values.position}
                         label="Posición"
                         iconColor="white"
@@ -273,7 +280,7 @@ function ProfileForm(props) {
                           color: 'white',
                         }}
                         onValueChange={itemValue => setFieldValue('position', itemValue)}
-                      />
+                      /> */}
                       <FormSelect
                         value={values.foot}
                         label="Pierna"
@@ -402,7 +409,7 @@ function ProfileForm(props) {
                         onPress={handleSubmit}
                         title="Editar"
                         buttonColor="#039BE5"
-                        disabled={!isValid}
+                        // disabled={!isValid}
                         loading={isSubmitting}
                       />
                     </View>

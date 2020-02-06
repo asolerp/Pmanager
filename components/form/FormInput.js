@@ -44,11 +44,13 @@ const styles = StyleSheet.create({
     borderColor: '#aaaaaa',
   },
   input: {
-    fontSize: 20,
+    fontSize: 30,
     flex: 0.7,
     borderRadius: 50,
     height: 50,
     fontFamily: 'montserrat-regular',
+    fontWeight: '300',
+    marginLeft: 10,
     width: '100%',
   },
   labelWrapper: {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 // import RNPickerSelect from 'react-native-picker-select'
 import { StyleSheet, Picker, View, Text } from 'react-native'
 
@@ -29,9 +29,7 @@ const styles = StyleSheet.create({
   },
 })
 
-const FormSelect = ({ values, label, iconName, iconSize, iconColor, ...rest }) => {
-  const [language, setLanguage] = useState()
-
+const FormSelect = ({ value, values, label, iconName, iconSize, iconColor, ...rest }) => {
   return (
     <View style={styles.wrapper}>
       <View style={styles.labelWrapper}>
@@ -39,14 +37,14 @@ const FormSelect = ({ values, label, iconName, iconSize, iconColor, ...rest }) =
       </View>
       <View style={styles.inputWrapper}>
         <Picker
-          selectedValue={language}
+          selectedValue={value}
           style={{ height: 50, width: '100%', borderWidth: 1, borderColor: 'black' }}
-          onValueChange={(itemValue, itemIndex) => setLanguage(itemValue)}
           itemTextStyle={{ color: 'red' }}
           textStyle={{ color: 'red' }}
+          {...rest}
         >
-          {values.map(value => (
-            <Picker.Item label={value.label} value={value.value} />
+          {values.map(v => (
+            <Picker.Item key={v.value} label={v.label} value={v.value} />
           ))}
         </Picker>
         {/* <RNPickerSelect
