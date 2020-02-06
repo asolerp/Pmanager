@@ -40,8 +40,6 @@ function PageBlank({ children, leftSide, rightSide, title, titleColor, iconName,
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 10,
-    paddingRight: 10,
     marginTop: getStatusBarHeight(),
   },
   titleContainer: {
@@ -49,7 +47,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: 20,
+    marginTop: 10,
     paddingLeft: 20,
     paddingRight: 20,
   },

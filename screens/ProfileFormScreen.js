@@ -1,19 +1,26 @@
+// UI
 import React, { useState, useEffect } from 'react'
 import { Platform, ScrollView, KeyboardAvoidingView, StyleSheet, View } from 'react-native'
-import { Formik } from 'formik'
-import * as ImagePicker from 'expo-image-picker'
+// import * as ImagePicker from 'expo-image-picker'
 import * as Yup from 'yup'
-import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
-import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
+
+// Components
+import { Formik } from 'formik'
+// import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
+// import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
+import { getStatusBarHeight } from 'react-native-status-bar-height'
 import FormInput from '../components/form/FormInput'
+import FormInputSimple from '../components/form/FormInputSimple'
 import FormButton from '../components/form/FormButton'
 import FormSelect from '../components/form/FormSelect'
 import ErrorMessage from '../components/form/ErrorMessage'
-import { POSITIONS, MAIN_FOOT, PLAYER_STATS } from '../constants/Player'
-import { withFirebaseHOC } from '../config/Firebase'
 import NumberSelector from '../components/form/NumberSelector'
 import Section from '../components/form/SectionTitle'
 import RadioSelector from '../components/form/RadioSelector'
+
+// Utils
+import { withFirebaseHOC } from '../config/Firebase'
+import { POSITIONS, MAIN_FOOT, PLAYER_STATS } from '../constants/Player'
 import COUNTRIES from '../constants/Countries'
 import PageBlank from '../components/PageBlank'
 import AvatarWithPicker from '../components/Avatar'
@@ -77,9 +84,9 @@ function ProfileForm(props) {
     setUser(userData)
   }, [])
 
-  const setImage = uri => {
-    setImgProfile(uri)
-  }
+  // const setImage = uri => {
+  //   setImgProfile(uri)
+  // }
 
   const addValue = (value, setFieldValue, input) => {
     setFieldValue(input, String(Number(value) + 1))
@@ -209,13 +216,13 @@ function ProfileForm(props) {
                   <ScrollView stickyHeaderIndices={[0, 2, 4]}>
                     <Section title="Datos personales" />
                     <View style={styles.inputsWrapper}>
-                      <FormInput
+                      <FormInputSimple
                         name="name"
                         value={values.name}
                         onChangeText={handleChange('name')}
                         placeholder="Nombre de jugador"
                         autoCapitalize="none"
-                        textAlign="center"
+                        textAlign="left"
                         label="Nombre"
                         color="black"
                         style={{
@@ -223,7 +230,7 @@ function ProfileForm(props) {
                         }}
                         onBlur={handleBlur('name')}
                       />
-                      <FormInput
+                      <FormInputSimple
                         name="description"
                         label="Descripción"
                         value={values.description}
@@ -232,7 +239,7 @@ function ProfileForm(props) {
                         multiline
                         numberOfLines={4}
                         autoCapitalize="none"
-                        textAlign="center"
+                        textAlign="left"
                         color="black"
                         style={{
                           marginBottom: 15,

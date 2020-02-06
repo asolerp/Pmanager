@@ -37,6 +37,8 @@ const styles = StyleSheet.create({
     borderColor: '#aaaaaa',
     padding: 5,
     height: 40,
+    fontFamily: 'montserrat-regular',
+    fontSize: 15,
   },
   label: {
     fontSize: 15,
