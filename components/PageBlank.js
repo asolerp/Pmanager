@@ -7,40 +7,11 @@ import { Ionicons } from '@expo/vector-icons'
 import { getStatusBarHeight } from 'react-native-status-bar-height'
 import { NavigationContext } from 'react-navigation'
 
-function PageBlank({ children, leftSide, rightSide, title, titleColor, iconName, iconColor }) {
-  const navigation = useContext(NavigationContext)
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <View style={styles.leftSide}>
-          {leftSide || (
-            <TouchableOpacity onPress={() => navigation.pop()}>
-              <Ionicons
-                style={styles.icon}
-                name={iconName || 'ios-arrow-back'}
-                size={40}
-                color={iconColor}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-        <View style={styles.centerSide}>
-          <Text color={titleColor} style={styles.title}>
-            {title}
-          </Text>
-        </View>
-        <View style={styles.rightSide}>{rightSide}</View>
-      </View>
-      {children}
-    </View>
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: getStatusBarHeight(),
+    height: '100%',
   },
   titleContainer: {
     justifyContent: 'center',
@@ -70,5 +41,35 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
 })
+
+function PageBlank({ children, leftSide, rightSide, title, titleColor, iconName, iconColor }) {
+  const navigation = useContext(NavigationContext)
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <View style={styles.leftSide}>
+          {leftSide || (
+            <TouchableOpacity onPress={() => navigation.pop()}>
+              <Ionicons
+                style={styles.icon}
+                name={iconName || 'ios-arrow-back'}
+                size={40}
+                color={iconColor}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={styles.centerSide}>
+          <Text color={titleColor} style={styles.title}>
+            {title}
+          </Text>
+        </View>
+        <View style={styles.rightSide}>{rightSide}</View>
+      </View>
+      <View>{children}</View>
+    </View>
+  )
+}
 
 export default PageBlank

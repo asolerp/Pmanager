@@ -83,7 +83,7 @@ const FriendListScreen = props => {
       <BlurBackground
         blur={2}
         center
-        backgroundUrl="https://i.pinimg.com/originals/35/5e/06/355e06c94e6bf92cbaf0c015edf7eea3.jpg"
+        backgroundUrlOnline="https://i.pinimg.com/originals/35/5e/06/355e06c94e6bf92cbaf0c015edf7eea3.jpg"
       >
         {/* <FriendItem /> */}
         <View style={styles.searchBarContainer}>

@@ -6,9 +6,23 @@ import { withFirebaseHOC } from '../config/Firebase'
 import subscribeUserData from '../hooks/subscribeUserData'
 import BlurBackground from '../components/BlurBackground'
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 30,
+    fontFamily: 'montserrat-light',
+    color: 'white',
+  },
+})
+
 function Home(props) {
   const { loading, user } = subscribeUserData()
-  const [{ session }, dispatch] = useStateValue()
+  // const [{ session }, dispatch] = useStateValue()
 
   useEffect(() => {
     props.navigation.setParams({ titulo: 'Alberto Soler', tabBar: false })
@@ -28,11 +42,10 @@ function Home(props) {
         blur={2}
         center
         backColor="rgba(63, 63, 63, .6)"
-        backgroundUrl="https://i.pinimg.com/originals/35/5e/06/355e06c94e6bf92cbaf0c015edf7eea3.jpg"
+        backgroundUrlOnline="https://i.pinimg.com/originals/35/5e/06/355e06c94e6bf92cbaf0c015edf7eea3.jpg"
       >
         {loading && <ActivityIndicator size="small" color="white" />}
         {user && <Text style={styles.text}>{user.name}</Text>}
-        {session && <Text style={styles.text}>{session.uid}</Text>}
         <Button
           title="Nuevo partido"
           onPress={() => props.navigation.navigate('NewMatch')}
@@ -53,20 +66,6 @@ function Home(props) {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 30,
-    fontFamily: 'montserrat-light',
-    color: 'white',
-  },
-})
 
 const HomeWithHOC = withFirebaseHOC(Home)
 

@@ -1,6 +1,14 @@
 // UI
 import React, { useState, useEffect } from 'react'
-import { Platform, ScrollView, KeyboardAvoidingView, StyleSheet, View } from 'react-native'
+import {
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  KeyboardAvoidingView,
+  StyleSheet,
+  View,
+  Text,
+} from 'react-native'
 // import * as ImagePicker from 'expo-image-picker'
 import * as Yup from 'yup'
 
@@ -17,6 +25,7 @@ import ErrorMessage from '../components/form/ErrorMessage'
 import NumberSelector from '../components/form/NumberSelector'
 import Section from '../components/form/SectionTitle'
 import RadioSelector from '../components/form/RadioSelector'
+import TShirt from '../components/form/TShirt'
 
 // Utils
 import { withFirebaseHOC } from '../config/Firebase'
@@ -32,14 +41,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  topWrapper: {
-    flex: 2,
-    width: '100%',
-  },
-  formWrapper: {
-    flex: 4,
-    width: '100%',
-  },
   inputsWrapper: {
     marginLeft: 15,
     marginRight: 15,
@@ -50,7 +51,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   numericInputs: {
+    flex: 1,
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
 })
@@ -85,9 +88,9 @@ function ProfileForm(props) {
     setUser(userData)
   }, [])
 
-  // const setImage = uri => {
-  //   setImgProfile(uri)
-  // }
+  const setImage = uri => {
+    setImgProfile(uri)
+  }
 
   const addValue = (value, setFieldValue, input) => {
     setFieldValue(input, String(Number(value) + 1))
@@ -154,7 +157,7 @@ function ProfileForm(props) {
               />
             )}
           </HideWithKeyboard> */}
-          <View style={styles.formWrapper}>
+          <View style={{ flex: 1 }}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} enabled>
               <Formik
                 initialValues={{ ...userEmpty, ...user }}
@@ -212,209 +215,220 @@ function ProfileForm(props) {
                   handleBlur,
                   isSubmitting,
                 }) => (
-                  <ScrollView stickyHeaderIndices={[0, 2, 4]}>
-                    <Section title="Datos personales" />
-                    <View style={styles.inputsWrapper}>
-                      <FormInputSimple
-                        name="name"
-                        value={values.name}
-                        onChangeText={handleChange('name')}
-                        placeholder="Nombre de jugador"
-                        autoCapitalize="none"
-                        textAlign="left"
-                        label="Nombre"
-                        color="black"
-                        style={{
-                          marginBottom: 15,
-                        }}
-                        onBlur={handleBlur('name')}
-                      />
-                      <FormInputSimple
-                        name="description"
-                        label="Descripción"
-                        value={values.description}
-                        onChangeText={handleChange('description')}
-                        placeholder="Que tipo de jugador eres?"
-                        multiline
-                        numberOfLines={4}
-                        textAlignVertical="top"
-                        autoCapitalize="none"
-                        textAlign="left"
-                        color="black"
-                        style={{
-                          marginBottom: 15,
-                        }}
-                        onBlur={handleBlur('name')}
-                      />
-                      <FormSelect
-                        value={values.country}
-                        label="País"
-                        iconColor="white"
-                        iconSize="15"
-                        iconName="ios-arrow-down"
-                        values={COUNTRIES}
-                        placeholder={{
-                          label: 'País',
-                          value: null,
-                          color: 'white',
-                        }}
-                        onValueChange={itemValue => setFieldValue('country', itemValue)}
-                      />
-                      <ChipSelector
-                        multiple
-                        value={values.positions}
-                        values={POSITIONS}
-                        label="Posición"
-                        onValueChange={itemValue => setFieldValue('positions', itemValue)}
-                      />
-                      {/* <FormSelect
-                        value={values.position}
-                        label="Posición"
-                        iconColor="white"
-                        iconSize="15"
-                        iconName="ios-arrow-down"
-                        values={POSITIONS}
-                        placeholder={{
-                          label: 'Posición',
-                          value: null,
-                          color: 'white',
-                        }}
-                        onValueChange={itemValue => setFieldValue('position', itemValue)}
-                      /> */}
-                      <FormSelect
-                        value={values.foot}
-                        label="Pierna"
-                        iconColor="black"
-                        iconSize="15"
-                        iconName="ios-arrow-down"
-                        values={MAIN_FOOT}
-                        placeholder={{
-                          label: 'Pierna principal',
-                          value: null,
-                          color: '#9EA0A4',
-                        }}
-                        onValueChange={itemValue => setFieldValue('foot', itemValue)}
-                      />
-                    </View>
-                    <Section title="Características jugador" />
-                    <View style={styles.inputsWrapper}>
-                      <NumberSelector
-                        label="Dorsal"
-                        name="dorsal"
-                        value={values.dorsal}
-                        addValue={value => addValue(value, setFieldValue, 'dorsal')}
-                        removeValue={value => removeValue(value, setFieldValue, 'dorsal')}
-                        onChangeText={handleChange('dorsal')}
-                        bgColor="#22508F"
-                      />
-                      <NumberSelector
-                        label="Edad"
-                        name="age"
-                        value={values.age}
-                        addValue={value => addValue(value, setFieldValue, 'age')}
-                        removeValue={value => removeValue(value, setFieldValue, 'age')}
-                        onChangeText={handleChange('age')}
-                        bgColor="#22508F"
-                      />
-                      <NumberSelector
-                        label="Altura (cm)"
-                        name="height"
-                        value={values.height}
-                        addValue={value => addValue(value, setFieldValue, 'height')}
-                        removeValue={value => removeValue(value, setFieldValue, 'height')}
-                        onChangeText={handleChange('height')}
-                        bgColor="#22508F"
-                      />
-                      <NumberSelector
-                        label="Peso (kg)"
-                        name="weight"
-                        value={values.weight}
-                        addValue={value => addValue(value, setFieldValue, 'weight')}
-                        removeValue={value => removeValue(value, setFieldValue, 'weight')}
-                        onChangeText={handleChange('weight')}
-                        bgColor="#22508F"
-                      />
-                    </View>
-                    <Section title="Habilidad" />
-                    <View style={styles.inputsWrapper}>
-                      <RadioSelector
-                        values={PLAYER_STATS}
-                        label="Disparo"
-                        index={
-                          values.stats
-                            ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.shoot)
-                            : 0
-                        }
-                        selectedOption={value => selectOption(value, setFieldValue, 'stats.shoot')}
-                      />
-                      <RadioSelector
-                        values={PLAYER_STATS}
-                        label="Velocidad"
-                        index={
-                          values.stats
-                            ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.speed)
-                            : 0
-                        }
-                        selectedOption={value => selectOption(value, setFieldValue, 'stats.speed')}
-                      />
-                      <RadioSelector
-                        values={PLAYER_STATS}
-                        label="Regate"
-                        index={
-                          values.stats
-                            ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.dribbling)
-                            : 0
-                        }
-                        selectedOption={value =>
-                          selectOption(value, setFieldValue, 'stats.dribbling')
-                        }
-                      />
-                      <RadioSelector
-                        values={PLAYER_STATS}
-                        label="Pase"
-                        index={
-                          values.stats
-                            ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.pass)
-                            : 0
-                        }
-                        selectedOption={value => selectOption(value, setFieldValue, 'stats.pass')}
-                      />
-                      <RadioSelector
-                        values={PLAYER_STATS}
-                        label="Fuerza"
-                        index={
-                          values.stats
-                            ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.strength)
-                            : 0
-                        }
-                        selectedOption={value =>
-                          selectOption(value, setFieldValue, 'stats.strength')
-                        }
-                      />
-                      <RadioSelector
-                        values={PLAYER_STATS}
-                        label="Resistencia"
-                        index={
-                          values.stats
-                            ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.resistance)
-                            : 0
-                        }
-                        selectedOption={value =>
-                          selectOption(value, setFieldValue, 'stats.resistance')
-                        }
-                      />
-                    </View>
-                    <View style={styles.buttonContainer}>
-                      <FormButton
-                        onPress={handleSubmit}
-                        title="Editar"
-                        buttonColor="#039BE5"
-                        // disabled={!isValid}
-                        loading={isSubmitting}
-                      />
-                    </View>
-                    <ErrorMessage errorValue={errors.general} />
-                  </ScrollView>
+                  <SafeAreaView>
+                    <ScrollView
+                      behaviour="height"
+                      style={{ marginBottom: 60 }}
+                      stickyHeaderIndices={[0, 2, 4]}
+                    >
+                      <Section title="Datos personales" />
+                      <View style={styles.inputsWrapper}>
+                        <TShirt name={values.name} dorsal={values.dorsal} />
+                        <View
+                          style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}
+                        >
+                          <FormInputSimple
+                            name="name"
+                            value={values.name}
+                            onChangeText={handleChange('name')}
+                            placeholder="Nombre de jugador"
+                            autoCapitalize="none"
+                            textAlign="left"
+                            label="Nombre"
+                            color="black"
+                            style={{
+                              marginBottom: 15,
+                              marginRight: 30,
+                            }}
+                            onBlur={handleBlur('name')}
+                          />
+                          <NumberSelector
+                            label="Dorsal"
+                            name="dorsal"
+                            value={values.dorsal}
+                            addValue={value => addValue(value, setFieldValue, 'dorsal')}
+                            removeValue={value => removeValue(value, setFieldValue, 'dorsal')}
+                            onChangeText={handleChange('dorsal')}
+                            bgColor="#22508F"
+                          />
+                        </View>
+                        <FormInputSimple
+                          name="description"
+                          label="Descripción"
+                          value={values.description}
+                          onChangeText={handleChange('description')}
+                          placeholder="Que tipo de jugador eres?"
+                          multiline
+                          numberOfLines={4}
+                          textAlignVertical="top"
+                          autoCapitalize="none"
+                          textAlign="left"
+                          color="black"
+                          style={{
+                            marginBottom: 15,
+                          }}
+                          onBlur={handleBlur('name')}
+                        />
+                        <FormSelect
+                          value={values.country}
+                          label="País"
+                          iconColor="white"
+                          iconSize="15"
+                          iconName="ios-arrow-down"
+                          values={COUNTRIES}
+                          placeholder={{
+                            label: 'País',
+                            value: null,
+                            color: 'white',
+                          }}
+                          onValueChange={itemValue => setFieldValue('country', itemValue)}
+                        />
+                        <ChipSelector
+                          multiple
+                          value={values.positions}
+                          values={POSITIONS}
+                          label="Posición"
+                          onValueChange={itemValue => setFieldValue('positions', itemValue)}
+                        />
+                        <FormSelect
+                          value={values.foot}
+                          label="Pierna"
+                          iconColor="black"
+                          iconSize="15"
+                          iconName="ios-arrow-down"
+                          values={MAIN_FOOT}
+                          placeholder={{
+                            label: 'Pierna principal',
+                            value: null,
+                            color: '#9EA0A4',
+                          }}
+                          onValueChange={itemValue => setFieldValue('foot', itemValue)}
+                        />
+                      </View>
+                      <Section title="Características jugador" />
+                      <View style={styles.inputsWrapper}>
+                        <View style={styles.numericInputs}>
+                          <NumberSelector
+                            label="Edad"
+                            name="age"
+                            value={values.age}
+                            addValue={value => addValue(value, setFieldValue, 'age')}
+                            removeValue={value => removeValue(value, setFieldValue, 'age')}
+                            onChangeText={handleChange('age')}
+                            bgColor="#22508F"
+                          />
+                          <NumberSelector
+                            label="Altura (cm)"
+                            name="height"
+                            value={values.height}
+                            addValue={value => addValue(value, setFieldValue, 'height')}
+                            removeValue={value => removeValue(value, setFieldValue, 'height')}
+                            onChangeText={handleChange('height')}
+                            bgColor="#22508F"
+                          />
+                          <NumberSelector
+                            label="Peso (kg)"
+                            name="weight"
+                            value={values.weight}
+                            addValue={value => addValue(value, setFieldValue, 'weight')}
+                            removeValue={value => removeValue(value, setFieldValue, 'weight')}
+                            onChangeText={handleChange('weight')}
+                            bgColor="#22508F"
+                          />
+                        </View>
+                      </View>
+                      <Section title="Habilidad" />
+                      <View style={styles.inputsWrapper}>
+                        <RadioSelector
+                          values={PLAYER_STATS}
+                          label="Disparo"
+                          index={
+                            values.stats
+                              ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.shoot)
+                              : 0
+                          }
+                          selectedOption={value =>
+                            selectOption(value, setFieldValue, 'stats.shoot')
+                          }
+                        />
+                        <RadioSelector
+                          values={PLAYER_STATS}
+                          label="Velocidad"
+                          index={
+                            values.stats
+                              ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.speed)
+                              : 0
+                          }
+                          selectedOption={value =>
+                            selectOption(value, setFieldValue, 'stats.speed')
+                          }
+                        />
+                        <RadioSelector
+                          values={PLAYER_STATS}
+                          label="Regate"
+                          index={
+                            values.stats
+                              ? PLAYER_STATS.findIndex(
+                                  stat => stat.value === values.stats.dribbling
+                                )
+                              : 0
+                          }
+                          selectedOption={value =>
+                            selectOption(value, setFieldValue, 'stats.dribbling')
+                          }
+                        />
+                        <RadioSelector
+                          values={PLAYER_STATS}
+                          label="Pase"
+                          index={
+                            values.stats
+                              ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.pass)
+                              : 0
+                          }
+                          selectedOption={value => selectOption(value, setFieldValue, 'stats.pass')}
+                        />
+                        <RadioSelector
+                          values={PLAYER_STATS}
+                          label="Fuerza"
+                          index={
+                            values.stats
+                              ? PLAYER_STATS.findIndex(stat => stat.value === values.stats.strength)
+                              : 0
+                          }
+                          selectedOption={value =>
+                            selectOption(value, setFieldValue, 'stats.strength')
+                          }
+                        />
+                        <RadioSelector
+                          values={PLAYER_STATS}
+                          label="Resistencia"
+                          index={
+                            values.stats
+                              ? PLAYER_STATS.findIndex(
+                                  stat => stat.value === values.stats.resistance
+                                )
+                              : 0
+                          }
+                          selectedOption={value =>
+                            selectOption(value, setFieldValue, 'stats.resistance')
+                          }
+                        />
+                      </View>
+                      <View style={styles.buttonContainer}>
+                        <FormButton
+                          onPress={handleSubmit}
+                          style={{
+                            backgroundColor: 'transparent',
+                          }}
+                          title="Editar"
+                          buttonColor="#039BE5"
+                          // disabled={!isValid}
+                          loading={isSubmitting}
+                        />
+                      </View>
+                      <ErrorMessage errorValue={errors.general} />
+                    </ScrollView>
+                  </SafeAreaView>
                 )}
               </Formik>
             </KeyboardAvoidingView>

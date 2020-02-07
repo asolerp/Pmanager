@@ -9,6 +9,8 @@ import { POSITIONS, MAIN_FOOT, LABEL_CHART } from '../constants/Player'
 import COUNTRIES from '../constants/Countries'
 import Stat from '../components/Stat'
 import PlayerDetail from '../components/PlayerDetail'
+import Section from '../components/form/SectionTitle'
+import TShirt from '../components/form/TShirt'
 
 const styles = StyleSheet.create({
   container: {
@@ -92,13 +94,26 @@ function Profile(props) {
                   background: 'red',
                 }}
               >
-                <Stat title="Dorsal" stat={user.dorsal || ''} />
                 <Stat title="Edad" stat={user.age || ''} />
                 <Stat title="Altura" stat={user.height || ''} />
+                <Stat title="Peso" stat={user.weight || ''} />
               </View>
-              <PlayerDetail title="Descripción" subtitle={user.description || ''} />
-              <PlayerDetail title="Nacionalidad" subtitle={user.country ? getCountryLabel() : ''} />
-              <PlayerDetail title="Pie" subtitle={user.foot ? getMainFoot() : ''} />
+              <Section title="Características jugador" />
+              <View style={{ flex: 1, flexDirection: 'row', padding: 10 }}>
+                <View style={{ flex: 1, justifyContent: 'center' }}>
+                  <PlayerDetail title="Descripción" subtitle={user.description || ''} />
+                  <PlayerDetail
+                    title="Nacionalidad"
+                    subtitle={user.country ? getCountryLabel() : ''}
+                  />
+                  <PlayerDetail title="Pie" subtitle={user.foot ? getMainFoot() : ''} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <TShirt name={user.name} dorsal={user.dorsal} />
+                </View>
+              </View>
+
+              <Section title="Habilidad" />
               {user.stats && <RadarChart labels={LABEL_CHART} data={formatData(user)} />}
             </>
           )}

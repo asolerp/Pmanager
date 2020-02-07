@@ -11,6 +11,8 @@ import { withFirebaseHOC } from '../config/Firebase'
 
 import BlurBackground from '../components/BlurBackground'
 
+import Images from '../constants/Images'
+
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .label('Email')
@@ -80,10 +82,7 @@ function LoginScreen(props) {
 
   return (
     <View style={styles.container}>
-      <BlurBackground
-        center
-        backgroundUrl="https://www.actualidadiphone.com/wp-content/uploads/2015/09/fondos-de-pantalla-deportes-9.jpeg"
-      >
+      <BlurBackground center backgroundSource={Images.loginScreen.file}>
         <HideWithKeyboard style={styles.logoContainer}>
           <AppLogo logo={false} />
         </HideWithKeyboard>

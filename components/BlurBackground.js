@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
 
 function BlurBackground({
   blur,
-  backgroundUrl,
+  backgroundUrlOnline,
+  backgroundSource,
   children,
   center,
   title,
@@ -37,9 +38,11 @@ function BlurBackground({
 }) {
   return (
     <ImageBackground
-      source={{
-        uri: backgroundUrl,
-      }}
+      source={
+        backgroundSource || {
+          uri: backgroundUrlOnline,
+        }
+      }
       blurRadius={blur || 6}
       style={styles.container}
     >

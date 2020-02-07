@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { Image } from 'react-native-elements'
+import PanamaLogo from '../assets/images/panama.png'
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -34,9 +35,7 @@ const styles = StyleSheet.create({
 
 const AppLogo = ({ logo }) => (
   <View style={styles.logoContainer}>
-    {logo && (
-      <Image source={require('../assets/images/panama.png')} style={{ width: 200, height: 300 }} />
-    )}
+    {logo && <Image source={PanamaLogo} style={{ width: 200, height: 300 }} />}
 
     <View style={styles.titleContainer}>
       <Text style={styles.leftTitle}>Panama</Text>

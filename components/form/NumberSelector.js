@@ -1,14 +1,69 @@
 import React from 'react'
 import { TouchableOpacity, StyleSheet, View, Text, TextInput } from 'react-native'
 
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 15,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: '#aaaaaa',
+  },
+  button: {
+    padding: 5,
+    backgroundColor: '#aaaaaa',
+    alignItems: 'center',
+    borderWidth: 1,
+  },
+  leftButton: {
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    paddingLeft: 9,
+    paddingRight: 8,
+  },
+  rightButton: {
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+  },
+  input: {
+    padding: 5,
+    width: 50,
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  number: {
+    fontSize: 15,
+    fontFamily: 'montserrat-regular',
+  },
+  symbol: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  label: {
+    fontSize: 15,
+    color: 'black',
+    fontFamily: 'montserrat-regular',
+    marginBottom: 10,
+  },
+})
+
 function NumberSelector({ label, addValue, removeValue, value, bgColor, ...rest }) {
   return (
-    <View style={styles.inputContainer}>
+    <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <View style={styles.container}>
+      <View style={styles.inputContainer}>
         <TouchableOpacity onPress={() => removeValue(value)}>
           <View
-            style={[styles.button, bgColor && { backgroundColor: bgColor, borderColor: bgColor }]}
+            style={[
+              styles.button,
+              styles.leftButton,
+              bgColor && { backgroundColor: bgColor, borderColor: bgColor },
+            ]}
           >
             <Text style={styles.symbol}>-</Text>
           </View>
@@ -26,8 +81,8 @@ function NumberSelector({ label, addValue, removeValue, value, bgColor, ...rest 
           <View
             style={[
               styles.button,
+              styles.rightButton,
               bgColor && { backgroundColor: bgColor, borderColor: bgColor },
-              { borderBottomRightRadius: 50, borderTopRightRadius: 50 },
             ]}
           >
             <Text style={styles.symbol}>+</Text>
@@ -37,56 +92,5 @@ function NumberSelector({ label, addValue, removeValue, value, bgColor, ...rest 
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    height: '100%',
-    alignItems: 'center',
-  },
-  inputContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: '#aaaaaa',
-    height: 60,
-    marginBottom: 15,
-    borderRadius: 50,
-  },
-  button: {
-    padding: 10,
-    backgroundColor: '#aaaaaa',
-    width: 45,
-    alignItems: 'center',
-    height: '100%',
-  },
-  input: {
-    padding: 10,
-    width: 50,
-    alignContent: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-  },
-  number: {
-    fontSize: 15,
-    fontFamily: 'montserrat-regular',
-  },
-  symbol: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  label: {
-    fontWeight: '400',
-    color: '#B6B6B6',
-    marginLeft: 10,
-    marginBottom: 0,
-    fontSize: 15,
-    fontFamily: 'montserrat-regular',
-  },
-})
 
 export default NumberSelector

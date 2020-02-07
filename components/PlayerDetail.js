@@ -13,6 +13,7 @@ function PlayerDetail(props) {
 const styles = StyleSheet.create({
   constainer: {
     justifyContent: 'flex-start',
+    marginBottom: 15,
   },
   title: {
     color: 'black',
