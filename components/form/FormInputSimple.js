@@ -18,7 +18,7 @@ const FormInputSimple = ({
     {label && <Text style={[styles.label, { color }]}>{label}</Text>}
     <TextInput
       style={[styles.input, { color }]}
-      placeholderTextColor={color}
+      placeholderTextColor="#aaaaaa"
       name={name}
       placeholder={placeholder}
       value={value}

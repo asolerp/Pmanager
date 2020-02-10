@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-// import RNPickerSelect from 'react-native-picker-select'
+import React from 'react'
 import { StyleSheet, Picker, View, Text } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -47,22 +46,6 @@ const FormSelect = ({ value, values, label, iconName, iconSize, iconColor, ...re
             <Picker.Item key={v.value} label={v.label} value={v.value} />
           ))}
         </Picker>
-        {/* <RNPickerSelect
-          style={{
-            ...styles.inputStyle,
-            iconContainer: {
-              top: 20,
-              right: 10,
-            },
-            placeholder: {
-              color: 'white',
-              fontSize: 15,
-              fontFamily: 'montserrat-regular',
-            },
-          }}
-          items={values}
-          {...rest}
-        /> */}
       </View>
     </View>
   )
