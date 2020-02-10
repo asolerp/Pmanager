@@ -83,6 +83,7 @@ function BlurBackgroundWithAvatar(props) {
             showEditButton={props.showEditButton}
             setImage={props.setImage}
             size={props.size}
+            imageUrl={props.avatarUrl}
             source={{
               uri: props.avatarUrl,
             }}

@@ -137,6 +137,7 @@ function ProfileForm(props) {
                 underlayColor: '#000',
               }}
               containerStyle={styles.avatar}
+              imageUrl={imgProfile}
               showEditButton
               setImage={uri => setImage(uri)}
               size="medium"
@@ -420,7 +421,7 @@ function ProfileForm(props) {
                           style={{
                             backgroundColor: 'transparent',
                           }}
-                          title="Editar"
+                          title="Guardar"
                           buttonColor="#039BE5"
                           // disabled={!isValid}
                           loading={isSubmitting}

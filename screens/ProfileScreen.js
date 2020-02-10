@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
   bottomWrapper: {
     flex: 2,
     width: '100%',
-    padding: 10,
   },
 })
 
@@ -85,6 +84,7 @@ function Profile(props) {
         <ScrollView>
           {user && (
             <>
+              <Section title="Características jugador" />
               <View
                 style={{
                   flexDirection: 'row',
@@ -98,7 +98,7 @@ function Profile(props) {
                 <Stat title="Altura" stat={user.height || ''} />
                 <Stat title="Peso" stat={user.weight || ''} />
               </View>
-              <Section title="Características jugador" />
+              <Section title="Datos personales" />
               <View style={{ flex: 1, flexDirection: 'row', padding: 10 }}>
                 <View style={{ flex: 1, justifyContent: 'center' }}>
                   <PlayerDetail title="Descripción" subtitle={user.description || ''} />
@@ -112,7 +112,6 @@ function Profile(props) {
                   <TShirt name={user.name} dorsal={user.dorsal} />
                 </View>
               </View>
-
               <Section title="Habilidad" />
               {user.stats && <RadarChart labels={LABEL_CHART} data={formatData(user)} />}
             </>
