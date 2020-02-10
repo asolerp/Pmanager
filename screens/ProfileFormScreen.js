@@ -46,10 +46,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     marginTop: 10,
   },
-  avatar: {
-    marginTop: 15,
-    marginBottom: 10,
-  },
+  avatar: {},
   numericInputs: {
     flex: 1,
     flexDirection: 'row',
@@ -420,7 +417,7 @@ function ProfileForm(props) {
                           style={{
                             backgroundColor: 'transparent',
                           }}
-                          title="Editar"
+                          title="Guardar"
                           buttonColor="#039BE5"
                           // disabled={!isValid}
                           loading={isSubmitting}

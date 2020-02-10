@@ -20,6 +20,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingLeft: 20,
     paddingRight: 20,
+    marginTop: 10,
+    marginBottom: 10,
   },
   leftSide: {
     flex: 2,

@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: '400',
-    color: '#B6B6B6',
+    color: 'black',
     marginLeft: 10,
     marginBottom: 0,
     fontSize: 15,
