@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 const POSITIONS = [
   { label: 'Delantero', value: 'dc' },
   { label: 'Extremo Izquierdo', value: 'ei' },
@@ -26,4 +28,8 @@ const PLAYER_STATS = [
 
 const LABEL_CHART = ['Disparo', 'Velocidad', 'Regate', 'Pase', 'Fuerza', 'Resistencia']
 
-export { POSITIONS, MAIN_FOOT, PLAYER_STATS, LABEL_CHART }
+const getLabelPostionByValue = pos => {
+  return _.find(POSITIONS, ['value', pos])
+}
+
+export { POSITIONS, MAIN_FOOT, PLAYER_STATS, LABEL_CHART, getLabelPostionByValue }

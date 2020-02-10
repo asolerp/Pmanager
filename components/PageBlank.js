@@ -69,7 +69,7 @@ function PageBlank({ children, leftSide, rightSide, title, titleColor, iconName,
         </View>
         <View style={styles.rightSide}>{rightSide}</View>
       </View>
-      <View>{children}</View>
+      <View style={{ flex: 1 }}>{children}</View>
     </View>
   )
 }

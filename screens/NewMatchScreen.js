@@ -1,6 +1,6 @@
 // MODULE
 import React, { useState } from 'react'
-import { StyleSheet, ScrollView, View, Text } from 'react-native'
+import { StyleSheet, SafeAreaView, ScrollView, View, Text } from 'react-native'
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps'
 
 // UI
@@ -11,20 +11,23 @@ import FormInputSimple from '../components/form/FormInputSimple'
 import AvatarWithPicker from '../components/Avatar'
 import FormButton from '../components/form/FormButton'
 import DatePicker from '../components/form/DatePicker'
+import Section from '../components/form/SectionTitle'
 
 // API
+import subscribeUserData from '../hooks/subscribeUserData'
 import { withFirebaseHOC } from '../config/Firebase'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  firstSection: {
-    flexDirection: 'row',
+  avatar: {
+    marginRight: 10,
   },
-  seconSection: {
-    marginTop: 30,
-    paddingHorizontal: 15,
+  inputsWrapper: {
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 10,
   },
   titleContainer: {
     flex: 1,
@@ -34,11 +37,10 @@ const styles = StyleSheet.create({
     fontFamily: 'montserrat-regular',
     fontWeight: 'bold',
   },
-  photoContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
+  addButon: {
+    fontFamily: 'montserrat-regular',
+    fontSize: 10,
+    color: 'blue',
   },
   buttonProgress: {
     fontSize: 15,
@@ -54,6 +56,7 @@ const validationSchema = Yup.object().shape({
 })
 
 function NewMatchScreen(props) {
+  const { user } = subscribeUserData()
   const [imageMatch, setImgProfile] = useState(
     'https://img.uefa.com/imgml/uefacom/ucl/social/og-default.jpg'
   )
@@ -61,48 +64,41 @@ function NewMatchScreen(props) {
     setImgProfile(uri)
   }
   return (
-    <PageBlank title="Nuevo Partido" titleColor="black" iconColor="black">
-      <View style={styles.firstSection}>
-        <View style={styles.photoContainer}>
-          <AvatarWithPicker
-            rounded
-            editButton={{
-              name: 'photo-camera',
-              type: 'material',
-              color: 'black',
-              underlayColor: '#000',
-            }}
-            containerStyle={styles.avatar}
-            showEditButton
-            setImage={uri => setImage(uri)}
-            size="large"
-            source={{
-              uri: imageMatch,
-            }}
-          />
-        </View>
-      </View>
-      <View style={styles.seconSection}>
+    <PageBlank
+      title="Nuevo Partido"
+      titleColor="black"
+      iconColor="black"
+      rightSide={
+        <AvatarWithPicker
+          rounded
+          editButton={{
+            name: 'photo-camera',
+            type: 'material',
+            color: 'black',
+            underlayColor: '#000',
+          }}
+          containerStyle={styles.avatar}
+          imageUrl={imageMatch}
+          showEditButton
+          setImage={uri => setImage(uri)}
+          size="medium"
+          source={{
+            uri: imageMatch,
+          }}
+        />
+      }
+    >
+      <View style={{ flex: 1 }}>
         <Formik
           initialValues={{ name: '' }}
           onSubmit={values => console.log(values)}
           validationSchema={validationSchema}
         >
           {({ handleChange, values, handleSubmit, setFieldValue, errors, isValid, handleBlur }) => (
-            <View style={{ height: '90%' }}>
-              <ProgressSteps
-                activeStepIconBorderColor="#22508F"
-                completedProgressBarColor="#22508F"
-                completedStepIconColor="#22508F"
-                labelFontFamily="montserrat-light"
-                activeLabelColor="#22508F"
-                labelColor="black"
-              >
-                <ProgressStep
-                  nextBtnText="Siguiente"
-                  nextBtnTextStyle={styles.buttonProgress}
-                  label="Información general"
-                >
+            <SafeAreaView>
+              <ScrollView behaviour="height" style={{ marginBottom: 60 }}>
+                <Section title="Datos personales" />
+                <View style={styles.inputsWrapper}>
                   <FormInputSimple
                     name="name"
                     label="Nombre del Partido"
@@ -162,19 +158,25 @@ function NewMatchScreen(props) {
                       onValueChange={itemValue => setFieldValue('time', itemValue)}
                     />
                   </View>
-                </ProgressStep>
-                <ProgressStep label="Jugadores">
-                  <View style={{ alignItems: 'center' }}>
-                    <Text>This is the content within step 2!</Text>
-                  </View>
-                </ProgressStep>
-                <ProgressStep label="Third Step">
-                  <View style={{ alignItems: 'center' }}>
-                    <Text>This is the content within step 3!</Text>
-                  </View>
-                </ProgressStep>
-              </ProgressSteps>
-            </View>
+                </View>
+                <Section title="Administradores" />
+                <View
+                  style={[styles.inputsWrapper, { flexDirection: 'row', alignItems: 'center' }]}
+                >
+                  <AvatarWithPicker
+                    rounded
+                    containerStyle={styles.avatar}
+                    imageUrl={user && user.imgProfile}
+                    size="small"
+                    source={{
+                      uri: user && user.imgProfile,
+                    }}
+                  />
+                  <Text style={styles.addButon}>Añadir</Text>
+                </View>
+                <Section title="Jugadores" />
+              </ScrollView>
+            </SafeAreaView>
           )}
         </Formik>
       </View>

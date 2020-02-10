@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, SafeAreaView, FlatList, View, Text } from 'react-native'
 import { SearchBar } from 'react-native-elements'
+import _ from 'lodash'
 import BlurBackground from '../components/BlurBackground'
 import { withFirebaseHOC } from '../config/Firebase'
 import FriendItem from '../components/FriendItem'
+
+// Utils
 import 'firebase/auth'
 import 'firebase/firestore'
 
@@ -46,6 +49,27 @@ const FriendListScreen = props => {
   const [sFriends, setSfriends] = useState()
   const [searchText, setSearchText] = useState('')
   const [loading, setLoading] = useState(false)
+
+  const [selectedFriends, setSelectedFriends] = useState([])
+
+  const handlePress = item => {
+    console.log(selectedFriends, item.uid)
+    const index = _.findIndex(selectedFriends, ['uid', item.uid])
+    console.log(index)
+    if (index === -1) {
+      setSelectedFriends([...selectedFriends, item])
+    } else {
+      console.log('Borrando...')
+      const friends = [...selectedFriends]
+      friends.slice(index, 1)
+      setSelectedFriends(friends)
+    }
+  }
+
+  const checkIfSelected = item => {
+    const selectedFriend = _.find(selectedFriends, ['uid', item.uid])
+    return selectedFriend
+  }
 
   useEffect(() => {
     // const friends = []
@@ -97,9 +121,17 @@ const FriendListScreen = props => {
         </View>
         {sFriends ? (
           <View style={styles.listContainer}>
+            {selectedFriends &&
+              selectedFriends.map(friend => <Text key={friend.uid}>{friend.uid}</Text>)}
             <FlatList
               data={sFriends}
-              renderItem={({ item }) => <FriendItem user={item} />}
+              renderItem={({ item }) => (
+                <FriendItem
+                  user={item}
+                  addFriend={friend => handlePress(friend)}
+                  active={checkIfSelected(item)}
+                />
+              )}
               keyExtractor={item => item.uid}
             />
           </View>

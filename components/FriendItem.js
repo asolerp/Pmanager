@@ -1,7 +1,10 @@
 import React, { useContext } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
-import { Avatar } from 'react-native-elements'
+import { Avatar, CheckBox } from 'react-native-elements'
 import { NavigationContext } from 'react-navigation'
+
+// Utils
+import { getLabelPostionByValue } from '../constants/Player'
 
 const styles = StyleSheet.create({
   itemWrapper: {
@@ -19,7 +22,6 @@ const styles = StyleSheet.create({
   infoWrapper: {
     flex: 3,
     justifyContent: 'center',
-    padding: 10,
   },
   title: {
     fontFamily: 'montserrat-regular',
@@ -42,13 +44,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   positionText: {
-    color: 'white',
+    color: 'black',
     fontFamily: 'montserrat-regular',
-    fontSize: 30,
+    fontSize: 15,
   },
 })
 
-const FriendItem = ({ user }) => {
+const FriendItem = ({ user, addFriend, active, ...rest }) => {
   const { imgProfile, name, position, uid } = user
   const navigation = useContext(NavigationContext)
 
@@ -58,7 +60,7 @@ const FriendItem = ({ user }) => {
         <View style={styles.avatarWrapper}>
           <Avatar
             rounded
-            size="large"
+            size="medium"
             source={{
               uri: imgProfile,
             }}
@@ -66,11 +68,10 @@ const FriendItem = ({ user }) => {
         </View>
         <View style={styles.infoWrapper}>
           <Text style={styles.title}>{name}</Text>
+          <Text style={styles.positionText}>{getLabelPostionByValue(position).label}</Text>
         </View>
         <View style={styles.positionWrapper}>
-          <View style={styles.positionLabel}>
-            <Text style={styles.positionText}>{position}</Text>
-          </View>
+          <CheckBox checked={active} onPress={() => addFriend(user)} />
         </View>
       </View>
     </TouchableOpacity>
