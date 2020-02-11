@@ -38,8 +38,8 @@ const TShirt = ({ name, dorsal }) => {
         source={Images.tShirt.file}
       />
       <View style={styles.dorsalContainer}>
-        <Text style={styles.name}>{name.substring(0, 8)}</Text>
-        <Text style={styles.dorsal}>{dorsal}</Text>
+        <Text style={styles.name}>{name && name.substring(0, 8)}</Text>
+        <Text style={styles.dorsal}>{dorsal || 0}</Text>
       </View>
     </View>
   )

@@ -282,6 +282,7 @@ function ProfileForm(props) {
                           onValueChange={itemValue => setFieldValue('country', itemValue)}
                         />
                         <ChipSelector
+                          touchable
                           multiple
                           value={values.positions}
                           values={POSITIONS}

@@ -44,7 +44,15 @@ const styles = StyleSheet.create({
   },
 })
 
-const ChipSelector = ({ value, values, label, multiple = false, onValueChange }) => {
+const ChipSelector = ({
+  value,
+  values,
+  label,
+  multiple = false,
+  touchable = false,
+  customStyle,
+  onValueChange,
+}) => {
   const [chips, setChip] = useState([])
 
   useEffect(() => {
@@ -74,18 +82,30 @@ const ChipSelector = ({ value, values, label, multiple = false, onValueChange })
     onValueChange(chips)
   }
 
+  const chip = item => (
+    <Text
+      key={item.value}
+      style={[styles.chip, item.active ? styles.activeChip : styles.deactiveChip, customStyle]}
+    >
+      {item.label}
+    </Text>
+  )
+
   return (
     <View style={styles.chipContainer}>
       {label && <Text style={[styles.label]}>{label}</Text>}
       <View style={styles.chips}>
         {chips &&
-          chips.map(item => (
-            <TouchableOpacity key={item.value} onPress={() => handlePress(item)}>
-              <Text style={[styles.chip, item.active ? styles.activeChip : styles.deactiveChip]}>
-                {item.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
+          chips.map(item => {
+            if (touchable) {
+              return (
+                <TouchableOpacity key={item.value} onPress={() => handlePress(item)}>
+                  {chip(item)}
+                </TouchableOpacity>
+              )
+            }
+            return chip(item)
+          })}
       </View>
     </View>
   )

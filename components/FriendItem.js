@@ -2,9 +2,7 @@ import React, { useContext } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { Avatar, CheckBox } from 'react-native-elements'
 import { NavigationContext } from 'react-navigation'
-
-// Utils
-import { getLabelPostionByValue } from '../constants/Player'
+import ChipSelector from './form/ChipSelector'
 
 const styles = StyleSheet.create({
   itemWrapper: {
@@ -14,7 +12,9 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 5,
     borderRadius: 10,
-    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#aaaaaa',
+    marginVertical: 10,
   },
   avatarWrapper: {
     flex: 1,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 })
 
 const FriendItem = ({ user, addFriend, active, ...rest }) => {
-  const { imgProfile, name, position, uid } = user
+  const { imgProfile, name, positions, uid } = user
   const navigation = useContext(NavigationContext)
 
   return (
@@ -68,7 +68,9 @@ const FriendItem = ({ user, addFriend, active, ...rest }) => {
         </View>
         <View style={styles.infoWrapper}>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.positionText}>{getLabelPostionByValue(position).label}</Text>
+          <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }}>
+            <ChipSelector values={positions.filter(p => p.active)} customStyle={{ fontSize: 10 }} />
+          </View>
         </View>
         <View style={styles.positionWrapper}>
           <CheckBox checked={active} onPress={() => addFriend(user)} />

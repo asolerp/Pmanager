@@ -34,7 +34,12 @@ const Firebase = {
       .set({ email: userData.email, ...userData.metadata, profileFilled: false })
   },
 
-  updateLogin: userData => {
+  updateLogin: async userData => {
+    const user = await firebase
+      .firestore()
+      .collection('users')
+      .doc(`${userData.uid}`)
+      .get()
     const { email, metadata } = userData
     const { lastSignInTime, creationTime } = metadata
     return firebase
@@ -45,7 +50,7 @@ const Firebase = {
         email,
         lastSignInTime,
         creationTime,
-        // keywords: generateKeywords('Carol'),
+        keywords: generateKeywords(user.data().name),
       })
   },
 
