@@ -1,16 +1,17 @@
 import _ from 'lodash'
 
 const POSITIONS = [
-  { label: 'Delantero', value: 'dc' },
-  { label: 'Extremo Izquierdo', value: 'ei' },
-  { label: 'Extremo derecho', value: 'ed' },
-  { label: 'Medio centro', value: 'mc' },
-  { label: 'Medio izquierdo', value: 'mi' },
-  { label: 'Medio derecho', value: 'md' },
-  { label: 'Defensa', value: 'df' },
-  { label: 'Lateral izquierdo', value: 'li' },
-  { label: 'Lateral derecho', value: 'ld' },
-  { label: 'Portero', value: 'pt' },
+  { label: 'Delantero', value: 'dc', color: '#EFA11F', shortName: 'DEL' },
+  { label: 'Extremo Izquierdo', value: 'ei', color: '#EFA11F', shortName: 'EI' },
+  { label: 'Extremo derecho', value: 'ed', color: '#EFA11F', shortName: 'ED' },
+  { label: 'Medio centro', value: 'mc', color: '#489CF9', shortName: 'MC' },
+  { label: 'Medio izquierdo', value: 'mi', color: '#489CF9', shortName: 'MI' },
+  { label: 'Medio derecho', value: 'md', color: '#489CF9', shortName: 'MD' },
+  { label: 'Defensa', value: 'df', color: '#8624AB', shortName: 'DEF' },
+  { label: 'Lateral izquierdo', value: 'li', color: '#8624AB', shortName: 'LI' },
+  { label: 'Lateral derecho', value: 'ld', color: '#8624AB', shortName: 'LD' },
+  { label: 'Portero', value: 'pt', color: '#DD5E10', shortName: 'POR' },
+  { label: 'Sin asignar', value: 'sa', color: '#DB1B11', shortName: 'NA' },
 ]
 
 const MAIN_FOOT = [
@@ -29,7 +30,12 @@ const PLAYER_STATS = [
 const LABEL_CHART = ['Disparo', 'Velocidad', 'Regate', 'Pase', 'Fuerza', 'Resistencia']
 
 const getLabelPostionByValue = pos => {
-  return _.find(POSITIONS, ['value', pos])
+  const position = _.find(POSITIONS, ['value', pos])
+  return {
+    label: position.label,
+    color: position.color,
+    name: position.shortName,
+  }
 }
 
 export { POSITIONS, MAIN_FOOT, PLAYER_STATS, LABEL_CHART, getLabelPostionByValue }

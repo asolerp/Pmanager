@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
-import FormInput from '../components/form/FormInput'
+import FormInputSimple from '../components/form/FormInputSimple'
 import FormButton from '../components/form/FormButton'
 import ErrorMessage from '../components/form/ErrorMessage'
 import AppLogo from '../components/AppLogo'
@@ -34,10 +34,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   inputContainer: {
+    flex: 1,
     marginBottom: 10,
+    paddingHorizontal: 25,
   },
   logoContainer: {
-    marginBottom: 15,
+    width: '100%',
     flex: 2,
     alignItems: 'center',
     justifyContent: 'center',
@@ -45,8 +47,8 @@ const styles = StyleSheet.create({
   },
   formWrapper: {
     width: '100%',
-    paddingLeft: 15,
-    paddingRight: 15,
+    flex: 1,
+    paddingVertical: 15,
   },
   signUpText: {
     fontFamily: 'montserrat-light',
@@ -100,7 +102,7 @@ function LoginScreen(props) {
             {({ handleChange, values, handleSubmit, errors, touched, handleBlur }) => (
               <>
                 <View style={styles.inputContainer}>
-                  <FormInput
+                  <FormInputSimple
                     name="email"
                     value={values.email}
                     onChangeText={handleChange('email')}
@@ -112,9 +114,7 @@ function LoginScreen(props) {
                     onBlur={handleBlur('email')}
                   />
                   <ErrorMessage errorValue={touched.email && errors.email} />
-                </View>
-                <View style={styles.inputContainer}>
-                  <FormInput
+                  <FormInputSimple
                     name="password"
                     value={values.password}
                     onChangeText={handleChange('password')}
@@ -129,12 +129,14 @@ function LoginScreen(props) {
                 </View>
                 <View style={styles.buttonContainer}>
                   <FormButton
-                    loading={loading}
-                    loadingProps={{ color: 'white', size: 'large' }}
-                    buttonType="outline"
                     onPress={handleSubmit}
-                    title="LOGIN"
-                    buttonColor="#22508F"
+                    style={{
+                      backgroundColor: 'transparent',
+                    }}
+                    title="Login"
+                    buttonColor="white"
+                    // disabled={!isValid}
+                    loading={loading}
                   />
                 </View>
                 <ErrorMessage errorValue={errors.general} />

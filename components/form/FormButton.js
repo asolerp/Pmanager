@@ -1,13 +1,13 @@
 import React from 'react'
 import { Button } from 'react-native-elements'
 
-const FormButton = ({ title, buttonType, style, buttonColor, ...rest }) => (
+const FormButton = ({ title, buttonType, style, buttonColor = 'black', ...rest }) => (
   <Button
     type={buttonType}
     title={title}
     buttonStyle={[style]}
-    loadingProps={{ color: 'black' }}
-    titleStyle={{ color: 'black', fontFamily: 'montserrat-regular', fontSize: 20 }}
+    loadingProps={{ color: buttonColor }}
+    titleStyle={{ color: buttonColor, fontFamily: 'montserrat-regular', fontSize: 20 }}
     {...rest}
   />
 )

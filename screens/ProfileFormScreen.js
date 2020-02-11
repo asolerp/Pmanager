@@ -169,6 +169,7 @@ function ProfileForm(props) {
                     height,
                     weight,
                     positions,
+                    principalPosition,
                     foot,
                     stats = {
                       shoot: 0,
@@ -195,6 +196,7 @@ function ProfileForm(props) {
                         height,
                         weight,
                         positions,
+                        principalPosition,
                         foot,
                         stats,
                         imgProfile: downloadURL,
@@ -216,7 +218,7 @@ function ProfileForm(props) {
                   <SafeAreaView>
                     <ScrollView
                       behaviour="height"
-                      style={{ marginBottom: 60 }}
+                      style={{ marginBottom: 0 }}
                       stickyHeaderIndices={[0, 2, 4]}
                     >
                       <Section title="Datos personales" />
@@ -288,6 +290,17 @@ function ProfileForm(props) {
                           values={POSITIONS}
                           label="Posición"
                           onValueChange={itemValue => setFieldValue('positions', itemValue)}
+                        />
+                        <FormSelect
+                          value={values.principalPosition}
+                          label="Posición principal"
+                          values={values.positions.filter(p => p.active)}
+                          placeholder={{
+                            label: 'Pierna principal',
+                            value: null,
+                            color: '#9EA0A4',
+                          }}
+                          onValueChange={itemValue => setFieldValue('principalPosition', itemValue)}
                         />
                         <FormSelect
                           value={values.foot}
@@ -420,7 +433,7 @@ function ProfileForm(props) {
                             backgroundColor: 'transparent',
                           }}
                           title="Guardar"
-                          buttonColor="#039BE5"
+                          buttonColor="black"
                           // disabled={!isValid}
                           loading={isSubmitting}
                         />

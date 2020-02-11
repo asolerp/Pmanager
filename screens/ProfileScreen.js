@@ -11,6 +11,7 @@ import Stat from '../components/Stat'
 import PlayerDetail from '../components/PlayerDetail'
 import Section from '../components/form/SectionTitle'
 import TShirt from '../components/form/TShirt'
+import ChipSelector from '../components/form/ChipSelector'
 
 const styles = StyleSheet.create({
   container: {
@@ -107,6 +108,10 @@ function Profile(props) {
                     subtitle={user.country ? getCountryLabel() : ''}
                   />
                   <PlayerDetail title="Pie" subtitle={user.foot ? getMainFoot() : ''} />
+                  <ChipSelector
+                    values={user.positions.filter(p => p.active)}
+                    customStyle={{ fontSize: 10 }}
+                  />
                 </View>
                 <View style={{ flex: 1 }}>
                   <TShirt name={user.name} dorsal={user.dorsal} />

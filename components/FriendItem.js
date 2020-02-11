@@ -2,7 +2,10 @@ import React, { useContext } from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { Avatar, CheckBox } from 'react-native-elements'
 import { NavigationContext } from 'react-navigation'
-import ChipSelector from './form/ChipSelector'
+import PositionLabel from './PositionLabel'
+
+// Utils
+import { getLabelPostionByValue } from '../constants/Player'
 
 const styles = StyleSheet.create({
   itemWrapper: {
@@ -51,7 +54,8 @@ const styles = StyleSheet.create({
 })
 
 const FriendItem = ({ user, addFriend, active, ...rest }) => {
-  const { imgProfile, name, positions, uid } = user
+  console.log('User', user)
+  const { imgProfile, name, principalPosition, uid } = user
   const navigation = useContext(NavigationContext)
 
   return (
@@ -59,7 +63,6 @@ const FriendItem = ({ user, addFriend, active, ...rest }) => {
       <View style={styles.itemWrapper}>
         <View style={styles.avatarWrapper}>
           <Avatar
-            rounded
             size="medium"
             source={{
               uri: imgProfile,
@@ -67,9 +70,15 @@ const FriendItem = ({ user, addFriend, active, ...rest }) => {
           />
         </View>
         <View style={styles.infoWrapper}>
-          <Text style={styles.title}>{name}</Text>
-          <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }}>
-            <ChipSelector values={positions.filter(p => p.active)} customStyle={{ fontSize: 10 }} />
+          <View style={{ flexDirection: 'row' }}>
+            <PositionLabel
+              position={
+                principalPosition
+                  ? getLabelPostionByValue(principalPosition)
+                  : getLabelPostionByValue('NA')
+              }
+            />
+            <Text style={styles.title}>{name}</Text>
           </View>
         </View>
         <View style={styles.positionWrapper}>
