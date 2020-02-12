@@ -10,7 +10,6 @@ import { NavigationContext } from 'react-navigation'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: getStatusBarHeight(),
     height: '100%',
   },
   titleContainer: {
@@ -45,11 +44,20 @@ const styles = StyleSheet.create({
   },
 })
 
-function PageBlank({ children, leftSide, rightSide, title, titleColor, iconName, iconColor }) {
+function PageBlank({
+  children,
+  leftSide,
+  rightSide,
+  title,
+  titleColor,
+  topMargin = getStatusBarHeight(),
+  iconName,
+  iconColor,
+}) {
   const navigation = useContext(NavigationContext)
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { marginTop: topMargin }]}>
       <View style={styles.titleContainer}>
         <View style={styles.leftSide}>
           {leftSide || (
@@ -64,9 +72,7 @@ function PageBlank({ children, leftSide, rightSide, title, titleColor, iconName,
           )}
         </View>
         <View style={styles.centerSide}>
-          <Text color={titleColor} style={styles.title}>
-            {title}
-          </Text>
+          <Text style={[styles.title, { color: titleColor }]}>{title}</Text>
         </View>
         <View style={styles.rightSide}>{rightSide}</View>
       </View>

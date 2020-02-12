@@ -101,17 +101,19 @@ function Profile(props) {
               </View>
               <Section title="Datos personales" />
               <View style={{ flex: 1, flexDirection: 'row', padding: 10 }}>
-                <View style={{ flex: 1, justifyContent: 'center' }}>
+                <View style={{ flex: 1 }}>
                   <PlayerDetail title="Descripción" subtitle={user.description || ''} />
                   <PlayerDetail
                     title="Nacionalidad"
                     subtitle={user.country ? getCountryLabel() : ''}
                   />
                   <PlayerDetail title="Pie" subtitle={user.foot ? getMainFoot() : ''} />
-                  <ChipSelector
-                    values={user.positions.filter(p => p.active)}
-                    customStyle={{ fontSize: 10 }}
-                  />
+                  <PlayerDetail title="Posiciones">
+                    <ChipSelector
+                      values={user.positions.filter(p => p.active)}
+                      customStyle={{ fontSize: 10 }}
+                    />
+                  </PlayerDetail>
                 </View>
                 <View style={{ flex: 1 }}>
                   <TShirt name={user.name} dorsal={user.dorsal} />

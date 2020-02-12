@@ -1,28 +1,33 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 
-function PlayerDetail({ title, subtitle, rest }) {
+function PlayerDetail({ title, subtitle, children, rest }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.subtitle} {...rest}>
-        {subtitle}
-      </Text>
+      {children ? (
+        <View>{children}</View>
+      ) : (
+        <Text style={styles.subtitle} {...rest}>
+          {subtitle}
+        </Text>
+      )}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   constainer: {
-    justifyContent: 'flex-start',
-    marginBottom: 15,
+    marginBottom: 30,
   },
   title: {
     color: 'black',
+    fontFamily: 'montserrat-regular',
     fontSize: 20,
   },
   subtitle: {
-    color: '#aaaaaa',
+    color: 'black',
+    fontFamily: 'montserrat-light',
     fontSize: 15,
   },
 })

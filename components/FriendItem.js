@@ -11,13 +11,13 @@ const styles = StyleSheet.create({
   itemWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'white',
     width: '100%',
     padding: 5,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#aaaaaa',
-    marginVertical: 10,
+    backgroundColor: 'rgba(81, 95, 137, .7)',
+    marginBottom: 5,
   },
   avatarWrapper: {
     flex: 1,
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'montserrat-regular',
     fontSize: 25,
+    color: 'white',
   },
   subtitle: {
     fontFamily: 'montserrat-light',
@@ -82,7 +83,7 @@ const FriendItem = ({ user, addFriend, active, ...rest }) => {
           </View>
         </View>
         <View style={styles.positionWrapper}>
-          <CheckBox checked={active} onPress={() => addFriend(user)} />
+          <CheckBox checked={active} onPress={() => addFriend(user)} checkedColor="white" />
         </View>
       </View>
     </TouchableOpacity>

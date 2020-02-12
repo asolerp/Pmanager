@@ -1,21 +1,25 @@
 // MODULE
 import React, { useState } from 'react'
-import { StyleSheet, SafeAreaView, ScrollView, View, Text } from 'react-native'
-import { ProgressSteps, ProgressStep } from 'react-native-progress-steps'
+import { StyleSheet, SafeAreaView, ScrollView, FlatList, Modal, View, Text } from 'react-native'
 
 // UI
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import PageBlank from '../components/PageBlank'
 import FormInputSimple from '../components/form/FormInputSimple'
 import AvatarWithPicker from '../components/Avatar'
 import FormButton from '../components/form/FormButton'
 import DatePicker from '../components/form/DatePicker'
 import Section from '../components/form/SectionTitle'
+import PlayerRow from '../components/PlayerRow'
 
 // API
 import subscribeUserData from '../hooks/subscribeUserData'
 import { withFirebaseHOC } from '../config/Firebase'
+
+// PAGES
+import FriendListScreen from './FriendListScreen'
 
 const styles = StyleSheet.create({
   container: {
@@ -23,11 +27,11 @@ const styles = StyleSheet.create({
   },
   avatar: {
     marginRight: 10,
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   inputsWrapper: {
-    marginLeft: 15,
-    marginRight: 15,
-    marginTop: 10,
+    paddingHorizontal: 15,
   },
   titleContainer: {
     flex: 1,
@@ -57,6 +61,8 @@ const validationSchema = Yup.object().shape({
 
 function NewMatchScreen(props) {
   const { user } = subscribeUserData()
+  const [activeModal, setActiveModal] = useState(false)
+  const [selectedPlayers, setSelectedPlayers] = useState([])
   const [imageMatch, setImgProfile] = useState(
     'https://img.uefa.com/imgml/uefacom/ucl/social/og-default.jpg'
   )
@@ -89,6 +95,22 @@ function NewMatchScreen(props) {
       }
     >
       <View style={{ flex: 1 }}>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={activeModal}
+          onRequestClose={() => {
+            setActiveModal(false)
+          }}
+        >
+          <FriendListScreen
+            listSelectedPlayers={selectedPlayers}
+            handlePlayerSelection={players => {
+              setSelectedPlayers(players)
+              setActiveModal(false)
+            }}
+          />
+        </Modal>
         <Formik
           initialValues={{ name: '' }}
           onSubmit={values => console.log(values)}
@@ -97,8 +119,8 @@ function NewMatchScreen(props) {
           {({ handleChange, values, handleSubmit, setFieldValue, errors, isValid, handleBlur }) => (
             <SafeAreaView>
               <ScrollView behaviour="height" style={{ marginBottom: 60 }}>
-                <Section title="Datos personales" />
-                <View style={styles.inputsWrapper}>
+                <Section title="Datos personales" customStyle={{ marginBottom: 10 }} />
+                <View style={[styles.inputsWrapper]}>
                   <FormInputSimple
                     name="name"
                     label="Nombre del Partido"
@@ -159,22 +181,44 @@ function NewMatchScreen(props) {
                     />
                   </View>
                 </View>
-                <Section title="Administradores" />
+                <Section title="Administradores" customStyle={{ marginBottom: 10 }} />
                 <View
-                  style={[styles.inputsWrapper, { flexDirection: 'row', alignItems: 'center' }]}
+                  style={[
+                    styles.inputsWrapper,
+                    { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
+                  ]}
                 >
                   <AvatarWithPicker
                     rounded
                     containerStyle={styles.avatar}
                     imageUrl={user && user.imgProfile}
-                    size="small"
+                    size="medium"
                     source={{
                       uri: user && user.imgProfile,
                     }}
                   />
-                  <Text style={styles.addButon}>Añadir</Text>
                 </View>
-                <Section title="Jugadores" />
+                <Section
+                  title="Jugadores"
+                  rightElement={
+                    <TouchableOpacity onPress={() => setActiveModal(true)}>
+                      <Text style={styles.addButon}>Añadir</Text>
+                    </TouchableOpacity>
+                  }
+                />
+                <View>
+                  <View
+                    style={[styles.inputsWrapper, { flexDirection: 'row', alignItems: 'center' }]}
+                  >
+                    {selectedPlayers && (
+                      <FlatList
+                        data={selectedPlayers}
+                        renderItem={({ item }) => <PlayerRow player={item} />}
+                        keyExtractor={item => item.uid}
+                      />
+                    )}
+                  </View>
+                </View>
               </ScrollView>
             </SafeAreaView>
           )}

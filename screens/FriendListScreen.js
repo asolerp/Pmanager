@@ -1,5 +1,13 @@
-import React, { useState, useEffect, useReducer } from 'react'
-import { StyleSheet, SafeAreaView, FlatList, View, Text } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import {
+  StyleSheet,
+  SafeAreaView,
+  FlatList,
+  View,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native'
 import { SearchBar } from 'react-native-elements'
 import _ from 'lodash'
 import { withFirebaseHOC } from '../config/Firebase'
@@ -7,10 +15,13 @@ import FriendItem from '../components/FriendItem'
 import Section from '../components/form/SectionTitle'
 import AvatarWithPicker from '../components/Avatar'
 import PageBlank from '../components/PageBlank'
+import BlurBackground from '../components/BlurBackground'
 
 // Utils
 import 'firebase/auth'
 import 'firebase/firestore'
+
+const screenWidth = Math.round(Dimensions.get('window').width)
 
 const styles = StyleSheet.create({
   container: {
@@ -29,8 +40,15 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 1,
     justifyContent: 'flex-start',
-    paddingHorizontal: 10,
     // paddingTop: 15,
+  },
+  floatingButton: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 100,
+    bottom: 20,
+    left: screenWidth / 2 - 50,
   },
   noUsersText: {
     color: 'black',
@@ -46,7 +64,7 @@ const FriendListScreen = props => {
   const [searchText, setSearchText] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const [list, updateList] = useState([])
+  const [list, updateList] = useState(props.listSelectedPlayers || [])
   const [selectedFriend, setSelectedFrind] = useState(null)
 
   const handlePress = item => {
@@ -113,6 +131,7 @@ const FriendListScreen = props => {
         iconColor="black"
         leftSide={() => <></>}
         rightSide={() => <></>}
+        topMargin={0}
       >
         <SearchBar
           placeholder="Type Here..."
@@ -130,6 +149,7 @@ const FriendListScreen = props => {
                 paddingHorizontal: 10,
                 paddingVertical: 5,
                 flexWrap: 'wrap',
+                backgroundColor: 'white',
               }}
             >
               {list.map(friend => (
@@ -147,7 +167,7 @@ const FriendListScreen = props => {
             </View>
           </View>
         )}
-        <Section title="Listado" />
+        <Section title="Listado" customStyle={{ marginBottom: 5 }} />
         {sFriends ? (
           <View style={styles.listContainer}>
             <SafeAreaView style={{ marginBottom: 10 }}>
@@ -166,9 +186,14 @@ const FriendListScreen = props => {
           </View>
         ) : (
           <View style={[styles.listContainer, { justifyContent: 'center', alignItems: 'center' }]}>
-            <Text style={styles.noUsersText}>Usuario no encontrado ...</Text>
+            <Text style={styles.noUsersText}>Busca jugadores</Text>
           </View>
         )}
+        <View style={styles.floatingButton}>
+          <TouchableOpacity onPress={() => props.handlePlayerSelection(list)}>
+            <Text style={{ width: '100%' }}>Guardar</Text>
+          </TouchableOpacity>
+        </View>
       </PageBlank>
     </View>
   )

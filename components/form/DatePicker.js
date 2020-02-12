@@ -38,7 +38,7 @@ const DatePickerCustom = ({
   ...rest
 }) => {
   return (
-    <View style={[{ marginRight: 15 }, style]}>
+    <View style={[{ marginRight: 15, marginBottom: 15 }, style]}>
       {label && <Text style={[styles.label, { color }]}>{label}</Text>}
       <DatePicker
         showIcon={false}
