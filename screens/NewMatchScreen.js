@@ -1,18 +1,19 @@
 // MODULE
 import React, { useState } from 'react'
-import { StyleSheet, SafeAreaView, ScrollView, FlatList, Modal, View, Text } from 'react-native'
+import { StyleSheet, SafeAreaView, ScrollView, Modal, View, Text } from 'react-native'
 
 // UI
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { ListItem } from 'react-native-elements'
+import { Ionicons } from '@expo/vector-icons'
 import PageBlank from '../components/PageBlank'
 import FormInputSimple from '../components/form/FormInputSimple'
 import AvatarWithPicker from '../components/Avatar'
-import FormButton from '../components/form/FormButton'
 import DatePicker from '../components/form/DatePicker'
 import Section from '../components/form/SectionTitle'
-import PlayerRow from '../components/PlayerRow'
+import PositionLabel from '../components/PositionLabel'
 
 // API
 import subscribeUserData from '../hooks/subscribeUserData'
@@ -20,6 +21,9 @@ import { withFirebaseHOC } from '../config/Firebase'
 
 // PAGES
 import FriendListScreen from './FriendListScreen'
+
+// UTILS
+import { getLabelPostionByValue } from '../constants/Player'
 
 const styles = StyleSheet.create({
   container: {
@@ -117,9 +121,9 @@ function NewMatchScreen(props) {
           onSubmit={values => console.log(values)}
           validationSchema={validationSchema}
         >
-          {({ handleChange, values, handleSubmit, setFieldValue, errors, isValid, handleBlur }) => (
+          {({ handleChange, values, setFieldValue, handleBlur }) => (
             <SafeAreaView>
-              <ScrollView behaviour="height" style={{ marginBottom: 60 }}>
+              <ScrollView behaviour="height">
                 <Section title="Datos personales" customStyle={{ marginBottom: 10 }} />
                 <View style={[styles.inputsWrapper]}>
                   <FormInputSimple
@@ -208,16 +212,42 @@ function NewMatchScreen(props) {
                   }
                 />
                 <View>
-                  <View
-                    style={[styles.inputsWrapper, { flexDirection: 'row', alignItems: 'center' }]}
-                  >
-                    {selectedPlayers && (
-                      <FlatList
-                        data={selectedPlayers}
-                        renderItem={({ item }) => <PlayerRow player={item} />}
-                        keyExtractor={item => item.uid}
-                      />
-                    )}
+                  <View>
+                    {selectedPlayers &&
+                      selectedPlayers.map(player => (
+                        <ListItem
+                          key={player.uid}
+                          leftAvatar={{ source: { uri: player.imgProfile } }}
+                          title={player.name}
+                          subtitle={
+                            <View
+                              style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                justifyContent: 'flex-start',
+                                alignContent: 'flex-start',
+                                alignItems: 'flex-start',
+                              }}
+                            >
+                              <PositionLabel
+                                position={getLabelPostionByValue(player.principalPosition)}
+                              />
+                            </View>
+                          }
+                          rightElement={
+                            <TouchableOpacity
+                              onPress={() =>
+                                props.navigation.navigate('FriendProfile', {
+                                  friendUID: player.uid,
+                                })
+                              }
+                            >
+                              <Ionicons name="ios-arrow-forward" size={25} color="black" />
+                            </TouchableOpacity>
+                          }
+                          bottomDivider
+                        />
+                      ))}
                   </View>
                 </View>
               </ScrollView>

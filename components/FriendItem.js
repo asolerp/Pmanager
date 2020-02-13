@@ -83,7 +83,7 @@ const FriendItem = ({ user, addFriend, active, ...rest }) => {
           </View>
         </View>
         <View style={styles.positionWrapper}>
-          <CheckBox checked={active} onPress={() => addFriend(user)} checkedColor="white" />
+          <CheckBox checked={active} onPress={() => addFriend(user)} checkedColor="black" />
         </View>
       </View>
     </TouchableOpacity>

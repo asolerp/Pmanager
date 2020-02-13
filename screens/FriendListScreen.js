@@ -8,18 +8,18 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native'
-import { SearchBar } from 'react-native-elements'
-import _ from 'lodash'
+import { SearchBar, CheckBox, ListItem } from 'react-native-elements'
 import { withFirebaseHOC } from '../config/Firebase'
-import FriendItem from '../components/FriendItem'
 import Section from '../components/form/SectionTitle'
 import AvatarWithPicker from '../components/Avatar'
 import PageBlank from '../components/PageBlank'
-import BlurBackground from '../components/BlurBackground'
+import PositionLabel from '../components/PositionLabel'
+import RadarChart from '../components/RadarChart'
 
 // Utils
 import 'firebase/auth'
 import 'firebase/firestore'
+import { getLabelPostionByValue, LABEL_CHART } from '../constants/Player'
 
 const screenWidth = Math.round(Dimensions.get('window').width)
 
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     marginRight: 10,
+    backgroundColor: 'white',
   },
   searchBarContainer: {
     width: '100%',
@@ -49,6 +50,13 @@ const styles = StyleSheet.create({
     width: 100,
     bottom: 20,
     left: screenWidth / 2 - 50,
+  },
+  positionLabelContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   noUsersText: {
     color: 'black',
@@ -104,13 +112,10 @@ const FriendListScreen = props => {
             querySnapshot.forEach(doc => searchedUsers.push(doc.data()))
           })
           .then(() => {
-            console.log('SearchList', searchedUsers)
-            console.log('List', list)
             const merged = searchedUsers.map(deflt => ({
               ...deflt,
               ...list.find(l => l.uid === deflt.uid),
             }))
-            console.log('Merged', merged)
             setSfriends(merged)
           })
       } catch (err) {
@@ -121,6 +126,81 @@ const FriendListScreen = props => {
       setSfriends(undefined)
     }
     setLoading(false)
+  }
+
+  const updateStateListPlayer = (playerList, updatePlayerList, index) => {
+    playerList[index].active = false
+    updatePlayerList(playerList)
+  }
+
+  const findIndexByKey = (array, key, value) => {
+    return array.findIndex(f => f[key] === value)
+  }
+
+  const removePlayerFromSelection = player => {
+    const friends = sFriends ? [...sFriends] : undefined
+    const friendsList = [...list]
+
+    if (!friends) {
+      updateStateListPlayer(friendsList, updateList, findIndexByKey(friendsList, 'uid', player.uid))
+    } else {
+      const i = findIndexByKey(friends, 'uid', player.uid)
+      if (i !== -1) {
+        updateStateListPlayer(friends, setSfriends, findIndexByKey(friends, 'uid', player.uid))
+      } else {
+        updateStateListPlayer(
+          friendsList,
+          updateList,
+          findIndexByKey(friendsList, 'uid', player.uid)
+        )
+      }
+    }
+    updateList(list.filter(e => e.uid !== player.uid))
+  }
+
+  const keyExtractor = (item, index) => index.toString()
+
+  const renderItem = ({ item }) => {
+    const formatData = user => {
+      const data = [
+        { x: 'Disparo', y: user.stats.shoot * 10 },
+        { x: 'Velocidad', y: user.stats.speed * 10 },
+        { x: 'Regate', y: user.stats.dribbling * 10 },
+        { x: 'Pase', y: user.stats.pass * 10 },
+        { x: 'Fuerza', y: user.stats.strength * 10 },
+        { x: 'Resistencia', y: user.stats.resistance * 10 },
+      ]
+      return data
+    }
+
+    return (
+      <ListItem
+        title={item.name}
+        subtitle={
+          <View style={styles.positionLabelContainer}>
+            <PositionLabel position={getLabelPostionByValue(item.principalPosition)} />
+          </View>
+        }
+        rightElement={
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <CheckBox
+              checked={item.active}
+              onPress={() => handlePress(item)}
+              checkedColor="black"
+            />
+          </View>
+        }
+        leftAvatar={{ source: { uri: item.imgProfile } }}
+        bottomDivider
+      />
+    )
   }
 
   return (
@@ -134,10 +214,14 @@ const FriendListScreen = props => {
         topMargin={0}
       >
         <SearchBar
-          placeholder="Type Here..."
+          placeholder="Escribe el nombre del jugador..."
+          containerStyle={{ backgroundColor: 'white', borderWidth: 0 }}
+          inputContainerStyle={{ backgroundColor: 'white', color: 'black' }}
           onChangeText={updateSearch}
           value={searchText}
           lightTheme
+          round
+          cancelIcon
           showLoading={loading}
         />
         {list.length > 0 && (
@@ -156,6 +240,14 @@ const FriendListScreen = props => {
                 <AvatarWithPicker
                   key={friend.uid}
                   rounded
+                  showEditButton
+                  onEditPress={() => removePlayerFromSelection(friend)}
+                  editButton={{
+                    name: 'cancel',
+                    type: 'material',
+                    color: 'white',
+                  }}
+                  underlayColor="white"
                   containerStyle={styles.avatar}
                   imageUrl={friend.imgProfile}
                   size="medium"
@@ -171,17 +263,7 @@ const FriendListScreen = props => {
         {sFriends ? (
           <View style={styles.listContainer}>
             <SafeAreaView style={{ marginBottom: 10 }}>
-              <FlatList
-                data={sFriends}
-                renderItem={({ item }) => (
-                  <FriendItem
-                    user={item}
-                    addFriend={friend => handlePress(friend)}
-                    active={item.active}
-                  />
-                )}
-                keyExtractor={item => item.uid}
-              />
+              <FlatList keyExtractor={keyExtractor} data={sFriends} renderItem={renderItem} />
             </SafeAreaView>
           </View>
         ) : (

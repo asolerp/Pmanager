@@ -4,11 +4,13 @@ import * as ImagePicker from 'expo-image-picker'
 import { Avatar } from 'react-native-elements'
 import ImageViewer from 'react-native-image-zoom-viewer'
 
-const AvatarWithPicker = ({ setImage, imageUrl, ...rest }) => {
+const AvatarWithPicker = ({ setImage, zoomImage, imageUrl, ...rest }) => {
   const [showImage, setShowImage] = useState(false)
 
   const handlePress = () => {
-    setShowImage(true)
+    if (zoomImage) {
+      setShowImage(true)
+    }
   }
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({

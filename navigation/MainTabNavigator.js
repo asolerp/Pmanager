@@ -8,7 +8,7 @@ import Profile from '../screens/ProfileScreen'
 import ProfileForm from '../screens/ProfileFormScreen'
 import FriendScreen from '../screens/FriendScreen'
 import NewMatchScreen from '../screens/NewMatchScreen'
-import FriendListScreen from '../screens/FriendListScreen'
+// import FriendListScreen from '../screens/FriendListScreen'
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -19,6 +19,7 @@ const HomeStack = createStackNavigator(
   {
     Home,
     NewMatch: NewMatchScreen,
+    FriendProfile: FriendScreen,
   },
   config
 )
@@ -57,32 +58,32 @@ ProfileStack.navigationOptions = ({ navigation }) => {
 
 ProfileStack.path = ''
 
-const FriendListStack = createStackNavigator({
-  FriendList: FriendListScreen,
-  FriendProfile: FriendScreen,
-})
+// const FriendListStack = createStackNavigator({
+//   FriendList: FriendListScreen,
+//   FriendProfile: FriendScreen,
+// })
 
-FriendListStack.navigationOptions = ({ navigation }) => {
-  let tabBarVisible = true
-  if (navigation.state.index > 0) {
-    tabBarVisible = false
-  }
+// FriendListStack.navigationOptions = ({ navigation }) => {
+//   let tabBarVisible = true
+//   if (navigation.state.index > 0) {
+//     tabBarVisible = false
+//   }
 
-  return {
-    tabBarVisible,
-    tabBarLabel: 'Friends',
-    tabBarIcon: ({ focused }) => (
-      <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-people' : 'md-people'} />
-    ),
-  }
-}
+//   return {
+//     tabBarVisible,
+//     tabBarLabel: 'Friends',
+//     tabBarIcon: ({ focused }) => (
+//       <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-people' : 'md-people'} />
+//     ),
+//   }
+// }
 
-FriendListStack.path = ''
+// FriendListStack.path = ''
 
 const tabNavigator = createBottomTabNavigator(
   {
     HomeStack,
-    FriendListStack,
+    // FriendListStack,
     ProfileStack,
   },
   {

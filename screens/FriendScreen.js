@@ -9,6 +9,7 @@ import { POSITIONS, MAIN_FOOT, LABEL_CHART } from '../constants/Player'
 import COUNTRIES from '../constants/Countries'
 import Stat from '../components/Stat'
 import PlayerDetail from '../components/PlayerDetail'
+import PageBlank from '../components/PageBlank'
 
 const styles = StyleSheet.create({
   container: {
@@ -35,9 +36,6 @@ function FriendScreen(props) {
     const friendUID = props.navigation.getParam('friendUID')
     const getFriendProfile = async uid => {
       await props.firebase.getUserProfile(uid).then(doc => {
-        props.navigation.setParams({
-          title: doc.data().name,
-        })
         setUser(doc.data())
       })
     }
@@ -70,7 +68,7 @@ function FriendScreen(props) {
   }
 
   return (
-    <View style={styles.container}>
+    <PageBlank title={user && user.name} titleColor="black" iconColor="black">
       <View style={styles.topWrapper}>
         {user && (
           <>
@@ -117,7 +115,7 @@ function FriendScreen(props) {
           )}
         </ScrollView>
       </View>
-    </View>
+    </PageBlank>
   )
 }
 
@@ -125,11 +123,8 @@ const extendedComponent = withFirebaseHOC(FriendScreen)
 
 extendedComponent.navigationOptions = props => {
   return {
-    title: props.navigation.getParam('title'),
-    headerTitleStyle: {
-      color: 'black',
-      fontSize: 20,
-    },
+    header: null,
+    tabBarVisible: false,
   }
 }
 
