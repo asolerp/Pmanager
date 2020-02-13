@@ -43,8 +43,9 @@ const styles = StyleSheet.create({
   },
   addButon: {
     fontFamily: 'montserrat-regular',
-    fontSize: 10,
-    color: 'blue',
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: 'black',
   },
   buttonProgress: {
     fontSize: 15,
