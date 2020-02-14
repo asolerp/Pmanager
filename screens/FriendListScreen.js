@@ -14,12 +14,11 @@ import Section from '../components/form/SectionTitle'
 import AvatarWithPicker from '../components/Avatar'
 import PageBlank from '../components/PageBlank'
 import PositionLabel from '../components/PositionLabel'
-import RadarChart from '../components/RadarChart'
-
+import StatsDetail from '../components/StatsDetail'
 // Utils
 import 'firebase/auth'
 import 'firebase/firestore'
-import { getLabelPostionByValue, LABEL_CHART } from '../constants/Player'
+import { getLabelPostionByValue } from '../constants/Player'
 
 const screenWidth = Math.round(Dimensions.get('window').width)
 
@@ -185,11 +184,14 @@ const FriendListScreen = props => {
           <View
             style={{
               flex: 1,
+              flexGrow: 4,
               flexDirection: 'row',
               justifyContent: 'space-between',
+              alignContent: 'center',
               alignItems: 'center',
             }}
           >
+            <StatsDetail stats={item.stats} />
             <CheckBox
               checked={item.active}
               onPress={() => handlePress(item)}

@@ -27,7 +27,14 @@ const PLAYER_STATS = [
   { label: 'Normal', value: 5 },
 ]
 
-const LABEL_CHART = ['Disparo', 'Velocidad', 'Regate', 'Pase', 'Fuerza', 'Resistencia']
+const PLAYER_CHAR = [
+  { label: 'Regate', shortName: 'Reg', value: 'dribbling', icon: 'angle-double-up' },
+  { label: 'Pase', shortName: 'Pas', value: 'pass', icon: 'arrows-alt' },
+  { label: 'Resistencia', shortName: 'Res', value: 'resistance', icon: 'battery-half' },
+  { label: 'Disparo', shortName: 'Dis', value: 'shoot', icon: 'futbol-o' },
+  { label: 'Velocidad', shortName: 'Vel', value: 'speed', icon: 'bolt' },
+  { label: 'Fuerza', shortName: 'Fue', value: 'strength', icon: 'heartbeat' },
+]
 
 const getLabelPostionByValue = pos => {
   const position = _.find(POSITIONS, ['value', pos])
@@ -38,4 +45,13 @@ const getLabelPostionByValue = pos => {
   }
 }
 
-export { POSITIONS, MAIN_FOOT, PLAYER_STATS, LABEL_CHART, getLabelPostionByValue }
+const getLabelStat = stat => {
+  const statPlayer = _.find(PLAYER_CHAR, ['value', stat])
+  return {
+    label: statPlayer.label,
+    name: statPlayer.shortName,
+    icon: statPlayer.icon,
+  }
+}
+
+export { POSITIONS, MAIN_FOOT, PLAYER_STATS, PLAYER_CHAR, getLabelPostionByValue, getLabelStat }
