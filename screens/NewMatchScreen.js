@@ -1,22 +1,24 @@
 // MODULE
-import React, { useState } from 'react'
-import { StyleSheet, SafeAreaView, ScrollView, Modal, View, Text } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, SafeAreaView, ScrollView, Modal, View, Text, Button } from 'react-native'
 
 // UI
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { ListItem } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons'
-import PageBlank from '../components/PageBlank'
+import { ListItem } from 'react-native-elements'
 import FormInputSimple from '../components/form/FormInputSimple'
+import PageBlank from '../components/PageBlank'
 import AvatarWithPicker from '../components/Avatar'
 import DatePicker from '../components/form/DatePicker'
 import Section from '../components/form/SectionTitle'
 import PositionLabel from '../components/PositionLabel'
+import FormButton from '../components/form/FormButton'
 
 // API
 import subscribeUserData from '../hooks/subscribeUserData'
+import insertFirebaseDB from '../hooks/insertFirebaseDB'
 import { withFirebaseHOC } from '../config/Firebase'
 
 // PAGES
@@ -68,18 +70,44 @@ function NewMatchScreen(props) {
   const { user } = subscribeUserData()
   const [activeModal, setActiveModal] = useState(false)
   const [selectedPlayers, setSelectedPlayers] = useState([])
+  const [admins, setAdmins] = useState([])
   const [imageMatch, setImgProfile] = useState(
     'https://img.uefa.com/imgml/uefacom/ucl/social/og-default.jpg'
   )
+
+  const [container, setContainer] = useState([])
+  const [selector, setSelector] = useState()
+
   const setImage = uri => {
     setImgProfile(uri)
   }
+
+  useEffect(() => {
+    if (user) {
+      setAdmins([
+        {
+          uid: user.uid,
+          imgProfile: user.imgProfile,
+        },
+      ])
+      setSelectedPlayers([
+        {
+          uid: user.uid,
+          name: user.name,
+          principalPosition: user.principalPosition,
+          imgProfile: user.imgProfile,
+          assistance: false,
+        },
+      ])
+    }
+  }, [user])
+
   return (
     <PageBlank
       title="Nuevo Partido"
       titleColor="black"
       iconColor="black"
-      rightSide={
+      rightSide={() => (
         <AvatarWithPicker
           rounded
           editButton={{
@@ -97,7 +125,7 @@ function NewMatchScreen(props) {
             uri: imageMatch,
           }}
         />
-      }
+      )}
     >
       <View style={{ flex: 1 }}>
         <Modal
@@ -109,19 +137,45 @@ function NewMatchScreen(props) {
           }}
         >
           <FriendListScreen
-            listSelectedPlayers={selectedPlayers}
+            listSelectedPlayers={container}
             handlePlayerSelection={players => {
-              setSelectedPlayers(players)
+              selector(players)
               setActiveModal(false)
             }}
           />
         </Modal>
         <Formik
           initialValues={{ name: '' }}
-          onSubmit={values => console.log(values)}
-          validationSchema={validationSchema}
+          onSubmit={values => {
+            const { name, description, place, date, time } = values
+            const newMatch = {
+              name,
+              description,
+              place,
+              date,
+              time,
+              admins,
+              players: selectedPlayers,
+              playersUID: selectedPlayers.map(player => player.uid),
+            }
+            props.firebase.insertDB(newMatch, 'matches').then(docRef => {
+              console.log(docRef)
+              return props.firebase
+                .uriToBlob(imageMatch)
+                .then(blob => props.firebase.uploadToFirebase(blob, `match/${docRef.id}`, 'match'))
+                .then(snapshot => snapshot.ref.getDownloadURL())
+                .then(downloadURL =>
+                  props.firebase.updateDB(
+                    { imageMatch: downloadURL, uid: docRef.id },
+                    'matches',
+                    docRef.id
+                  )
+                )
+                .then(() => props.navigation.navigate('Home'))
+            })
+          }}
         >
-          {({ handleChange, values, setFieldValue, handleBlur }) => (
+          {({ handleChange, handleSubmit, isSubmitting, values, setFieldValue, handleBlur }) => (
             <SafeAreaView>
               <ScrollView behaviour="height">
                 <Section title="Datos personales" customStyle={{ marginBottom: 10 }} />
@@ -144,7 +198,7 @@ function NewMatchScreen(props) {
                     name="description"
                     label="Descripción"
                     value={values.description}
-                    onChangeText={handleChange('name')}
+                    onChangeText={handleChange('description')}
                     placeholder="Descripción del partido"
                     autoCapitalize="none"
                     textAlign="left"
@@ -186,27 +240,51 @@ function NewMatchScreen(props) {
                     />
                   </View>
                 </View>
-                <Section title="Administradores" customStyle={{ marginBottom: 10 }} />
+                <Section
+                  title="Administradores"
+                  rightElement={
+                    <TouchableOpacity
+                      onPress={() => {
+                        setActiveModal(true)
+                        setSelector(() => setAdmins)
+                        setContainer(admins)
+                      }}
+                    >
+                      <Text style={styles.addButon}>Añadir</Text>
+                    </TouchableOpacity>
+                  }
+                  customStyle={{ marginBottom: 10 }}
+                />
                 <View
                   style={[
                     styles.inputsWrapper,
                     { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
                   ]}
                 >
-                  <AvatarWithPicker
-                    rounded
-                    containerStyle={styles.avatar}
-                    imageUrl={user && user.imgProfile}
-                    size="medium"
-                    source={{
-                      uri: user && user.imgProfile,
-                    }}
-                  />
+                  {admins &&
+                    admins.map(admin => (
+                      <AvatarWithPicker
+                        key={`${admin.uid}-admins`}
+                        rounded
+                        containerStyle={styles.avatar}
+                        imageUrl={admin && admin.imgProfile}
+                        size="medium"
+                        source={{
+                          uri: admin && admin.imgProfile,
+                        }}
+                      />
+                    ))}
                 </View>
                 <Section
                   title="Jugadores"
                   rightElement={
-                    <TouchableOpacity onPress={() => setActiveModal(true)}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setActiveModal(true)
+                        setSelector(() => setSelectedPlayers)
+                        setContainer(selectedPlayers)
+                      }}
+                    >
                       <Text style={styles.addButon}>Añadir</Text>
                     </TouchableOpacity>
                   }
@@ -214,11 +292,11 @@ function NewMatchScreen(props) {
                 <View>
                   <View>
                     {selectedPlayers &&
-                      selectedPlayers.map(player => (
+                      selectedPlayers.map(splayer => (
                         <ListItem
-                          key={player.uid}
-                          leftAvatar={{ source: { uri: player.imgProfile } }}
-                          title={player.name}
+                          key={splayer.uid}
+                          leftAvatar={{ source: { uri: splayer.imgProfile } }}
+                          title={splayer.name}
                           subtitle={
                             <View
                               style={{
@@ -230,7 +308,7 @@ function NewMatchScreen(props) {
                               }}
                             >
                               <PositionLabel
-                                position={getLabelPostionByValue(player.principalPosition)}
+                                position={getLabelPostionByValue(splayer.principalPosition)}
                               />
                             </View>
                           }
@@ -249,6 +327,18 @@ function NewMatchScreen(props) {
                         />
                       ))}
                   </View>
+                </View>
+                <View>
+                  <FormButton
+                    onPress={handleSubmit}
+                    style={{
+                      backgroundColor: 'transparent',
+                    }}
+                    title="Guardar"
+                    buttonColor="black"
+                    // disabled={!isValid}
+                    loading={isSubmitting}
+                  />
                 </View>
               </ScrollView>
             </SafeAreaView>

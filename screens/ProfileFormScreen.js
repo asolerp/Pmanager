@@ -124,7 +124,7 @@ function ProfileForm(props) {
           title={user.name}
           titleColor="black"
           iconColor="black"
-          rightSide={
+          rightSide={() => (
             <AvatarWithPicker
               rounded
               editButton={{
@@ -142,7 +142,7 @@ function ProfileForm(props) {
                 uri: imgProfile,
               }}
             />
-          }
+          )}
         >
           {/* <HideWithKeyboard style={styles.topWrapper}>
             {user && (
@@ -183,7 +183,9 @@ function ProfileForm(props) {
                   const { uid } = props.firebase.currentUser()
                   props.firebase
                     .uriToBlob(imgProfile)
-                    .then(blob => props.firebase.uploadToFirebase(blob, uid, 'profile'))
+                    .then(blob =>
+                      props.firebase.uploadToFirebase(blob, `players/${uid}`, 'profile')
+                    )
                     .then(snapshot => snapshot.ref.getDownloadURL())
                     .then(downloadURL => {
                       const userData = {

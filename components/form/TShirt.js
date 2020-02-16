@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
   dorsalContainer: {
     position: 'absolute',
-    top: 40,
+    top: '30%',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

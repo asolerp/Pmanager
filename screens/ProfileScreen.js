@@ -112,6 +112,8 @@ function Profile(props) {
                     <ChipSelector
                       values={user.positions.filter(p => p.active)}
                       customStyle={{ fontSize: 10 }}
+                      markPrincipal
+                      principal={user.principalPosition}
                     />
                   </PlayerDetail>
                 </View>
@@ -120,7 +122,6 @@ function Profile(props) {
                 </View>
               </View>
               <Section title="Habilidad" />
-              {user.stats && <RadarChart labels={LABEL_CHART} data={formatData(user)} />}
             </>
           )}
         </ScrollView>

@@ -59,7 +59,9 @@ function PageBlank({
     <View style={[styles.container, { marginTop: topMargin }]}>
       <View style={styles.titleContainer}>
         <View style={styles.leftSide}>
-          {leftSide || (
+          {leftSide ? (
+            leftSide()
+          ) : (
             <TouchableOpacity onPress={() => navigation.pop()}>
               <Ionicons
                 style={styles.icon}
@@ -73,7 +75,7 @@ function PageBlank({
         <View style={styles.centerSide}>
           <Text style={[styles.title, { color: titleColor }]}>{title}</Text>
         </View>
-        <View style={styles.rightSide}>{rightSide}</View>
+        <View style={styles.rightSide}>{rightSide()}</View>
       </View>
       <View style={{ flex: 1 }}>{children}</View>
     </View>

@@ -160,18 +160,6 @@ const FriendListScreen = props => {
   const keyExtractor = (item, index) => index.toString()
 
   const renderItem = ({ item }) => {
-    const formatData = user => {
-      const data = [
-        { x: 'Disparo', y: user.stats.shoot * 10 },
-        { x: 'Velocidad', y: user.stats.speed * 10 },
-        { x: 'Regate', y: user.stats.dribbling * 10 },
-        { x: 'Pase', y: user.stats.pass * 10 },
-        { x: 'Fuerza', y: user.stats.strength * 10 },
-        { x: 'Resistencia', y: user.stats.resistance * 10 },
-      ]
-      return data
-    }
-
     return (
       <ListItem
         title={item.name}
@@ -218,7 +206,7 @@ const FriendListScreen = props => {
         <SearchBar
           placeholder="Escribe el nombre del jugador..."
           containerStyle={{ backgroundColor: 'white', borderWidth: 0 }}
-          inputContainerStyle={{ backgroundColor: 'white', color: 'black' }}
+          inputContainerStyle={{ backgroundColor: 'white' }}
           onChangeText={updateSearch}
           value={searchText}
           lightTheme
@@ -274,7 +262,21 @@ const FriendListScreen = props => {
           </View>
         )}
         <View style={styles.floatingButton}>
-          <TouchableOpacity onPress={() => props.handlePlayerSelection(list)}>
+          <TouchableOpacity
+            onPress={() =>
+              props.handlePlayerSelection(
+                list.map(player => {
+                  return {
+                    uid: player.uid,
+                    imgProfile: player.imgProfile,
+                    principalPosition: player.principalPosition,
+                    name: player.name,
+                    assistance: false,
+                  }
+                })
+              )
+            }
+          >
             <Text style={{ width: '100%' }}>Guardar</Text>
           </TouchableOpacity>
         </View>

@@ -50,6 +50,8 @@ const ChipSelector = ({
   label,
   multiple = false,
   touchable = false,
+  markPrincipal = false,
+  principal,
   customStyle,
   onValueChange,
 }) => {
@@ -61,10 +63,13 @@ const ChipSelector = ({
   }, [])
 
   // Chip methods
-
   const findChip = item => {
     const index = _.findIndex(chips, ['value', item.value])
     return index
+  }
+
+  const isPrincipal = item => {
+    return item.value === principal
   }
 
   const handlePress = item => {
@@ -85,7 +90,12 @@ const ChipSelector = ({
   const chip = item => (
     <Text
       key={item.value}
-      style={[styles.chip, item.active ? styles.activeChip : styles.deactiveChip, customStyle]}
+      style={[
+        styles.chip,
+        item.active ? styles.activeChip : styles.deactiveChip,
+        customStyle,
+        markPrincipal && isPrincipal(item) && { backgroundColor: '#CC1034' },
+      ]}
     >
       {item.label}
     </Text>

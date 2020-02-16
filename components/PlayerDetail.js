@@ -17,8 +17,8 @@ function PlayerDetail({ title, subtitle, children, rest }) {
 }
 
 const styles = StyleSheet.create({
-  constainer: {
-    marginBottom: 30,
+  container: {
+    marginBottom: 15,
   },
   title: {
     color: 'black',

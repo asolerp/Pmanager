@@ -35,19 +35,15 @@ const StatsDetail = ({ stats }) => (
   <View style={styles.container}>
     <View style={styles.statsWrapper}>
       {stats &&
-        Object.keys(stats).map(stat => (
-          <View style={styles.container}>
-            <Icon name={getLabelStat(stat).icon} type="font-awesome" color="black" />
+        Object.keys(stats).map((stat, i) => (
+          <View style={styles.container} key={i}>
+            <Icon name={getLabelStat(stat).icon} type="font-awesome" color="black" size={10} />
             <Text style={styles.titleStat}>{getLabelStat(stat).name}: </Text>
             <Text style={styles.valueStat}>{stats[stat]}</Text>
           </View>
         ))}
     </View>
   </View>
-  // <View style={styles.container}>
-  //   <Text style={styles.titleStat}>{getLabelStat(stat).name}: </Text>
-  //   <Text style={styles.valueStat}>{value}</Text>
-  // </View>
 )
 
 export default StatsDetail

@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, TouchableOpacity, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 import { useStateValue } from '../config/User/UserContextManagement'
 import { withFirebaseHOC } from '../config/Firebase'
 import subscribeUserData from '../hooks/subscribeUserData'
+import subscribePlayerMatches from '../hooks/subscribePlayerMatches'
 import BlurBackground from '../components/BlurBackground'
 
 const styles = StyleSheet.create({
@@ -22,11 +23,21 @@ const styles = StyleSheet.create({
 
 function Home(props) {
   const { loading, user } = subscribeUserData()
+  const { matches } = subscribePlayerMatches()
   // const [{ session }, dispatch] = useStateValue()
 
+  useEffect(() => {}, [])
+
   useEffect(() => {
+    const getPlayerMatches = async userUID => {
+      const arrayOfMatches = await props.firebase.getPlayerMatches(userUID)
+      arrayOfMatches.forEach(match => console.log('Partido', match.data()))
+    }
     props.navigation.setParams({ titulo: 'Alberto Soler', tabBar: false })
-  }, [])
+    // if (user) {
+    //   getPlayerMatches(user.uid)
+    // }
+  }, [user])
 
   const handleSignout = async () => {
     try {
@@ -46,6 +57,23 @@ function Home(props) {
       >
         {loading && <ActivityIndicator size="small" color="white" />}
         {user && <Text style={styles.text}>{user.name}</Text>}
+        {matches &&
+          matches.map(match => (
+            <View>
+              <Text>{match.name}</Text>
+              {match.players.map(player => (
+                <View>
+                  <Text>{player.name}</Text>
+                  <Text>{player.assistance ? 'Sí' : 'No'}</Text>
+                </View>
+              ))}
+              <TouchableOpacity
+                onPress={() => props.firebase.updatePlayerParticipation(match.uid, user, true)}
+              >
+                <Text>Asistir</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
         <Button
           title="Nuevo partido"
           onPress={() => props.navigation.navigate('NewMatch')}
