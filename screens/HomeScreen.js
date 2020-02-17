@@ -1,23 +1,27 @@
 import React, { useEffect } from 'react'
 import { ActivityIndicator, TouchableOpacity, StyleSheet, Text, View } from 'react-native'
-import { Button } from 'react-native-elements'
+import { Button, CheckBox, ListItem } from 'react-native-elements'
 import { useStateValue } from '../config/User/UserContextManagement'
 import { withFirebaseHOC } from '../config/Firebase'
 import subscribeUserData from '../hooks/subscribeUserData'
 import subscribePlayerMatches from '../hooks/subscribePlayerMatches'
 import BlurBackground from '../components/BlurBackground'
+import StatsDetail from '../components/StatsDetail'
+import PositionLabel from '../components/PositionLabel'
+import { getLabelPostionByValue } from '../constants/Player'
+import PageBlank from '../components/PageBlank'
+import AvatarWithPicker from '../components/Avatar'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
   text: {
     fontSize: 30,
     fontFamily: 'montserrat-light',
-    color: 'white',
+    color: 'black',
   },
 })
 
@@ -48,37 +52,83 @@ function Home(props) {
     }
   }
   return (
-    <View style={styles.container}>
-      <BlurBackground
-        blur={2}
-        center
-        backColor="rgba(63, 63, 63, .6)"
-        backgroundUrlOnline="https://i.pinimg.com/originals/35/5e/06/355e06c94e6bf92cbaf0c015edf7eea3.jpg"
-      >
-        {loading && <ActivityIndicator size="small" color="white" />}
-        {user && <Text style={styles.text}>{user.name}</Text>}
-        {matches &&
-          matches.map(match => (
-            <View>
-              <Text>{match.name}</Text>
+    <PageBlank
+      title="PANAMA MANAGER"
+      titleColor="black"
+      iconColor="black"
+      leftSide={() => <></>}
+      rightSide={() => (
+        <AvatarWithPicker
+          rounded
+          containerStyle={styles.avatar}
+          imageUrl={user && user.imgProfile}
+          size="medium"
+          source={{
+            uri: user && user.imgProfile,
+          }}
+        />
+      )}
+    >
+      {loading && <ActivityIndicator size="small" color="black" />}
+      {matches &&
+        matches.map(match => (
+          <View style={{ width: '100%' }}>
+            <Text style={{ textAlign: 'center', fontSize: 30, color: 'black', marginBottom: 15 }}>
+              {match.name}
+            </Text>
+            <View style={{ height: 300 }}>
               {match.players.map(player => (
-                <View>
-                  <Text>{player.name}</Text>
-                  <Text>{player.assistance ? 'Sí' : 'No'}</Text>
-                </View>
+                <ListItem
+                  title={player.name}
+                  subtitle={
+                    <View style={styles.positionLabelContainer}>
+                      {/* <PositionLabel position={getLabelPostionByValue(player.principalPosition)} /> */}
+                    </View>
+                  }
+                  rightElement={
+                    <View
+                      style={{
+                        flex: 1,
+                        flexGrow: 4,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      {/* <StatsDetail stats={player.stats} /> */}
+                      <CheckBox
+                        checked={player.assistance}
+                        // onPress={() => handlePress(item)}
+                        checkedColor="black"
+                      />
+                    </View>
+                  }
+                  leftAvatar={{ source: { uri: player.imgProfile } }}
+                  bottomDivider
+                />
               ))}
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
               <TouchableOpacity
-                onPress={() => props.firebase.updatePlayerParticipation(match.uid, user, true)}
+                onPress={() => props.firebase.updatePlayerParticipation(match, user, true)}
               >
-                <Text>Asistir</Text>
+                <Text style={{ color: 'black', fontSize: 20 }}>Asistir</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => props.firebase.updatePlayerParticipation(match, user, false)}
+              >
+                <Text style={{ color: 'black', fontSize: 20 }}>No Asistir</Text>
               </TouchableOpacity>
             </View>
-          ))}
+          </View>
+        ))}
+      <View>
         <Button
           title="Nuevo partido"
           onPress={() => props.navigation.navigate('NewMatch')}
           titleStyle={{
-            color: 'white',
+            color: 'black',
           }}
           type="clear"
         />
@@ -86,12 +136,12 @@ function Home(props) {
           title="Signout"
           onPress={handleSignout}
           titleStyle={{
-            color: 'white',
+            color: 'black',
           }}
           type="clear"
         />
-      </BlurBackground>
-    </View>
+      </View>
+    </PageBlank>
   )
 }
 

@@ -18,7 +18,6 @@ import FormButton from '../components/form/FormButton'
 
 // API
 import subscribeUserData from '../hooks/subscribeUserData'
-import insertFirebaseDB from '../hooks/insertFirebaseDB'
 import { withFirebaseHOC } from '../config/Firebase'
 
 // PAGES
@@ -26,6 +25,7 @@ import FriendListScreen from './FriendListScreen'
 
 // UTILS
 import { getLabelPostionByValue } from '../constants/Player'
+import { FORMATION_1 } from '../constants/Formations'
 
 const styles = StyleSheet.create({
   container: {
@@ -166,7 +166,12 @@ function NewMatchScreen(props) {
                 .then(snapshot => snapshot.ref.getDownloadURL())
                 .then(downloadURL =>
                   props.firebase.updateDB(
-                    { imageMatch: downloadURL, uid: docRef.id },
+                    {
+                      imageMatch: downloadURL,
+                      teamA: FORMATION_1,
+                      teamB: FORMATION_1,
+                      uid: docRef.id,
+                    },
                     'matches',
                     docRef.id
                   )

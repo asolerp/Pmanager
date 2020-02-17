@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
-import { Button } from 'react-native-elements'
-import RadarChart from '../components/RadarChart'
+import { StyleSheet, View } from 'react-native'
 import { withFirebaseHOC } from '../config/Firebase'
 import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
-import subscribeUserData from '../hooks/subscribeUserData'
-import { POSITIONS, MAIN_FOOT, LABEL_CHART } from '../constants/Player'
+import { POSITIONS, MAIN_FOOT } from '../constants/Player'
 import COUNTRIES from '../constants/Countries'
 import Stat from '../components/Stat'
 import PlayerDetail from '../components/PlayerDetail'
 import PageBlank from '../components/PageBlank'
+import TShirt from '../components/form/TShirt'
+import ChipSelector from '../components/form/ChipSelector'
+import Section from '../components/form/SectionTitle'
 
 const styles = StyleSheet.create({
   container: {
@@ -54,19 +54,6 @@ function FriendScreen(props) {
     return COUNTRIES.find(country => country.value === user.country).label
   }
 
-  const formatData = user => {
-    const data = [
-      { x: 'Disparo', y: user.stats.shoot * 10 },
-      { x: 'Velocidad', y: user.stats.speed * 10 },
-      { x: 'Regate', y: user.stats.dribbling * 10 },
-      { x: 'Pase', y: user.stats.pass * 10 },
-      { x: 'Fuerza', y: user.stats.strength * 10 },
-      { x: 'Resistencia', y: user.stats.resistance * 10 },
-    ]
-
-    return data
-  }
-
   return (
     <PageBlank title={user && user.name} titleColor="black" iconColor="black">
       <View style={styles.topWrapper}>
@@ -104,16 +91,25 @@ function FriendScreen(props) {
         )}
       </View>
       <View style={styles.bottomWrapper}>
-        <ScrollView>
-          {user && (
-            <>
-              <PlayerDetail title="Descripción" subtitle={user.description || ''} />
-              <PlayerDetail title="Nacionalidad" subtitle={user.country ? getCountryLabel() : ''} />
-              <PlayerDetail title="Pie" subtitle={user.foot ? getMainFoot() : ''} />
-              {user.stats && <RadarChart labels={LABEL_CHART} data={formatData(user)} />}
-            </>
-          )}
-        </ScrollView>
+        <Section title="Datos personales" />
+        <View style={{ flex: 1, flexDirection: 'row', padding: 10 }}>
+          <View style={{ flex: 1 }}>
+            <PlayerDetail title="Descripción" subtitle={user.description || ''} />
+            <PlayerDetail title="Nacionalidad" subtitle={user.country ? getCountryLabel() : ''} />
+            <PlayerDetail title="Pie" subtitle={user.foot ? getMainFoot() : ''} />
+            <PlayerDetail title="Posiciones">
+              <ChipSelector
+                values={user.positions.filter(p => p.active)}
+                customStyle={{ fontSize: 10 }}
+                markPrincipal
+                principal={user.principalPosition}
+              />
+            </PlayerDetail>
+          </View>
+          <View style={{ flex: 1 }}>
+            <TShirt name={user.name} dorsal={user.dorsal} />
+          </View>
+        </View>
       </View>
     </PageBlank>
   )

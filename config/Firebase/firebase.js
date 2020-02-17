@@ -39,14 +39,6 @@ const Firebase = {
       .firestore()
       .collection(collection)
       .add(model)
-    // .then(docRef =>
-    //   firebase
-    //     .firestore()
-    //     .collection('matches')
-    //     .doc(docRef.id)
-    //     .set({ uid: docRef.id })
-    // )
-    // .catch(err => console.log(err))
   },
 
   updateDB: (model, collection, doc) => {
@@ -85,33 +77,35 @@ const Firebase = {
       .set({ ...userData, keywords: generateKeywords(userData.name) })
   },
 
-  updatePlayerParticipation: (matchUID, user, assistance) => {
-    firebase
+  updatePlayerParticipation: (match, user, assistance) => {
+    console.log('TO CHANGE', {
+      assistance,
+      imgProfile: user.imgProfile,
+      name: user.name,
+      principalPositon: user.principalPosition,
+      uid: user.uid,
+    })
+
+    return firebase
       .firestore()
       .collection('matches')
-      .doc(matchUID)
+      .doc(match.uid)
       .update({
-        players: firebase.firestore.FieldValue.arrayRemove({
-          uid: user.uid,
-          name: user.name,
-          principalPositon: user.principalPositon,
-          imgProfile: user.imgProfile,
-          assistance,
-        }),
+        players: match.players.filter(player => player.uid !== user.uid),
       })
       .then(() => {
         console.log('Removed old element from Host -> locations array successfully')
         firebase
           .firestore()
           .collection('matches')
-          .doc(matchUID)
+          .doc(match.uid)
           .update({
             players: firebase.firestore.FieldValue.arrayUnion({
-              uid: user.uid,
-              name: user.name,
-              principalPositon: user.principalPositon,
-              imgProfile: user.imgProfile,
               assistance,
+              imgProfile: user.imgProfile,
+              name: user.name,
+              principalPositon: user.principalPosition,
+              uid: user.uid,
             }),
           })
           .then(() => {

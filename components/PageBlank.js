@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontFamily: 'montserrat-regular',
-    fontWeight: 'bold',
+    fontWeight: '200',
   },
   icon: {
     justifyContent: 'flex-start',
