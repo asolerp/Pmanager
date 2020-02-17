@@ -5,7 +5,6 @@ import { useStateValue } from '../config/User/UserContextManagement'
 import { withFirebaseHOC } from '../config/Firebase'
 import subscribeUserData from '../hooks/subscribeUserData'
 import subscribePlayerMatches from '../hooks/subscribePlayerMatches'
-import BlurBackground from '../components/BlurBackground'
 import StatsDetail from '../components/StatsDetail'
 import PositionLabel from '../components/PositionLabel'
 import { getLabelPostionByValue } from '../constants/Player'
@@ -17,6 +16,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  positionLabelContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   text: {
     fontSize: 30,
@@ -62,7 +68,7 @@ function Home(props) {
           rounded
           containerStyle={styles.avatar}
           imageUrl={user && user.imgProfile}
-          size="medium"
+          size="small"
           source={{
             uri: user && user.imgProfile,
           }}
@@ -77,46 +83,50 @@ function Home(props) {
               {match.name}
             </Text>
             <View style={{ height: 300 }}>
-              {match.players.map(player => (
-                <ListItem
-                  title={player.name}
-                  subtitle={
-                    <View style={styles.positionLabelContainer}>
-                      {/* <PositionLabel position={getLabelPostionByValue(player.principalPosition)} /> */}
-                    </View>
-                  }
-                  rightElement={
-                    <View
-                      style={{
-                        flex: 1,
-                        flexGrow: 4,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignContent: 'center',
-                        alignItems: 'center',
-                      }}
-                    >
-                      {/* <StatsDetail stats={player.stats} /> */}
-                      <CheckBox
-                        checked={player.assistance}
-                        // onPress={() => handlePress(item)}
-                        checkedColor="black"
-                      />
-                    </View>
-                  }
-                  leftAvatar={{ source: { uri: player.imgProfile } }}
-                  bottomDivider
-                />
-              ))}
+              {match.players &&
+                match.players.map(player => (
+                  <ListItem
+                    title={player.name}
+                    titleStyle={{ fontSize: 15 }}
+                    subtitle={
+                      <View style={styles.positionLabelContainer}>
+                        <PositionLabel
+                          position={getLabelPostionByValue(player.principalPosition)}
+                        />
+                      </View>
+                    }
+                    rightElement={
+                      <View
+                        style={{
+                          flex: 1,
+                          flexGrow: 4,
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignContent: 'center',
+                          alignItems: 'center',
+                        }}
+                      >
+                        <StatsDetail stats={player.stats} />
+                        <CheckBox
+                          checked={player.assistance}
+                          // onPress={() => handlePress(item)}
+                          checkedColor="black"
+                        />
+                      </View>
+                    }
+                    leftAvatar={{ source: { uri: player.imgProfile } }}
+                    bottomDivider
+                  />
+                ))}
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
               <TouchableOpacity
-                onPress={() => props.firebase.updatePlayerParticipation(match, user, true)}
+                onPress={() => props.firebase.updatePlayerParticipation2(match, user, true)}
               >
                 <Text style={{ color: 'black', fontSize: 20 }}>Asistir</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => props.firebase.updatePlayerParticipation(match, user, false)}
+                onPress={() => props.firebase.updatePlayerParticipation2(match, user, false)}
               >
                 <Text style={{ color: 'black', fontSize: 20 }}>No Asistir</Text>
               </TouchableOpacity>

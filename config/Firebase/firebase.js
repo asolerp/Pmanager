@@ -77,21 +77,25 @@ const Firebase = {
       .set({ ...userData, keywords: generateKeywords(userData.name) })
   },
 
-  updatePlayerParticipation: (match, user, assistance) => {
-    console.log('TO CHANGE', {
-      assistance,
-      imgProfile: user.imgProfile,
-      name: user.name,
-      principalPositon: user.principalPosition,
-      uid: user.uid,
-    })
+  updatePlayerParticipation2: (match, user, assistance) => {
+    const update = {}
+    update[`participants.${user.uid}`] = assistance
 
     return firebase
       .firestore()
       .collection('matches')
       .doc(match.uid)
+      .update(update)
+  },
+
+  updatePlayerParticipation: (match, user, assistance) => {
+    console.log(user)
+    return firebase
+      .firestore()
+      .collection('matches')
+      .doc(match.uid)
       .update({
-        players: match.players.filter(player => player.uid !== user.uid),
+        players: [],
       })
       .then(() => {
         console.log('Removed old element from Host -> locations array successfully')
@@ -104,6 +108,7 @@ const Firebase = {
               assistance,
               imgProfile: user.imgProfile,
               name: user.name,
+              stats: user.stats,
               principalPositon: user.principalPosition,
               uid: user.uid,
             }),

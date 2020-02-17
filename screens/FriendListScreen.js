@@ -270,6 +270,7 @@ const FriendListScreen = props => {
                     uid: player.uid,
                     imgProfile: player.imgProfile,
                     principalPosition: player.principalPosition,
+                    stats: player.stats,
                     name: player.name,
                     assistance: false,
                   }

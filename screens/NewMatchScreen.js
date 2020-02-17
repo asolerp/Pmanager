@@ -60,11 +60,11 @@ const styles = StyleSheet.create({
   },
 })
 
-const validationSchema = Yup.object().shape({
-  name: Yup.string().label('Nombre'),
-  place: Yup.string().label('Lugar del partido'),
-  description: Yup.string().label('Descripción'),
-})
+// const validationSchema = Yup.object().shape({
+//   name: Yup.string().label('Nombre'),
+//   place: Yup.string().label('Lugar del partido'),
+//   description: Yup.string().label('Descripción'),
+// })
 
 function NewMatchScreen(props) {
   const { user } = subscribeUserData()
@@ -95,6 +95,7 @@ function NewMatchScreen(props) {
           uid: user.uid,
           name: user.name,
           principalPosition: user.principalPosition,
+          stats: user.stats,
           imgProfile: user.imgProfile,
           assistance: false,
         },
@@ -120,7 +121,7 @@ function NewMatchScreen(props) {
           imageUrl={imageMatch}
           showEditButton
           setImage={uri => setImage(uri)}
-          size="medium"
+          size="small"
           source={{
             uri: imageMatch,
           }}
@@ -156,7 +157,9 @@ function NewMatchScreen(props) {
               time,
               admins,
               players: selectedPlayers,
-              playersUID: selectedPlayers.map(player => player.uid),
+              playersUID: selectedPlayers.map(player => {
+                return { [player.uid]: false }
+              }),
             }
             props.firebase.insertDB(newMatch, 'matches').then(docRef => {
               console.log(docRef)
@@ -321,7 +324,7 @@ function NewMatchScreen(props) {
                             <TouchableOpacity
                               onPress={() =>
                                 props.navigation.navigate('FriendProfile', {
-                                  friendUID: player.uid,
+                                  friendUID: splayer.uid,
                                 })
                               }
                             >
