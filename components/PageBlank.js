@@ -17,10 +17,8 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    paddingLeft: 20,
-    paddingRight: 20,
-    marginTop: 10,
-    marginBottom: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#072357',
   },
   leftSide: {
     flex: 2,
@@ -49,6 +47,9 @@ function PageBlank({
   leftSide,
   rightSide,
   title,
+  sizeTopContainer = 'small',
+  backgroundColorChildren = 'transparent',
+  topContainerColor = 'transparent',
   titleColor,
   topMargin = getStatusBarHeight(),
   iconName,
@@ -56,9 +57,28 @@ function PageBlank({
 }) {
   const navigation = useContext(NavigationContext)
 
+  const parseSize = size => {
+    const sizes = {
+      small: {
+        paddingVertical: 10,
+      },
+      big: {
+        paddingTop: 10,
+        paddingBottom: 80,
+      },
+    }
+    return sizes[size]
+  }
+
   return (
     <View style={[styles.container, { marginTop: topMargin }]}>
-      <View style={styles.titleContainer}>
+      <View
+        style={[
+          styles.titleContainer,
+          parseSize(sizeTopContainer),
+          { backgroundColor: topContainerColor },
+        ]}
+      >
         <View style={styles.leftSide}>
           {leftSide ? (
             leftSide()
@@ -78,7 +98,7 @@ function PageBlank({
         </View>
         <View style={styles.rightSide}>{rightSide()}</View>
       </View>
-      <View style={{ flex: 1 }}>{children}</View>
+      <View style={{ flex: 1, backgroundColor: backgroundColorChildren }}>{children}</View>
     </View>
   )
 }

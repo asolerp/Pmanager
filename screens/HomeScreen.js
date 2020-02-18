@@ -61,7 +61,10 @@ function Home(props) {
   return (
     <PageBlank
       title="PANAMA MANAGER"
-      titleColor="black"
+      titleColor="white"
+      sizeTopContainer="big"
+      topContainerColor="#072357"
+      backgroundColorChildren="#f2f2f2"
       iconColor="black"
       leftSide={() => <></>}
       rightSide={() => (
@@ -77,10 +80,15 @@ function Home(props) {
       )}
     >
       {loading && <ActivityIndicator size="small" color="black" />}
-      <View style={{ flex: 1, paddingHorizontal: 10, marginTop: 15 }}>
+      <View style={{ flex: 1, paddingHorizontal: 10, marginTop: -30 }}>
         {matches &&
           matches.map(match => (
-            <MatchCard match={match} />
+            <MatchCard
+              match={match}
+              userUID={user.uid}
+              assist={() => props.firebase.updatePlayerParticipation2(match, user, true)}
+              noassist={() => props.firebase.updatePlayerParticipation2(match, user, false)}
+            />
             // <View style={{ width: '100%' }}>
             //   <Text style={{ textAlign: 'center', fontSize: 20, color: 'black', marginBottom: 15 }}>
             //     {match.name}
