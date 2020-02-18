@@ -24,11 +24,18 @@ const HomeStack = createStackNavigator(
   config
 )
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-football' : 'md-football'} />
-  ),
+HomeStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true
+  if (navigation.state.index > 0) {
+    tabBarVisible = false
+  }
+  return {
+    tabBarVisible,
+    tabBarLabel: 'Home',
+    tabBarIcon: ({ focused }) => (
+      <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-football' : 'md-football'} />
+    ),
+  }
 }
 
 HomeStack.path = ''

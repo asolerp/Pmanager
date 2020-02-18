@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rightSide: {
+    alignItems: 'flex-end',
     flex: 2,
   },
   title: {

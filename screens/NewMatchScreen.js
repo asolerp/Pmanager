@@ -121,7 +121,7 @@ function NewMatchScreen(props) {
           imageUrl={imageMatch}
           showEditButton
           setImage={uri => setImage(uri)}
-          size="small"
+          size="medium"
           source={{
             uri: imageMatch,
           }}
@@ -149,6 +149,10 @@ function NewMatchScreen(props) {
           initialValues={{ name: '' }}
           onSubmit={values => {
             const { name, description, place, date, time } = values
+            const participation = {}
+            selectedPlayers.forEach(player => {
+              participation[player.uid] = false
+            })
             const newMatch = {
               name,
               description,
@@ -157,9 +161,8 @@ function NewMatchScreen(props) {
               time,
               admins,
               players: selectedPlayers,
-              playersUID: selectedPlayers.map(player => {
-                return { [player.uid]: false }
-              }),
+              playersUID: selectedPlayers.map(player => player.uid),
+              participation,
             }
             props.firebase.insertDB(newMatch, 'matches').then(docRef => {
               console.log(docRef)

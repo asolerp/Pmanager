@@ -79,7 +79,7 @@ const Firebase = {
 
   updatePlayerParticipation2: (match, user, assistance) => {
     const update = {}
-    update[`participants.${user.uid}`] = assistance
+    update[`participation.${user.uid}`] = assistance
 
     return firebase
       .firestore()

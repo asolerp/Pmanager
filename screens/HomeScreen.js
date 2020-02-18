@@ -10,6 +10,7 @@ import PositionLabel from '../components/PositionLabel'
 import { getLabelPostionByValue } from '../constants/Player'
 import PageBlank from '../components/PageBlank'
 import AvatarWithPicker from '../components/Avatar'
+import MatchCard from '../components/MatchCard'
 
 const styles = StyleSheet.create({
   container: {
@@ -76,63 +77,66 @@ function Home(props) {
       )}
     >
       {loading && <ActivityIndicator size="small" color="black" />}
-      {matches &&
-        matches.map(match => (
-          <View style={{ width: '100%' }}>
-            <Text style={{ textAlign: 'center', fontSize: 30, color: 'black', marginBottom: 15 }}>
-              {match.name}
-            </Text>
-            <View style={{ height: 300 }}>
-              {match.players &&
-                match.players.map(player => (
-                  <ListItem
-                    title={player.name}
-                    titleStyle={{ fontSize: 15 }}
-                    subtitle={
-                      <View style={styles.positionLabelContainer}>
-                        <PositionLabel
-                          position={getLabelPostionByValue(player.principalPosition)}
-                        />
-                      </View>
-                    }
-                    rightElement={
-                      <View
-                        style={{
-                          flex: 1,
-                          flexGrow: 4,
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          alignContent: 'center',
-                          alignItems: 'center',
-                        }}
-                      >
-                        <StatsDetail stats={player.stats} />
-                        <CheckBox
-                          checked={player.assistance}
-                          // onPress={() => handlePress(item)}
-                          checkedColor="black"
-                        />
-                      </View>
-                    }
-                    leftAvatar={{ source: { uri: player.imgProfile } }}
-                    bottomDivider
-                  />
-                ))}
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-              <TouchableOpacity
-                onPress={() => props.firebase.updatePlayerParticipation2(match, user, true)}
-              >
-                <Text style={{ color: 'black', fontSize: 20 }}>Asistir</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => props.firebase.updatePlayerParticipation2(match, user, false)}
-              >
-                <Text style={{ color: 'black', fontSize: 20 }}>No Asistir</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))}
+      <View style={{ flex: 1, paddingHorizontal: 10, marginTop: 15 }}>
+        {matches &&
+          matches.map(match => (
+            <MatchCard match={match} />
+            // <View style={{ width: '100%' }}>
+            //   <Text style={{ textAlign: 'center', fontSize: 20, color: 'black', marginBottom: 15 }}>
+            //     {match.name}
+            //   </Text>
+            //   <View>
+            //     {match.players &&
+            //       match.players.map(player => (
+            //         <ListItem
+            //           title={player.name}
+            //           titleStyle={{ fontSize: 15 }}
+            //           subtitle={
+            //             <View style={styles.positionLabelContainer}>
+            //               <PositionLabel
+            //                 position={getLabelPostionByValue(player.principalPosition)}
+            //               />
+            //             </View>
+            //           }
+            //           rightElement={
+            //             <View
+            //               style={{
+            //                 flex: 1,
+            //                 flexGrow: 4,
+            //                 flexDirection: 'row',
+            //                 justifyContent: 'space-between',
+            //                 alignContent: 'center',
+            //                 alignItems: 'center',
+            //               }}
+            //             >
+            //               <StatsDetail stats={player.stats} />
+            //               <CheckBox
+            //                 checked={match.participation[player.uid]}
+            //                 // onPress={() => handlePress(item)}
+            //                 checkedColor="black"
+            //               />
+            //             </View>
+            //           }
+            //           leftAvatar={{ source: { uri: player.imgProfile } }}
+            //           bottomDivider
+            //         />
+            //       ))}
+            //   </View>
+            //   <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            //     <TouchableOpacity
+            //       onPress={() => props.firebase.updatePlayerParticipation2(match, user, true)}
+            //     >
+            //       <Text style={{ color: 'black', fontSize: 20 }}>Asistir</Text>
+            //     </TouchableOpacity>
+            //     <TouchableOpacity
+            //       onPress={() => props.firebase.updatePlayerParticipation2(match, user, false)}
+            //     >
+            //       <Text style={{ color: 'black', fontSize: 20 }}>No Asistir</Text>
+            //     </TouchableOpacity>
+            //   </View>
+            // </View>
+          ))}
+      </View>
       <View>
         <Button
           title="Nuevo partido"
