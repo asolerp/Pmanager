@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   assistStyle: {
-    shadowColor: '#15db23',
+    shadowColor: 'rgba(21, 219, 35, .8)',
     shadowOffset: {
       width: 0,
       height: 3,
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   noassistStyle: {
-    shadowColor: '#15db23',
+    shadowColor: '#CC1034',
     shadowOffset: {
       width: 0,
       height: 3,
@@ -39,19 +39,21 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   topSection: {
-    flex: 3,
+    flex: 5,
     flexDirection: 'row',
   },
   bottomSection: {
     flex: 1,
     flexDirection: 'row',
-    paddingVertical: 10,
+    paddingVertical: 5,
+    justifyContent: 'space-around',
   },
   bottomItem: {
-    flex: 1,
+    width: 90,
     borderColor: '#f2f2f2',
     borderRadius: 5,
     borderWidth: 1,
+    padding: 5,
   },
   imageContainer: {
     flex: 1,
@@ -80,16 +82,15 @@ const styles = StyleSheet.create({
   },
 })
 
-const MatchCard = ({ match, userUID, assist, noassist }) => {
-  const bItem = () => {
-    return (
-      <View>
-        <Text />
-        <Text />
-      </View>
-    )
-  }
+const BottomItem = ({ texto, color }) => {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
+      <TextC style={{ textAlign: 'center', color, fontWeight: 'bold' }}>{texto}</TextC>
+    </View>
+  )
+}
 
+const MatchCard = ({ match, userUID, assist, noassist }) => {
   return (
     <View
       style={[
@@ -137,22 +138,22 @@ const MatchCard = ({ match, userUID, assist, noassist }) => {
         </View>
       </View>
       <View style={styles.bottomSection}>
-        <View style={styles.bottomItem} />
-        <View
-          style={[styles.bottomItem, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}
-        >
+        <View style={[styles.bottomItem, { backgroundColor: 'rgba(21, 219, 35, .8)' }]}>
+          <BottomItem texto={5} color="white" />
+        </View>
+        <View style={[styles.bottomItem, { justifyContent: 'center', alignItems: 'center' }]}>
           <TouchableOpacity onPress={() => assist()}>
-            <TextC style={{ color: 'black', fontSize: 20 }}>Asistir</TextC>
+            <TextC style={{ color: 'black', fontSize: 10 }}>Asistir</TextC>
           </TouchableOpacity>
         </View>
-        <View
-          style={[styles.bottomItem, { flex: 1, justifyContent: 'center', alignItems: 'center' }]}
-        >
+        <View style={[styles.bottomItem, { justifyContent: 'center', alignItems: 'center' }]}>
           <TouchableOpacity onPress={() => noassist()}>
-            <TextC style={{ color: 'black', fontSize: 20 }}>No asistir</TextC>
+            <TextC style={{ color: 'black', fontSize: 10 }}>No asistir</TextC>
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1 }} />
+        <View style={[styles.bottomItem, { backgroundColor: '#CC1034' }]}>
+          <BottomItem texto={10} color="white" />
+        </View>
       </View>
     </View>
   )
