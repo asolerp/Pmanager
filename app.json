@@ -9,6 +9,20 @@
       "android",
       "web"
     ],
+    "permissions": [
+      "ACCESS_COARSE_LOCATION",
+      "ACCESS_FINE_LOCATION",
+      "CAMERA",
+      "READ_EXTERNAL_STORAGE",
+      "READ_INTERNAL_STORAGE",
+      "RECORD_AUDIO",
+      "READ_PHONE_STATE",
+      "READ_CONTACTS",
+      "NOTIFICATIONS"
+  ],
+  "notification": {
+    "icon": "https://cdn.countryflags.com/thumbs/panama/flag-400.png"
+  },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

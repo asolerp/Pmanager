@@ -93,6 +93,7 @@ function NewMatchScreen(props) {
       setSelectedPlayers([
         {
           uid: user.uid,
+          expoToken: user.expoToken,
           name: user.name,
           principalPosition: user.principalPosition,
           stats: user.stats,

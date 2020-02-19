@@ -1,9 +1,27 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
+import { Notifications } from 'expo'
+import * as Permissions from 'expo-permissions'
 import { useStateValue } from '../config/User/UserContextManagement'
 import { withFirebaseHOC } from '../config/Firebase'
 
 function Initial(props) {
   const [{ user }, dispatch] = useStateValue()
+
+  const registerForPushNotificationsAsync = async userUID => {
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+
+    if (status !== 'granted') {
+      console.log('No notification permissions!')
+      return
+    }
+    // Get the token that identifies this device
+    const token = await Notifications.getExpoPushTokenAsync()
+
+    const update = {}
+    update.expoToken = token
+
+    props.firebase.updatePushToken(userUID, update)
+  }
 
   useEffect(() => {
     async function checkStatusAuth() {
@@ -18,6 +36,7 @@ function Initial(props) {
                 uid: userProfile.data().uid,
               },
             })
+            registerForPushNotificationsAsync(user.uid)
             if (userProfile.data().firstLogin) {
               // if first logged in
               props.navigation.navigate('ProfileForm')

@@ -5,6 +5,7 @@ import { Asset } from 'expo-asset'
 import Constants from 'expo-constants'
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons'
+import * as Permissions from 'expo-permissions'
 import AppNavigator from './navigation/AppNavigator'
 import { UserProvider } from './config/User/UserContextManagement'
 import Firebase, { FirebaseProvider, withFirebaseHOC } from './config/Firebase'
@@ -52,7 +53,7 @@ function App(props) {
 
   const getPermissionAsync = async () => {
     if (Constants.platform.ios) {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+      const { status } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
       if (status !== 'granted') {
         Alert('Sorry, we need camera roll permissions to make this work!')
       }
