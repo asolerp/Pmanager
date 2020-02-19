@@ -9,8 +9,6 @@ const styles = StyleSheet.create({
     width: '100%',
     maxHeight: 180,
     backgroundColor: 'white',
-    borderColor: 'white',
-    borderWidth: 1,
     borderRadius: 5,
     marginBottom: 5,
   },
@@ -23,8 +21,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
     elevation: 7,
-    borderColor: '#15db23',
-    borderWidth: 2,
   },
   noassistStyle: {
     shadowColor: '#CC1034',
@@ -35,8 +31,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
     elevation: 7,
-    borderColor: '#CC1034',
-    borderWidth: 2,
   },
   topSection: {
     flex: 5,
@@ -96,6 +90,9 @@ const MatchCard = ({ match, userUID, assist, noassist }) => {
       style={[
         styles.container,
         match.participation[userUID] ? styles.assistStyle : styles.noassistStyle,
+        // match.participation[userUID]
+        //   ? { backgroundColor: 'rgba(124, 173, 139, .5)' }
+        //   : { backgroundColor: 'rgba(211, 122, 122, .5)' },
       ]}
     >
       <View style={styles.topSection}>
@@ -138,8 +135,8 @@ const MatchCard = ({ match, userUID, assist, noassist }) => {
         </View>
       </View>
       <View style={styles.bottomSection}>
-        <View style={[styles.bottomItem, { backgroundColor: 'rgba(21, 219, 35, .8)' }]}>
-          <BottomItem texto={5} color="white" />
+        <View style={[styles.bottomItem, { backgroundColor: '#4eaa4c' }]}>
+          <BottomItem texto={match.assistance || 0} color="white" />
         </View>
         <View style={[styles.bottomItem, { justifyContent: 'center', alignItems: 'center' }]}>
           <TouchableOpacity onPress={() => assist()}>
@@ -152,7 +149,7 @@ const MatchCard = ({ match, userUID, assist, noassist }) => {
           </TouchableOpacity>
         </View>
         <View style={[styles.bottomItem, { backgroundColor: '#CC1034' }]}>
-          <BottomItem texto={10} color="white" />
+          <BottomItem texto={match.players.length - match.assistance || 0} color="white" />
         </View>
       </View>
     </View>
