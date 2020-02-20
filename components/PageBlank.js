@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
   },
   leftSide: {
     flex: 2,
+    alignItems: 'flex-start',
   },
   centerSide: {
     flex: 8,

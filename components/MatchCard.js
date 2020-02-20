@@ -5,9 +5,8 @@ import TextC from './customContainers/TextC'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     width: '100%',
-    maxHeight: 180,
+    height: 180,
     backgroundColor: 'white',
     borderRadius: 5,
     marginBottom: 5,
@@ -84,12 +83,13 @@ const BottomItem = ({ texto, color }) => {
   )
 }
 
-const MatchCard = ({ match, userUID, assist, noassist }) => {
+const MatchCard = ({ match, userUID, assist, noassist, element }) => {
   return (
     <View
       style={[
         styles.container,
         match.participation[userUID] ? styles.assistStyle : styles.noassistStyle,
+        element === 0 && { marginTop: 100 },
         // match.participation[userUID]
         //   ? { backgroundColor: 'rgba(124, 173, 139, .5)' }
         //   : { backgroundColor: 'rgba(211, 122, 122, .5)' },
