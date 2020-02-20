@@ -34,6 +34,14 @@ const Firebase = {
       .set({ email: userData.email, ...userData.metadata, profileFilled: false })
   },
 
+  registreToken: (userUID, token) => {
+    return firebase
+      .firestore()
+      .collection('users')
+      .doc(userUID)
+      .update(token)
+  },
+
   insertDB: (model, collection) => {
     return firebase
       .firestore()
