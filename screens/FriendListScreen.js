@@ -268,6 +268,7 @@ const FriendListScreen = props => {
                 list.map(player => {
                   return {
                     uid: player.uid,
+                    expoToken: player.expoToken || '',
                     imgProfile: player.imgProfile,
                     principalPosition: player.principalPosition,
                     stats: player.stats,

@@ -34,7 +34,7 @@ const Firebase = {
       .set({ email: userData.email, ...userData.metadata, profileFilled: false })
   },
 
-  registreToken: (userUID, token) => {
+  updatePushToken: (userUID, token) => {
     return firebase
       .firestore()
       .collection('users')
@@ -85,52 +85,14 @@ const Firebase = {
       .set({ ...userData, keywords: generateKeywords(userData.name) })
   },
 
-  updatePlayerParticipation2: (match, user, assistance) => {
+  updatePlayerParticipation: (match, user, assistance) => {
     const update = {}
     update[`participation.${user.uid}`] = assistance
-
     return firebase
       .firestore()
       .collection('matches')
       .doc(match.uid)
       .update(update)
-  },
-
-  updatePlayerParticipation: (match, user, assistance) => {
-    console.log(user)
-    return firebase
-      .firestore()
-      .collection('matches')
-      .doc(match.uid)
-      .update({
-        players: [],
-      })
-      .then(() => {
-        console.log('Removed old element from Host -> locations array successfully')
-        firebase
-          .firestore()
-          .collection('matches')
-          .doc(match.uid)
-          .update({
-            players: firebase.firestore.FieldValue.arrayUnion({
-              assistance,
-              imgProfile: user.imgProfile,
-              name: user.name,
-              stats: user.stats,
-              principalPositon: user.principalPosition,
-              uid: user.uid,
-            }),
-          })
-          .then(() => {
-            console.log('Added new element to the Host -> locations array successfully')
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      })
-      .catch(error => {
-        console.log(error)
-      })
   },
 
   getUserProfile: id => {

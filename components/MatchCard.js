@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity, View, Text } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Icon, Image } from 'react-native-elements'
 import TextC from './customContainers/TextC'
 
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   assistStyle: {
-    shadowColor: 'rgba(21, 219, 35, .8)',
+    shadowColor: '#aaaaaa',
     shadowOffset: {
       width: 0,
       height: 3,
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     elevation: 7,
   },
   noassistStyle: {
-    shadowColor: '#CC1034',
+    shadowColor: '#aaaaaa',
     shadowOffset: {
       width: 0,
       height: 3,
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   bottomItem: {
-    width: 90,
+    width: 80,
     borderColor: '#f2f2f2',
     borderRadius: 5,
     borderWidth: 1,

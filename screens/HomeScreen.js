@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { ActivityIndicator, TouchableOpacity, StyleSheet, Text, View } from 'react-native'
 import { Button, CheckBox, ListItem } from 'react-native-elements'
+import axios from 'axios'
 import { useStateValue } from '../config/User/UserContextManagement'
 import { withFirebaseHOC } from '../config/Firebase'
 import subscribeUserData from '../hooks/subscribeUserData'
@@ -11,6 +12,7 @@ import { getLabelPostionByValue } from '../constants/Player'
 import PageBlank from '../components/PageBlank'
 import AvatarWithPicker from '../components/Avatar'
 import MatchCard from '../components/MatchCard'
+import NOTIFICATIONS_TYPE from '../constants/Notifications'
 
 const styles = StyleSheet.create({
   container: {
@@ -50,6 +52,19 @@ function Home(props) {
     // }
   }, [user])
 
+  const sendNotification = async (u, matchUID) => {
+    await axios({
+      method: 'post',
+      url: 'https://us-central1-panamafc-81bc0.cloudfunctions.net/sendPushNotification',
+      data: {
+        from: u.name,
+        senderUID: u.uid,
+        matchUID,
+        notification: NOTIFICATIONS_TYPE.PARTICIPATION_UPDATE,
+      },
+    })
+  }
+
   const handleSignout = async () => {
     try {
       await props.firebase.signOut()
@@ -84,10 +99,17 @@ function Home(props) {
         {matches &&
           matches.map(match => (
             <MatchCard
+              key={match.uid}
               match={match}
               userUID={user.uid}
-              assist={() => props.firebase.updatePlayerParticipation2(match, user, true)}
-              noassist={() => props.firebase.updatePlayerParticipation2(match, user, false)}
+              assist={() => {
+                props.firebase.updatePlayerParticipation(match, user, true)
+                sendNotification(user, match.uid)
+              }}
+              noassist={() => {
+                props.firebase.updatePlayerParticipation(match, user, false)
+                sendNotification(user, match.uid)
+              }}
             />
             // <View style={{ width: '100%' }}>
             //   <Text style={{ textAlign: 'center', fontSize: 20, color: 'black', marginBottom: 15 }}>
