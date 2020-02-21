@@ -130,20 +130,22 @@ function Home(props) {
           <View style={{ paddingHorizontal: 10, height: '100%' }}>
             {matches &&
               matches.map((match, i) => (
-                <MatchCard
-                  key={match.uid}
-                  element={i}
-                  match={match}
-                  userUID={user.uid}
-                  assist={() => {
-                    props.firebase.updatePlayerParticipation(match, user, true)
-                    sendNotification(user, match.uid)
-                  }}
-                  noassist={() => {
-                    props.firebase.updatePlayerParticipation(match, user, false)
-                    sendNotification(user, match.uid)
-                  }}
-                />
+                <TouchableOpacity onPress={() => props.navigation.navigate('MatchPage', { match })}>
+                  <MatchCard
+                    key={match.uid}
+                    element={i}
+                    match={match}
+                    userUID={user.uid}
+                    assist={() => {
+                      props.firebase.updatePlayerParticipation(match, user, true)
+                      sendNotification(user, match.uid)
+                    }}
+                    noassist={() => {
+                      props.firebase.updatePlayerParticipation(match, user, false)
+                      sendNotification(user, match.uid)
+                    }}
+                  />
+                </TouchableOpacity>
                 // <View style={{ width: '100%' }}>
                 //   <Text style={{ textAlign: 'center', fontSize: 20, color: 'black', marginBottom: 15 }}>
                 //     {match.name}

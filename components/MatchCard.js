@@ -11,17 +11,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 5,
   },
-  assistStyle: {
-    shadowColor: '#aaaaaa',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.29,
-    shadowRadius: 4.65,
-    elevation: 7,
-  },
-  noassistStyle: {
+  cardMatch: {
     shadowColor: '#aaaaaa',
     shadowOffset: {
       width: 0,
@@ -107,7 +97,7 @@ const MatchCard = ({ match, userUID, assist, noassist, element }) => {
     <View
       style={[
         styles.container,
-        match.participation[userUID] ? styles.assistStyle : styles.noassistStyle,
+        styles.cardMatch,
         element === 0 && { marginTop: 100 },
         // match.participation[userUID]
         //   ? { backgroundColor: 'rgba(124, 173, 139, .5)' }

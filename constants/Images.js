@@ -7,4 +7,7 @@ export default {
   tShirt: {
     file: require('../assets/images/shirts.png'),
   },
+  matchField: {
+    file: require('../assets/images/field.png'),
+  },
 }
