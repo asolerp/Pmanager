@@ -3,6 +3,7 @@ import {
   ScrollView,
   ActivityIndicator,
   TouchableOpacity,
+  TouchableHighlight,
   StyleSheet,
   Text,
   View,
@@ -130,7 +131,9 @@ function Home(props) {
           <View style={{ paddingHorizontal: 10, height: '100%' }}>
             {matches &&
               matches.map((match, i) => (
-                <TouchableOpacity onPress={() => props.navigation.navigate('MatchPage', { match })}>
+                <TouchableHighlight
+                  onPress={() => props.navigation.navigate('MatchPage', { match })}
+                >
                   <MatchCard
                     key={match.uid}
                     element={i}
@@ -145,7 +148,7 @@ function Home(props) {
                       sendNotification(user, match.uid)
                     }}
                   />
-                </TouchableOpacity>
+                </TouchableHighlight>
                 // <View style={{ width: '100%' }}>
                 //   <Text style={{ textAlign: 'center', fontSize: 20, color: 'black', marginBottom: 15 }}>
                 //     {match.name}

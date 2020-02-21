@@ -44,120 +44,92 @@ const styles = StyleSheet.create({
   },
 })
 
-const Formacion = ({ match, reverse }) => {
-  return (
-    <View
-      style={{
-        width: '50%',
-        height: '100%',
-        flexDirection: reverse ? 'row-reverse' : 'row',
-        justifyContent: 'center',
-        alignContent: 'center',
-      }}
-    >
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View style={{ alignItems: 'center' }}>
-          <AvatarWithPicker
-            rounded
-            containerStyle={styles.avatar}
-            imageUrl={match && match.imageMatch}
-            size="small"
-            source={{
-              uri: match && match.imageMatch,
-            }}
-          />
-          <Text style={{ color: 'white', fontSize: 10 }}>Nombre</Text>
-        </View>
-      </View>
-      <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
-        <View style={{ alignItems: 'center' }}>
-          <AvatarWithPicker
-            rounded
-            containerStyle={styles.avatar}
-            imageUrl={match && match.imageMatch}
-            size="small"
-            source={{
-              uri: match && match.imageMatch,
-            }}
-          />
-          <Text style={{ color: 'white', fontSize: 10 }}>Nombre</Text>
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <AvatarWithPicker
-            rounded
-            containerStyle={styles.avatar}
-            imageUrl={match && match.imageMatch}
-            size="small"
-            source={{
-              uri: match && match.imageMatch,
-            }}
-          />
-          <Text style={{ color: 'white', fontSize: 10 }}>Nombre</Text>
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <AvatarWithPicker
-            rounded
-            containerStyle={styles.avatar}
-            imageUrl={match && match.imageMatch}
-            size="small"
-            source={{
-              uri: match && match.imageMatch,
-            }}
-          />
-          <Text style={{ color: 'white', fontSize: 10 }}>Nombre</Text>
-        </View>
-      </View>
-      <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
-        <View style={{ alignItems: 'center' }}>
-          <AvatarWithPicker
-            rounded
-            containerStyle={styles.avatar}
-            imageUrl={match && match.imageMatch}
-            size="small"
-            source={{
-              uri: match && match.imageMatch,
-            }}
-          />
-          <Text style={{ color: 'white', fontSize: 10 }}>Nombre</Text>
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <AvatarWithPicker
-            rounded
-            containerStyle={styles.avatar}
-            imageUrl={match && match.imageMatch}
-            size="small"
-            source={{
-              uri: match && match.imageMatch,
-            }}
-          />
-          <Text style={{ color: 'white', fontSize: 10 }}>Nombre</Text>
-        </View>
-      </View>
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <View style={{ alignItems: 'center' }}>
-          <AvatarWithPicker
-            rounded
-            containerStyle={styles.avatar}
-            imageUrl={match && match.imageMatch}
-            size="small"
-            source={{
-              uri: match && match.imageMatch,
-            }}
-          />
-          <Text style={{ color: 'white', fontSize: 10 }}>Nombre</Text>
-        </View>
-      </View>
-    </View>
-  )
-}
-
 const MatchScreen = props => {
   const [match, setMatch] = useState()
+  const [defaultPosition, setDefaultPosition] = useState('3-2-1')
+  const [firstLine, setFirstLine] = useState()
+  const [secondLine, setSecondLine] = useState()
+  const [thirdLine, setThirdLine] = useState()
+
+  const generateRows = team => {
+    Object.keys(team).map(line => (
+      <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ alignItems: 'center' }}>
+            <AvatarWithPicker
+              rounded
+              containerStyle={styles.avatar}
+              imageUrl={match && match.imageMatch}
+              size="small"
+              source={{
+                uri: match && match.imageMatch,
+              }}
+            />
+            <Text style={{ color: 'white', fontSize: 10 }}>Nombre</Text>
+          </View>
+        </View>
+        {Object.keys(team[line]).map(position => (
+          <View style={{ alignItems: 'center' }}>
+            <AvatarWithPicker
+              rounded
+              containerStyle={styles.avatar}
+              imageUrl={team[line][position].imgProfile}
+              size="small"
+              source={{
+                uri: match && match.imageMatch,
+              }}
+            />
+            <Text style={{ color: 'white', fontSize: 10 }}>
+              {team[line][position].imgProfile.name}
+            </Text>
+          </View>
+        ))}
+      </View>
+    ))
+    // const container = []
+    // for (let i = 0; i < players; i += 1) {
+    //   container.push(
+    //     <View style={{ alignItems: players > 1 ? 'space-around' : 'center' }}>
+    //       <AvatarWithPicker
+    //         rounded
+    //         containerStyle={styles.avatar}
+    //         imageUrl={m.imageMatch}
+    //         size="small"
+    //         source={{
+    //           uri: m.imageMatch,
+    //         }}
+    //       />
+    //       <Text style={{ color: 'white', fontSize: 10 }}>Nombre</Text>
+    //     </View>
+    //   )
+    // }
+    // setter(container)
+  }
 
   useEffect(() => {
     const matchSelected = props.navigation.getParam('match')
+    // generateRows(setFirstLine, Number(defaultPosition.split('-')[0]), matchSelected)
+    // generateRows(setSecondLine, Number(defaultPosition.split('-')[1]), matchSelected)
+    // generateRows(setThirdLine, Number(defaultPosition.split('-')[2]), matchSelected)
     setMatch(matchSelected)
   }, [])
+
+  const Formacion = ({ match, reverse }) => {
+    return (
+      <View
+        style={{
+          width: '50%',
+          height: '100%',
+          flexDirection: reverse ? 'row-reverse' : 'row',
+          justifyContent: 'center',
+          alignContent: 'center',
+        }}
+      >
+        {generateRows(match.teamA)}
+        {generateRows(match.teamB)}
+      </View>
+    )
+  }
 
   return (
     <PageBlank
@@ -184,10 +156,6 @@ const MatchScreen = props => {
     >
       <View style={{ flex: 1, justifyContent: 'flex-start', paddingHorizontal: 10 }}>
         <View style={styles.fieldContainer}>
-          <Image
-            style={{ width: '100%', height: '100%', borderRadius: 5 }}
-            source={Images.matchField.file}
-          />
           <View
             style={{
               position: 'absolute',
@@ -195,11 +163,21 @@ const MatchScreen = props => {
               width: '100%',
               height: '100%',
               flexDirection: 'row',
+              top: 5,
+              left: 7,
             }}
           >
-            <Formacion match={match} />
-            <Formacion match={match} reverse />
+            {match && (
+              <>
+                <Formacion match={match} />
+                <Formacion match={match} reverse />
+              </>
+            )}
           </View>
+          <Image
+            style={{ width: '100%', height: '100%', borderRadius: 5 }}
+            source={Images.matchField.file}
+          />
         </View>
       </View>
     </PageBlank>
