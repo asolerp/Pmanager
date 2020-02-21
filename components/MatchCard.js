@@ -48,6 +48,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 5,
   },
+  bottomAssistActive: {
+    backgroundColor: '#8eea75',
+  },
+  bottomAssist: {
+    backgroundColor: '#4eaa4c',
+  },
+  bottomNoAssistActive: {
+    backgroundColor: '#ed7474',
+  },
+  bottomNoAssist: {
+    backgroundColor: '#CC1034',
+  },
+  // bottomNoAssist:  {
+
+  // },
   imageContainer: {
     flex: 1,
     padding: 5,
@@ -78,7 +93,11 @@ const styles = StyleSheet.create({
 const BottomItem = ({ texto, color }) => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
-      <TextC style={{ textAlign: 'center', color, fontWeight: 'bold' }}>{texto}</TextC>
+      <TextC
+        style={{ textAlign: 'center', color, fontWeight: 'bold', fontSize: 18, paddingVertical: 5 }}
+      >
+        {texto}
+      </TextC>
     </View>
   )
 }
@@ -138,16 +157,29 @@ const MatchCard = ({ match, userUID, assist, noassist, element }) => {
         <View style={[styles.bottomItem, { backgroundColor: '#4eaa4c' }]}>
           <BottomItem texto={match.assistance || 0} color="white" />
         </View>
-        <View style={[styles.bottomItem, { justifyContent: 'center', alignItems: 'center' }]}>
-          <TouchableOpacity onPress={() => assist()}>
-            <TextC style={{ color: 'black', fontSize: 10 }}>Asistir</TextC>
-          </TouchableOpacity>
-        </View>
-        <View style={[styles.bottomItem, { justifyContent: 'center', alignItems: 'center' }]}>
-          <TouchableOpacity onPress={() => noassist()}>
-            <TextC style={{ color: 'black', fontSize: 10 }}>No asistir</TextC>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={() => assist()}>
+          <View
+            style={[
+              styles.bottomItem,
+              match.participation[userUID] ? styles.bottomAssist : styles.bottomAssistActive,
+              { justifyContent: 'center', alignItems: 'center' },
+            ]}
+          >
+            <TextC style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}>Asistir</TextC>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => noassist()}>
+          <View
+            style={[
+              styles.bottomItem,
+              !match.participation[userUID] ? styles.bottomNoAssist : styles.bottomNoAssistActive,
+
+              { justifyContent: 'center', alignItems: 'center' },
+            ]}
+          >
+            <TextC style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}>No asistir</TextC>
+          </View>
+        </TouchableOpacity>
         <View style={[styles.bottomItem, { backgroundColor: '#CC1034' }]}>
           <BottomItem texto={match.players.length - match.assistance || 0} color="white" />
         </View>
