@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, TouchableOpacity, View, Image, Text } from 'react-native'
+import { Alert, Animated, StyleSheet, TouchableOpacity, View, Image, Text } from 'react-native'
 import { Icon } from 'react-native-elements'
+import { createDndContext } from 'react-native-easy-dnd'
 import Images from '../constants/Images'
 
 // UI
@@ -14,7 +15,6 @@ const styles = StyleSheet.create({
   fieldContainer: {
     width: '100%',
     position: 'relative',
-    height: 300,
     backgroundColor: 'white',
     borderRadius: 5,
     marginTop: 10,
@@ -44,17 +44,20 @@ const styles = StyleSheet.create({
   },
 })
 
+const cleanPosition = {
+  imgProfile: 'https://cdn4.iconfinder.com/data/icons/game-10/22/player-profile-512.png',
+  name: 'Pmanager',
+}
+
 const MatchScreen = props => {
   const [match, setMatch] = useState()
-  const [defaultPosition, setDefaultPosition] = useState('3-2-1')
-  const [firstLine, setFirstLine] = useState()
-  const [secondLine, setSecondLine] = useState()
-  const [thirdLine, setThirdLine] = useState()
+  const [playersContainer, setPlayersContainer] = useState()
+  const { Provider, Droppable, Draggable } = createDndContext()
 
-  const generateRows = team => {
-    Object.keys(team).map(line => (
-      <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  const generateRows = (team, teamName) => {
+    return (
+      <>
+        {/* <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
           <View style={{ alignItems: 'center' }}>
             <AvatarWithPicker
               rounded
@@ -67,43 +70,97 @@ const MatchScreen = props => {
             />
             <Text style={{ color: 'white', fontSize: 10 }}>Nombre</Text>
           </View>
-        </View>
-        {Object.keys(team[line]).map(position => (
-          <View style={{ alignItems: 'center' }}>
-            <AvatarWithPicker
-              rounded
-              containerStyle={styles.avatar}
-              imageUrl={team[line][position].imgProfile}
-              size="small"
-              source={{
-                uri: match && match.imageMatch,
-              }}
-            />
-            <Text style={{ color: 'white', fontSize: 10 }}>
-              {team[line][position].imgProfile.name}
-            </Text>
+        </View> */}
+        {Object.keys(team).map(line => (
+          <View
+            key={line}
+            style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}
+          >
+            {Object.keys(team[line]).map(position => (
+              <>
+                {team[line][position].filled ? (
+                  <AvatarWithPicker
+                    key={`${position}-droppable`}
+                    rounded
+                    editButton={{
+                      name: 'cancel',
+                      type: 'material',
+                      color: 'black',
+                      underlayColor: '#000',
+                    }}
+                    onEditPress={() => {
+                      const updatedFormation = { ...match }
+                      const players = [...playersContainer]
+                      players.push(updatedFormation[teamName][line][position])
+                      updatedFormation[teamName][line][position] = cleanPosition
+                      setPlayersContainer(players)
+                      setMatch(updatedFormation)
+                    }}
+                    containerStyle={styles.avatar}
+                    showEditButton
+                    setImage={props.setImage}
+                    size="medium"
+                    source={{
+                      uri: team[line][position].imgProfile,
+                    }}
+                  />
+                ) : (
+                  <Droppable
+                    key={`${position}-droppable`}
+                    onEnter={() => {
+                      console.log('Draggable entered')
+                    }}
+                    onLeave={() => {
+                      console.log('Draggable left')
+                    }}
+                    onDrop={({ payload }) => {
+                      const updatedFormation = { ...match }
+                      const players = [...playersContainer]
+                      updatedFormation[teamName][line][position] = { ...payload, filled: true }
+                      setPlayersContainer(players.filter(p => p.uid !== payload.uid))
+                      setMatch(updatedFormation)
+                    }}
+                  >
+                    {({ viewProps }) => {
+                      return (
+                        <Animated.View {...viewProps}>
+                          <View style={{ alignItems: 'center' }}>
+                            <View
+                              style={{
+                                width: 45,
+                                height: 45,
+                                borderStyle: 'dashed',
+                                borderColor: 'black',
+                                borderWidth: 2,
+                                borderRadius: 100,
+                                backgroundColor: 'rgba(127, 127, 127, 0.4)',
+                              }}
+                            />
+                            <Text>{position}</Text>
+                            {/* <AvatarWithPicker
+                            rounded
+                            containerStyle={styles.avatar}
+                            imageUrl={team[line][position].imgProfile}
+                            size="small"
+                            source={{
+                              uri: match && match.imageMatch,
+                            }}
+                          />
+                          <Text style={{ color: 'white', fontSize: 10 }}>
+                            {team[line][position].name}
+                          </Text> */}
+                          </View>
+                        </Animated.View>
+                      )
+                    }}
+                  </Droppable>
+                )}
+              </>
+            ))}
           </View>
         ))}
-      </View>
-    ))
-    // const container = []
-    // for (let i = 0; i < players; i += 1) {
-    //   container.push(
-    //     <View style={{ alignItems: players > 1 ? 'space-around' : 'center' }}>
-    //       <AvatarWithPicker
-    //         rounded
-    //         containerStyle={styles.avatar}
-    //         imageUrl={m.imageMatch}
-    //         size="small"
-    //         source={{
-    //           uri: m.imageMatch,
-    //         }}
-    //       />
-    //       <Text style={{ color: 'white', fontSize: 10 }}>Nombre</Text>
-    //     </View>
-    //   )
-    // }
-    // setter(container)
+      </>
+    )
   }
 
   useEffect(() => {
@@ -111,76 +168,111 @@ const MatchScreen = props => {
     // generateRows(setFirstLine, Number(defaultPosition.split('-')[0]), matchSelected)
     // generateRows(setSecondLine, Number(defaultPosition.split('-')[1]), matchSelected)
     // generateRows(setThirdLine, Number(defaultPosition.split('-')[2]), matchSelected)
+    setPlayersContainer(matchSelected.players)
     setMatch(matchSelected)
   }, [])
 
-  const Formacion = ({ match, reverse }) => {
+  const Formacion = ({ team, teamName, reverse }) => {
     return (
       <View
         style={{
           width: '50%',
           height: '100%',
+          zIndex: 1,
           flexDirection: reverse ? 'row-reverse' : 'row',
           justifyContent: 'center',
           alignContent: 'center',
         }}
       >
-        {generateRows(match.teamA)}
-        {generateRows(match.teamB)}
+        {generateRows(team, teamName)}
       </View>
     )
   }
 
   return (
-    <PageBlank
-      title={match && match.name}
-      titleColor="white"
-      topContainerColor="#072357"
-      backgroundColorChildren="#f2f2f2"
-      iconColor="black"
-      leftSide={() => (
-        <TouchableOpacity onPress={() => props.navigation.pop()}>
-          <Icon name="angle-left" type="font-awesome" color="white" size={30} />
-        </TouchableOpacity>
-      )}
-      rightSide={() => (
-        <AvatarWithPicker
-          rounded
-          imageUrl={match && match.imageMatch}
-          size="small"
-          source={{
-            uri: match && match.imageMatch,
-          }}
-        />
-      )}
-    >
-      <View style={{ flex: 1, justifyContent: 'flex-start', paddingHorizontal: 10 }}>
-        <View style={styles.fieldContainer}>
-          <View
-            style={{
-              position: 'absolute',
-              zIndex: 2,
-              width: '100%',
-              height: '100%',
-              flexDirection: 'row',
-              top: 5,
-              left: 7,
+    <Provider>
+      <PageBlank
+        title={match && match.name}
+        titleColor="white"
+        topContainerColor="#072357"
+        backgroundColorChildren="#f2f2f2"
+        iconColor="black"
+        leftSide={() => (
+          <TouchableOpacity onPress={() => props.navigation.pop()}>
+            <Icon name="angle-left" type="font-awesome" color="white" size={30} />
+          </TouchableOpacity>
+        )}
+        rightSide={() => (
+          <AvatarWithPicker
+            rounded
+            imageUrl={match && match.imageMatch}
+            size="small"
+            source={{
+              uri: match && match.imageMatch,
             }}
-          >
-            {match && (
-              <>
-                <Formacion match={match} />
-                <Formacion match={match} reverse />
-              </>
-            )}
-          </View>
-          <Image
-            style={{ width: '100%', height: '100%', borderRadius: 5 }}
-            source={Images.matchField.file}
           />
+        )}
+      >
+        <View style={{ flex: 1, justifyContent: 'flex-start', paddingHorizontal: 10 }}>
+          <View style={styles.fieldContainer}>
+            <View>
+              {match && (
+                <>
+                  <View style={{ flexDirection: 'row', height: 300 }}>
+                    <Formacion team={match.teamA} teamName="teamA" />
+                    <Formacion team={match.teamB} teamName="teamB" reverse />
+                    <Image
+                      style={{
+                        position: 'absolute',
+                        zIndex: 0,
+                        width: '100%',
+                        height: '100%',
+                        top: 0,
+                        left: 0,
+                      }}
+                      source={Images.matchField.file}
+                    />
+                  </View>
+                  <View>
+                    <Text style={{ paddingVertical: 10 }}>Jugadores</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', zIndex: 3 }}>
+                    {playersContainer &&
+                      playersContainer.map(player => (
+                        <Draggable
+                          key={`${player.uid}-draggable`}
+                          onDragStart={() => {
+                            console.log('Started draggging')
+                          }}
+                          onDragEnd={() => {
+                            console.log('Ended draggging')
+                          }}
+                          payload={player}
+                        >
+                          {({ viewProps }) => {
+                            return (
+                              <Animated.View {...viewProps} style={[viewProps.style]}>
+                                <AvatarWithPicker
+                                  rounded
+                                  imageUrl={player.imgProfile}
+                                  size="medium"
+                                  source={{
+                                    uri: player.imgProfile,
+                                  }}
+                                />
+                              </Animated.View>
+                            )
+                          }}
+                        </Draggable>
+                      ))}
+                  </View>
+                </>
+              )}
+            </View>
+          </View>
         </View>
-      </View>
-    </PageBlank>
+      </PageBlank>
+    </Provider>
   )
 }
 

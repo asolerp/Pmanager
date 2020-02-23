@@ -1,5 +1,4 @@
 const FORMATION_1 = {
-  description: '3-2-1',
   firstLine: {
     LI: {
       imgProfile: 'https://cdn4.iconfinder.com/data/icons/game-10/22/player-profile-512.png',
@@ -33,7 +32,6 @@ const FORMATION_1 = {
 }
 
 const FORMATION_2 = {
-  description: '3-3-0',
   firstLine: {
     LI: {
       imgProfile: 'https://cdn4.iconfinder.com/data/icons/game-10/22/player-profile-512.png',

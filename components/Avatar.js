@@ -35,9 +35,13 @@ const AvatarWithPicker = ({ setImage, zoomImage, imageUrl, ...rest }) => {
           enableSwipeDown
         />
       </Modal>
-      <TouchableOpacity onPress={() => handlePress()}>
+      {zoomImage ? (
+        <TouchableOpacity onPress={() => handlePress()}>
+          <Avatar onEditPress={() => pickImage()} {...rest} />
+        </TouchableOpacity>
+      ) : (
         <Avatar onEditPress={() => pickImage()} {...rest} />
-      </TouchableOpacity>
+      )}
     </>
   )
 }
