@@ -165,7 +165,9 @@ const FriendListScreen = props => {
         title={item.name}
         subtitle={
           <View style={styles.positionLabelContainer}>
-            <PositionLabel position={getLabelPostionByValue(item.principalPosition)} />
+            {item.principalPosition && (
+              <PositionLabel position={getLabelPostionByValue(item.principalPosition)} />
+            )}
           </View>
         }
         rightElement={

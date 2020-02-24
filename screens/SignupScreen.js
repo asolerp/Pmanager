@@ -9,6 +9,7 @@ import FormInput from '../components/form/FormInput'
 import FormButton from '../components/form/FormButton'
 import ErrorMessage from '../components/form/ErrorMessage'
 import { withFirebaseHOC } from '../config/Firebase'
+import Images from '../constants/Images'
 
 import AppLogo from '../components/AppLogo'
 import BlurBackground from '../components/BlurBackground'
@@ -87,10 +88,7 @@ const Signup = props => {
 
   return (
     <View style={styles.container}>
-      <BlurBackground
-        center
-        backgroundUrl="https://www.actualidadiphone.com/wp-content/uploads/2015/09/fondos-de-pantalla-deportes-9.jpeg"
-      >
+      <BlurBackground center backgroundSource={Images.loginScreen.file}>
         <HideWithKeyboard style={styles.logoContainer}>
           <AppLogo logo={false} />
         </HideWithKeyboard>

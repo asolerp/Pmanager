@@ -124,6 +124,7 @@ function ProfileForm(props) {
           title={user.name}
           titleColor="black"
           iconColor="black"
+          viewLeftSide={user.profileFilled}
           rightSide={() => (
             <AvatarWithPicker
               rounded
@@ -158,7 +159,7 @@ function ProfileForm(props) {
           <View style={{ flex: 1 }}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} enabled>
               <Formik
-                initialValues={{ ...userEmpty, ...user }}
+                initialValues={{ ...userEmpty, ...user, positions: [] }}
                 onSubmit={values => {
                   const {
                     age,

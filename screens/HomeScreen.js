@@ -28,6 +28,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  newMatchButton: {
+    width: 60,
+    height: 60,
+    position: 'absolute',
+    bottom: 50,
+    right: 10,
+    backgroundColor: 'black',
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignContent: 'center',
+    shadowColor: '#aaaaaa',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
+    zIndex: 5,
+  },
   positionLabelContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -50,6 +70,7 @@ function Home(props) {
   useEffect(() => {}, [])
 
   useEffect(() => {
+    console.log(JSON.stringify(user))
     const getPlayerMatches = async userUID => {
       const arrayOfMatches = await props.firebase.getPlayerMatches(userUID)
       arrayOfMatches.forEach(match => console.log('Partido', match.data()))
@@ -72,17 +93,13 @@ function Home(props) {
       },
     })
   }
-
-  const handleSignout = async () => {
-    try {
-      await props.firebase.signOut()
-      props.navigation.navigate('Auth')
-    } catch (error) {
-      console.log(error)
-    }
-  }
   return (
     <>
+      <View style={styles.newMatchButton}>
+        <TouchableOpacity onPress={() => props.navigation.navigate('NewMatch')}>
+          <Icon name="futbol-o" type="font-awesome" color="white" size={30} />
+        </TouchableOpacity>
+      </View>
       <PageBlank
         title="PANAMA MANAGER"
         titleColor="white"
@@ -90,17 +107,18 @@ function Home(props) {
         topContainerColor="#072357"
         backgroundColorChildren="#f2f2f2"
         iconColor="black"
-        leftSide={() => (
-          <TouchableOpacity onPress={() => props.navigation.navigate('NewMatch')}>
-            <Icon name="futbol-o" type="font-awesome" color="white" size={30} />
-          </TouchableOpacity>
-        )}
+        leftSide={() => <></>}
+        // leftSide={() => (
+        //   <TouchableOpacity onPress={() => props.navigation.navigate('NewMatch')}>
+        //     <Icon name="futbol-o" type="font-awesome" color="white" size={30} />
+        //   </TouchableOpacity>
+        // )}
         rightSide={() => (
           <AvatarWithPicker
             rounded
             containerStyle={styles.avatar}
             imageUrl={user && user.imgProfile}
-            size="small"
+            size="medium"
             source={{
               uri: user && user.imgProfile,
             }}
@@ -108,25 +126,8 @@ function Home(props) {
         )}
       >
         {loading && <ActivityIndicator size="small" color="black" />}
-        <View>
-          <Button
-            title="Nuevo partido"
-            titleStyle={{
-              color: 'black',
-            }}
-            type="clear"
-          />
-          <Button
-            title="Signout"
-            onPress={handleSignout}
-            titleStyle={{
-              color: 'black',
-            }}
-            type="clear"
-          />
-        </View>
       </PageBlank>
-      <View style={{ position: 'absolute', top: 0, width: '100%', zIndex: 2, height: '100%' }}>
+      <View style={{ position: 'absolute', top: 20, width: '100%', zIndex: 2, height: '100%' }}>
         <ScrollView style={{ flex: 1 }} contentContainerStyle={{ width: '100%' }}>
           <View style={{ paddingHorizontal: 10, height: '100%' }}>
             {matches &&
@@ -149,60 +150,6 @@ function Home(props) {
                     }}
                   />
                 </TouchableHighlight>
-                // <View style={{ width: '100%' }}>
-                //   <Text style={{ textAlign: 'center', fontSize: 20, color: 'black', marginBottom: 15 }}>
-                //     {match.name}
-                //   </Text>
-                //   <View>
-                //     {match.players &&
-                //       match.players.map(player => (
-                //         <ListItem
-                //           title={player.name}
-                //           titleStyle={{ fontSize: 15 }}
-                //           subtitle={
-                //             <View style={styles.positionLabelContainer}>
-                //               <PositionLabel
-                //                 position={getLabelPostionByValue(player.principalPosition)}
-                //               />
-                //             </View>
-                //           }
-                //           rightElement={
-                //             <View
-                //               style={{
-                //                 flex: 1,
-                //                 flexGrow: 4,
-                //                 flexDirection: 'row',
-                //                 justifyContent: 'space-between',
-                //                 alignContent: 'center',
-                //                 alignItems: 'center',
-                //               }}
-                //             >
-                //               <StatsDetail stats={player.stats} />
-                //               <CheckBox
-                //                 checked={match.participation[player.uid]}
-                //                 // onPress={() => handlePress(item)}
-                //                 checkedColor="black"
-                //               />
-                //             </View>
-                //           }
-                //           leftAvatar={{ source: { uri: player.imgProfile } }}
-                //           bottomDivider
-                //         />
-                //       ))}
-                //   </View>
-                //   <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                //     <TouchableOpacity
-                //       onPress={() => props.firebase.updatePlayerParticipation2(match, user, true)}
-                //     >
-                //       <Text style={{ color: 'black', fontSize: 20 }}>Asistir</Text>
-                //     </TouchableOpacity>
-                //     <TouchableOpacity
-                //       onPress={() => props.firebase.updatePlayerParticipation2(match, user, false)}
-                //     >
-                //       <Text style={{ color: 'black', fontSize: 20 }}>No Asistir</Text>
-                //     </TouchableOpacity>
-                //   </View>
-                // </View>
               ))}
           </View>
         </ScrollView>

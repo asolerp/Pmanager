@@ -31,7 +31,12 @@ const Firebase = {
       .firestore()
       .collection('users')
       .doc(`${userData.uid}`)
-      .set({ email: userData.email, ...userData.metadata, profileFilled: false })
+      .set({
+        email: userData.email,
+        ...userData.metadata,
+        profileFilled: false,
+        keywords: generateKeywords(userData.name),
+      })
   },
 
   updatePushToken: (userUID, token) => {

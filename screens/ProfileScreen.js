@@ -1,5 +1,6 @@
 import React from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
+import { Button } from 'react-native-elements'
 import { withFirebaseHOC } from '../config/Firebase'
 import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
 import subscribeUserData from '../hooks/subscribeUserData'
@@ -41,6 +42,15 @@ function Profile(props) {
 
   const getCountryLabel = () => {
     return COUNTRIES.find(country => country.value === user.country).label
+  }
+
+  const handleSignout = async () => {
+    try {
+      await props.firebase.signOut()
+      props.navigation.navigate('Auth')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const formatData = user => {
@@ -106,20 +116,30 @@ function Profile(props) {
                     subtitle={user.country ? getCountryLabel() : ''}
                   />
                   <PlayerDetail title="Pie" subtitle={user.foot ? getMainFoot() : ''} />
-                  <PlayerDetail title="Posiciones">
-                    <ChipSelector
-                      values={user.positions.filter(p => p.active)}
-                      customStyle={{ fontSize: 10 }}
-                      markPrincipal
-                      principal={user.principalPosition}
-                    />
-                  </PlayerDetail>
+                  {user.positions && (
+                    <PlayerDetail title="Posiciones">
+                      <ChipSelector
+                        values={user.positions.filter(p => p.active)}
+                        customStyle={{ fontSize: 10 }}
+                        markPrincipal
+                        principal={user.principalPosition}
+                      />
+                    </PlayerDetail>
+                  )}
                 </View>
                 <View style={{ flex: 1 }}>
-                  <TShirt name={user.name} dorsal={user.dorsal} />
+                  <TShirt name={user.name || 'Nombre'} dorsal={user.dorsal || 0} />
                 </View>
               </View>
               <Section title="Habilidad" />
+              <Button
+                title="Signout"
+                onPress={handleSignout}
+                titleStyle={{
+                  color: 'black',
+                }}
+                type="clear"
+              />
             </>
           )}
         </ScrollView>

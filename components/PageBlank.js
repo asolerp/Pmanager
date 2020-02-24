@@ -46,6 +46,8 @@ const styles = StyleSheet.create({
 function PageBlank({
   children,
   leftSide,
+  viewLeftSide = true,
+  viewRightSide = true,
   rightSide,
   title,
   sizeTopContainer = 'small',
@@ -80,24 +82,26 @@ function PageBlank({
           { backgroundColor: topContainerColor },
         ]}
       >
-        <View style={styles.leftSide}>
-          {leftSide ? (
-            leftSide()
-          ) : (
-            <TouchableOpacity onPress={() => navigation.pop()}>
-              <Ionicons
-                style={styles.icon}
-                name={iconName || 'ios-arrow-back'}
-                size={40}
-                color={iconColor}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
+        {viewLeftSide && (
+          <View style={styles.leftSide}>
+            {leftSide ? (
+              leftSide()
+            ) : (
+              <TouchableOpacity onPress={() => navigation.pop()}>
+                <Ionicons
+                  style={styles.icon}
+                  name={iconName || 'ios-arrow-back'}
+                  size={40}
+                  color={iconColor}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
         <View style={styles.centerSide}>
           <Text style={[styles.title, { color: titleColor }]}>{title}</Text>
         </View>
-        <View style={styles.rightSide}>{rightSide()}</View>
+        {viewRightSide && <View style={styles.rightSide}>{rightSide()}</View>}
       </View>
       <View style={{ flex: 1, backgroundColor: backgroundColorChildren }}>{children}</View>
     </View>

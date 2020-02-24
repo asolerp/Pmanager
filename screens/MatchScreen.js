@@ -57,53 +57,46 @@ const MatchScreen = props => {
   const generateRows = (team, teamName) => {
     return (
       <>
-        {/* <View style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
-          <View style={{ alignItems: 'center' }}>
-            <AvatarWithPicker
-              rounded
-              containerStyle={styles.avatar}
-              imageUrl={match && match.imageMatch}
-              size="small"
-              source={{
-                uri: match && match.imageMatch,
-              }}
-            />
-            <Text style={{ color: 'white', fontSize: 10 }}>Nombre</Text>
-          </View>
-        </View> */}
         {Object.keys(team).map(line => (
           <View
             key={line}
-            style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}
+            style={{
+              flex: 1,
+              justifyContent: 'space-around',
+              alignItems: 'center',
+            }}
           >
             {Object.keys(team[line]).map(position => (
               <>
                 {team[line][position].filled ? (
-                  <AvatarWithPicker
-                    key={`${position}-droppable`}
-                    rounded
-                    editButton={{
-                      name: 'cancel',
-                      type: 'material',
-                      color: 'black',
-                      underlayColor: '#000',
-                    }}
-                    onEditPress={() => {
-                      const updatedFormation = { ...match }
-                      const players = [...playersContainer]
-                      players.push(updatedFormation[teamName][line][position])
-                      updatedFormation[teamName][line][position] = cleanPosition
-                      setPlayersContainer(players)
-                      setMatch(updatedFormation)
-                    }}
-                    containerStyle={styles.avatar}
-                    showEditButton
-                    setImage={props.setImage}
-                    size="medium"
-                    source={{
-                      uri: team[line][position].imgProfile,
-                    }}
-                  />
+                  <View style={{ justifyContent: 'center' }}>
+                    <AvatarWithPicker
+                      key={`${position}-droppable`}
+                      rounded
+                      editButton={{
+                        name: 'cancel',
+                        type: 'material',
+                        color: 'black',
+                        underlayColor: '#000',
+                      }}
+                      onEditPress={() => {
+                        const updatedFormation = { ...match }
+                        const players = [...playersContainer]
+                        players.push(updatedFormation[teamName][line][position])
+                        updatedFormation[teamName][line][position] = cleanPosition
+                        setPlayersContainer(players)
+                        setMatch(updatedFormation)
+                      }}
+                      containerStyle={styles.avatar}
+                      showEditButton
+                      setImage={props.setImage}
+                      size="medium"
+                      source={{
+                        uri: team[line][position].imgProfile,
+                      }}
+                    />
+                    <Text>{team[line][position].name}</Text>
+                  </View>
                 ) : (
                   <Droppable
                     key={`${position}-droppable`}
@@ -114,6 +107,7 @@ const MatchScreen = props => {
                       console.log('Draggable left')
                     }}
                     onDrop={({ payload }) => {
+                      console.log(payload)
                       const updatedFormation = { ...match }
                       const players = [...playersContainer]
                       updatedFormation[teamName][line][position] = { ...payload, filled: true }
@@ -127,8 +121,8 @@ const MatchScreen = props => {
                           <View style={{ alignItems: 'center' }}>
                             <View
                               style={{
-                                width: 45,
-                                height: 45,
+                                width: 40,
+                                height: 40,
                                 borderStyle: 'dashed',
                                 borderColor: 'black',
                                 borderWidth: 2,
@@ -136,19 +130,7 @@ const MatchScreen = props => {
                                 backgroundColor: 'rgba(127, 127, 127, 0.4)',
                               }}
                             />
-                            <Text>{position}</Text>
-                            {/* <AvatarWithPicker
-                            rounded
-                            containerStyle={styles.avatar}
-                            imageUrl={team[line][position].imgProfile}
-                            size="small"
-                            source={{
-                              uri: match && match.imageMatch,
-                            }}
-                          />
-                          <Text style={{ color: 'white', fontSize: 10 }}>
-                            {team[line][position].name}
-                          </Text> */}
+                            <Text>{position.substring(2)}</Text>
                           </View>
                         </Animated.View>
                       )
@@ -165,9 +147,6 @@ const MatchScreen = props => {
 
   useEffect(() => {
     const matchSelected = props.navigation.getParam('match')
-    // generateRows(setFirstLine, Number(defaultPosition.split('-')[0]), matchSelected)
-    // generateRows(setSecondLine, Number(defaultPosition.split('-')[1]), matchSelected)
-    // generateRows(setThirdLine, Number(defaultPosition.split('-')[2]), matchSelected)
     setPlayersContainer(matchSelected.players)
     setMatch(matchSelected)
   }, [])
@@ -252,14 +231,17 @@ const MatchScreen = props => {
                           {({ viewProps }) => {
                             return (
                               <Animated.View {...viewProps} style={[viewProps.style]}>
-                                <AvatarWithPicker
-                                  rounded
-                                  imageUrl={player.imgProfile}
-                                  size="medium"
-                                  source={{
-                                    uri: player.imgProfile,
-                                  }}
-                                />
+                                <View style={{ marginRight: 10, alignItems: 'center' }}>
+                                  <AvatarWithPicker
+                                    rounded
+                                    imageUrl={player.imgProfile}
+                                    size="medium"
+                                    source={{
+                                      uri: player.imgProfile,
+                                    }}
+                                  />
+                                  <Text>{player.name}</Text>
+                                </View>
                               </Animated.View>
                             )
                           }}

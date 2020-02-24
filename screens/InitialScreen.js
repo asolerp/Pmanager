@@ -37,9 +37,9 @@ function Initial(props) {
               },
             })
             registerForPushNotificationsAsync(user.uid)
-            if (userProfile.data().firstLogin) {
+            if (!userProfile.data().profileFilled) {
               // if first logged in
-              props.navigation.navigate('ProfileForm')
+              props.navigation.navigate('ProfileForm', { user: userProfile.data() })
             } else {
               // if the user has previously logged in
               props.navigation.navigate('Home')
