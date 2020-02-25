@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
@@ -35,8 +35,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flex: 1,
-    marginBottom: 10,
     paddingHorizontal: 25,
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   logoContainer: {
     width: '100%',
@@ -88,7 +89,8 @@ function LoginScreen(props) {
         <HideWithKeyboard style={styles.logoContainer}>
           <AppLogo logo={false} />
         </HideWithKeyboard>
-        <View style={styles.formWrapper}>
+
+        <KeyboardAvoidingView style={styles.formWrapper} behavior="padding" enabled>
           <Formik
             initialValues={{
               email: 'albertosolpal@gmail.com',
@@ -112,8 +114,11 @@ function LoginScreen(props) {
                     iconColor="#2C384A"
                     textAlign="center"
                     onBlur={handleBlur('email')}
+                    style={{ flex: 1, justifyContent: 'flex-end' }}
                   />
                   <ErrorMessage errorValue={touched.email && errors.email} />
+                </View>
+                <View style={styles.inputContainer}>
                   <FormInputSimple
                     name="password"
                     value={values.password}
@@ -124,6 +129,7 @@ function LoginScreen(props) {
                     iconColor="#2C384A"
                     textAlign="center"
                     onBlur={handleBlur('password')}
+                    style={{ flex: 1, justifyContent: 'flex-start' }}
                   />
                   <ErrorMessage errorValue={touched.password && errors.password} />
                 </View>
@@ -146,7 +152,7 @@ function LoginScreen(props) {
               </>
             )}
           </Formik>
-        </View>
+        </KeyboardAvoidingView>
       </BlurBackground>
       {/*
       <View>
