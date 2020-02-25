@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Alert, Animated, StyleSheet, TouchableOpacity, View, Image, Text } from 'react-native'
+import { Animated, StyleSheet, TouchableOpacity, View, Image, Text } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { createDndContext } from 'react-native-easy-dnd'
 import Images from '../constants/Images'
@@ -7,6 +7,8 @@ import Images from '../constants/Images'
 // UI
 import PageBlank from '../components/PageBlank'
 import AvatarWithPicker from '../components/Avatar'
+import { getLabelPostionByValue } from '../constants/Player'
+import PositionLabel from '../components/PositionLabel'
 
 // API
 import { withFirebaseHOC } from '../config/Firebase'
@@ -31,7 +33,6 @@ const styles = StyleSheet.create({
     elevation: 7,
   },
   avatar: {
-    borderColor: 'white',
     borderWidth: 2,
     shadowColor: '#aaaaaa',
     shadowOffset: {
@@ -87,7 +88,14 @@ const MatchScreen = props => {
                         setPlayersContainer(players)
                         setMatch(updatedFormation)
                       }}
-                      containerStyle={styles.avatar}
+                      containerStyle={[
+                        styles.avatar,
+                        {
+                          borderColor: getLabelPostionByValue(
+                            team[line][position].principalPosition
+                          ).color,
+                        },
+                      ]}
                       showEditButton
                       setImage={props.setImage}
                       size="medium"
@@ -213,40 +221,117 @@ const MatchScreen = props => {
                     />
                   </View>
                   <View>
-                    <Text style={{ paddingVertical: 10 }}>Jugadores</Text>
+                    <Text style={{ paddingVertical: 10, marginBottom: 10 }}>
+                      Jugadores confirmados
+                    </Text>
                   </View>
-                  <View style={{ flexDirection: 'row', zIndex: 3 }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      alignItems: 'flex-start',
+                      justifyContent: 'center',
+                    }}
+                  >
                     {playersContainer &&
-                      playersContainer.map(player => (
-                        <Draggable
-                          key={`${player.uid}-draggable`}
-                          onDragStart={() => {
-                            console.log('Started draggging')
-                          }}
-                          onDragEnd={() => {
-                            console.log('Ended draggging')
-                          }}
-                          payload={player}
-                        >
-                          {({ viewProps }) => {
-                            return (
-                              <Animated.View {...viewProps} style={[viewProps.style]}>
-                                <View style={{ marginRight: 10, alignItems: 'center' }}>
-                                  <AvatarWithPicker
-                                    rounded
-                                    imageUrl={player.imgProfile}
-                                    size="medium"
-                                    source={{
-                                      uri: player.imgProfile,
+                      playersContainer
+                        .filter(p => match.participation[p.uid])
+                        .map(player => (
+                          <Draggable
+                            key={`${player.uid}-draggable`}
+                            onDragStart={() => {
+                              console.log('Started draggging')
+                            }}
+                            onDragEnd={() => {
+                              console.log('Ended draggging')
+                            }}
+                            payload={player}
+                          >
+                            {({ viewProps }) => {
+                              return (
+                                <Animated.View {...viewProps} style={[viewProps.style]}>
+                                  <View
+                                    style={{
+                                      marginRight: 10,
+                                      alignItems: 'center',
+                                      marginBottom: 10,
+                                      position: 'relative',
                                     }}
-                                  />
-                                  <Text>{player.name}</Text>
-                                </View>
-                              </Animated.View>
-                            )
-                          }}
-                        </Draggable>
-                      ))}
+                                  >
+                                    <AvatarWithPicker
+                                      rounded
+                                      imageUrl={player.imgProfile}
+                                      size="medium"
+                                      source={{
+                                        uri: player.imgProfile,
+                                      }}
+                                    />
+                                    <PositionLabel
+                                      style={{
+                                        position: 'absolute',
+                                        top: -10,
+                                        left: '50%',
+                                        zIndex: 2,
+                                      }}
+                                      position={getLabelPostionByValue(player.principalPosition)}
+                                    />
+                                    <View style={{ flexDirection: 'row' }}>
+                                      <Text>{player.name}</Text>
+                                    </View>
+                                  </View>
+                                </Animated.View>
+                              )
+                            }}
+                          </Draggable>
+                        ))}
+                  </View>
+                  <View>
+                    <Text style={{ paddingVertical: 10, marginBottom: 10 }}>
+                      Jugadores sin confirmar
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      alignItems: 'flex-start',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {playersContainer &&
+                      playersContainer
+                        .filter(p => !match.participation[p.uid])
+                        .map(player => (
+                          <View
+                            style={{
+                              marginRight: 10,
+                              alignItems: 'center',
+                              marginBottom: 10,
+                              position: 'relative',
+                            }}
+                          >
+                            <AvatarWithPicker
+                              rounded
+                              imageUrl={player.imgProfile}
+                              size="medium"
+                              source={{
+                                uri: player.imgProfile,
+                              }}
+                            />
+                            <PositionLabel
+                              style={{
+                                position: 'absolute',
+                                top: -10,
+                                left: '50%',
+                                zIndex: 2,
+                              }}
+                              position={getLabelPostionByValue(player.principalPosition)}
+                            />
+                            <View style={{ flexDirection: 'row' }}>
+                              <Text>{player.name}</Text>
+                            </View>
+                          </View>
+                        ))}
                   </View>
                 </>
               )}
