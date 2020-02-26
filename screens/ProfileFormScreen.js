@@ -159,7 +159,7 @@ function ProfileForm(props) {
           <View style={{ flex: 1 }}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'position' : 'padding'} enabled>
               <Formik
-                initialValues={{ ...userEmpty, ...user, positions: [] }}
+                initialValues={{ ...userEmpty, ...user, positions: user.positions || [] }}
                 onSubmit={values => {
                   const {
                     age,

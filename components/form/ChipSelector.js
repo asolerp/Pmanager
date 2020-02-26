@@ -60,7 +60,7 @@ const ChipSelector = ({
   useEffect(() => {
     const result = _.values(_.merge(_.keyBy(value, 'label'), _.keyBy(values, 'label')))
     setChip(result)
-  }, [])
+  }, [chips])
 
   // Chip methods
   const findChip = item => {

@@ -2,16 +2,20 @@ import React, { useState, useEffect } from 'react'
 import { Animated, StyleSheet, TouchableOpacity, View, Image, Text } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { createDndContext } from 'react-native-easy-dnd'
+import _ from 'lodash'
 import Images from '../constants/Images'
 
 // UI
 import PageBlank from '../components/PageBlank'
 import AvatarWithPicker from '../components/Avatar'
 import { getLabelPostionByValue } from '../constants/Player'
-import PositionLabel from '../components/PositionLabel'
+import PlayerDrag from '../components/PlayerDrag'
+import FormButton from '../components/form/FormButton'
+import Section from '../components/form/SectionTitle'
 
 // API
 import { withFirebaseHOC } from '../config/Firebase'
+import subscribeUserData from '../hooks/subscribeUserData'
 
 const styles = StyleSheet.create({
   fieldContainer: {
@@ -51,8 +55,13 @@ const cleanPosition = {
 }
 
 const MatchScreen = props => {
+  const { user } = subscribeUserData()
+
   const [match, setMatch] = useState()
+  const [admin, setAdmin] = useState()
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [playersContainer, setPlayersContainer] = useState()
+
   const { Provider, Droppable, Draggable } = createDndContext()
 
   const generateRows = (team, teamName) => {
@@ -84,6 +93,9 @@ const MatchScreen = props => {
                         const updatedFormation = { ...match }
                         const players = [...playersContainer]
                         players.push(updatedFormation[teamName][line][position])
+                        updatedFormation.players.forEach(p => {
+                          if (p.uid === team[line][position].uid) p.dragged = false
+                        })
                         updatedFormation[teamName][line][position] = cleanPosition
                         setPlayersContainer(players)
                         setMatch(updatedFormation)
@@ -119,6 +131,9 @@ const MatchScreen = props => {
                       const updatedFormation = { ...match }
                       const players = [...playersContainer]
                       updatedFormation[teamName][line][position] = { ...payload, filled: true }
+                      updatedFormation.players.forEach(p => {
+                        if (p.uid === payload.uid) p.dragged = true
+                      })
                       setPlayersContainer(players.filter(p => p.uid !== payload.uid))
                       setMatch(updatedFormation)
                     }}
@@ -155,9 +170,28 @@ const MatchScreen = props => {
 
   useEffect(() => {
     const matchSelected = props.navigation.getParam('match')
-    setPlayersContainer(matchSelected.players)
+    setPlayersContainer(matchSelected.players.filter(p => !p.dragged))
     setMatch(matchSelected)
   }, [])
+
+  useEffect(() => {
+    if (user && match) {
+      if (match.admins.find(p => p.uid === user.uid)) {
+        setAdmin(true)
+      }
+    }
+  }, [user])
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+    try {
+      await props.firebase.updateDB(match, 'matches', match.uid)
+      props.navigation.pop()
+    } catch (err) {
+      console.log(err)
+    }
+    setIsSubmitting(false)
+  }
 
   const Formacion = ({ team, teamName, reverse }) => {
     return (
@@ -220,123 +254,78 @@ const MatchScreen = props => {
                       source={Images.matchField.file}
                     />
                   </View>
-                  <View>
-                    <Text style={{ paddingVertical: 10, marginBottom: 10 }}>
-                      Jugadores confirmados
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                      alignItems: 'flex-start',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {playersContainer &&
-                      playersContainer
-                        .filter(p => match.participation[p.uid])
-                        .map(player => (
-                          <Draggable
-                            key={`${player.uid}-draggable`}
-                            onDragStart={() => {
-                              console.log('Started draggging')
-                            }}
-                            onDragEnd={() => {
-                              console.log('Ended draggging')
-                            }}
-                            payload={player}
-                          >
-                            {({ viewProps }) => {
-                              return (
-                                <Animated.View {...viewProps} style={[viewProps.style]}>
-                                  <View
-                                    style={{
-                                      marginRight: 10,
-                                      alignItems: 'center',
-                                      marginBottom: 10,
-                                      position: 'relative',
+                  {playersContainer.filter(p => match.participation[p.uid]).length > 0 && (
+                    <View>
+                      <View>
+                        <Section title="Jugadores confirmados" />
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
+                          alignItems: 'flex-start',
+                          justifyContent: 'center',
+                          marginTop: 20,
+                        }}
+                      >
+                        {playersContainer &&
+                          playersContainer
+                            .filter(p => match.participation[p.uid])
+                            .map(player => (
+                              <>
+                                {admin ? (
+                                  <Draggable key={`${player.uid}-draggable`} payload={player}>
+                                    {({ viewProps }) => {
+                                      return (
+                                        <Animated.View {...viewProps} style={[viewProps.style]}>
+                                          <PlayerDrag player={player} />
+                                        </Animated.View>
+                                      )
                                     }}
-                                  >
-                                    <AvatarWithPicker
-                                      rounded
-                                      imageUrl={player.imgProfile}
-                                      size="medium"
-                                      source={{
-                                        uri: player.imgProfile,
-                                      }}
-                                    />
-                                    <PositionLabel
-                                      style={{
-                                        position: 'absolute',
-                                        top: -10,
-                                        left: '50%',
-                                        zIndex: 2,
-                                      }}
-                                      position={getLabelPostionByValue(player.principalPosition)}
-                                    />
-                                    <View style={{ flexDirection: 'row' }}>
-                                      <Text>{player.name}</Text>
-                                    </View>
-                                  </View>
-                                </Animated.View>
-                              )
-                            }}
-                          </Draggable>
-                        ))}
-                  </View>
-                  <View>
-                    <Text style={{ paddingVertical: 10, marginBottom: 10 }}>
-                      Jugadores sin confirmar
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                      alignItems: 'flex-start',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {playersContainer &&
-                      playersContainer
-                        .filter(p => !match.participation[p.uid])
-                        .map(player => (
-                          <View
-                            style={{
-                              marginRight: 10,
-                              alignItems: 'center',
-                              marginBottom: 10,
-                              position: 'relative',
-                            }}
-                          >
-                            <AvatarWithPicker
-                              rounded
-                              imageUrl={player.imgProfile}
-                              size="medium"
-                              source={{
-                                uri: player.imgProfile,
-                              }}
-                            />
-                            <PositionLabel
-                              style={{
-                                position: 'absolute',
-                                top: -10,
-                                left: '50%',
-                                zIndex: 2,
-                              }}
-                              position={getLabelPostionByValue(player.principalPosition)}
-                            />
-                            <View style={{ flexDirection: 'row' }}>
-                              <Text>{player.name}</Text>
-                            </View>
-                          </View>
-                        ))}
-                  </View>
+                                  </Draggable>
+                                ) : (
+                                  <PlayerDrag player={player} />
+                                )}
+                              </>
+                            ))}
+                      </View>
+                    </View>
+                  )}
+                  {playersContainer.filter(p => !match.participation[p.uid]).length > 0 && (
+                    <View>
+                      <View>
+                        <Section title="Jugadores sin confirmar" />
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
+                          alignItems: 'flex-start',
+                          justifyContent: 'center',
+                          marginTop: 20,
+                        }}
+                      >
+                        {playersContainer &&
+                          playersContainer
+                            .filter(p => !match.participation[p.uid])
+                            .map(player => <PlayerDrag player={player} />)}
+                      </View>
+                    </View>
+                  )}
                 </>
               )}
             </View>
           </View>
+          <FormButton
+            onPress={handleSubmit}
+            style={{
+              backgroundColor: 'transparent',
+            }}
+            title="Guardar"
+            buttonColor="black"
+            // disabled={!isValid}
+            loading={isSubmitting}
+          />
         </View>
       </PageBlank>
     </Provider>
