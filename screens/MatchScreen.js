@@ -94,7 +94,11 @@ const MatchScreen = props => {
                         const players = [...playersContainer]
                         players.push(updatedFormation[teamName][line][position])
                         updatedFormation.players.forEach(p => {
-                          if (p.uid === team[line][position].uid) p.dragged = false
+                          if (p.uid === team[line][position].uid) {
+                            p.dragged = false
+                            delete p.line
+                            delete p.position
+                          }
                         })
                         updatedFormation[teamName][line][position] = cleanPosition
                         setPlayersContainer(players)
@@ -120,19 +124,16 @@ const MatchScreen = props => {
                 ) : (
                   <Droppable
                     key={`${position}-droppable`}
-                    onEnter={() => {
-                      console.log('Draggable entered')
-                    }}
-                    onLeave={() => {
-                      console.log('Draggable left')
-                    }}
                     onDrop={({ payload }) => {
-                      console.log(payload)
                       const updatedFormation = { ...match }
                       const players = [...playersContainer]
                       updatedFormation[teamName][line][position] = { ...payload, filled: true }
                       updatedFormation.players.forEach(p => {
-                        if (p.uid === payload.uid) p.dragged = true
+                        if (p.uid === payload.uid) {
+                          p.dragged = true
+                          p.line = line
+                          p.position = position
+                        }
                       })
                       setPlayersContainer(players.filter(p => p.uid !== payload.uid))
                       setMatch(updatedFormation)
