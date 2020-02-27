@@ -171,6 +171,8 @@ function ProfileForm(props) {
                     weight,
                     positions,
                     principalPosition,
+                    expoToken,
+                    lastSignInTime,
                     foot,
                     stats = {
                       shoot: 0,
@@ -200,6 +202,8 @@ function ProfileForm(props) {
                         weight,
                         positions,
                         principalPosition,
+                        expoToken,
+                        lastSignInTime,
                         foot,
                         stats,
                         imgProfile: downloadURL,
