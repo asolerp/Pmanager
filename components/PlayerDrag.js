@@ -21,7 +21,7 @@ const PlayerDrag = ({ player }) => {
       <AvatarWithPicker
         rounded
         imageUrl={player.imgProfile}
-        size="medium"
+        size="small"
         source={{
           uri: player.imgProfile,
         }}

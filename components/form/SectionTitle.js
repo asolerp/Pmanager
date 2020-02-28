@@ -24,10 +24,10 @@ const styles = StyleSheet.create({
   },
 })
 
-function SectionTitle({ title, customStyle, rightElement }) {
+function SectionTitle({ title, customStyle, rightElement, textStyle }) {
   return (
     <View style={[styles.container, customStyle]}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={[styles.title, textStyle]}>{title}</Text>
       {rightElement}
     </View>
   )
