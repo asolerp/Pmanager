@@ -12,30 +12,14 @@ import { getLabelPostionByValue } from '../constants/Player'
 import PlayerDrag from '../components/PlayerDrag'
 import FormButton from '../components/form/FormButton'
 import Section from '../components/form/SectionTitle'
+import Card from '../components/Card'
+import TextC from '../components/customContainers/TextC'
 
 // API
 import { withFirebaseHOC } from '../config/Firebase'
 import subscribeUserData from '../hooks/subscribeUserData'
 
 const styles = StyleSheet.create({
-  fieldContainer: {
-    width: '100%',
-    position: 'relative',
-    backgroundColor: 'white',
-    borderRadius: 5,
-    marginTop: 10,
-    marginBottom: 10,
-    paddingVertical: 5,
-    paddingHorizontal: 5,
-    shadowColor: '#aaaaaa',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.29,
-    shadowRadius: 4.65,
-    elevation: 7,
-  },
   avatar: {
     borderWidth: 2,
     shadowColor: '#aaaaaa',
@@ -46,6 +30,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
     elevation: 7,
+  },
+  avatarText: {
+    color: 'white',
+    width: '100%',
+    backgroundColor: 'black',
+    fontSize: 12,
+    paddingHorizontal: 5,
+    paddingVertical: 1,
+    marginTop: 5,
+    borderRadius: 5,
+    height: 20,
+  },
+  emptyPlayer: {
+    width: 40,
+    height: 40,
+    borderStyle: 'dashed',
+    borderColor: 'black',
+    borderWidth: 2,
+    borderRadius: 100,
+    backgroundColor: 'rgba(127, 127, 127, 0.4)',
+    zIndex: 0,
   },
 })
 
@@ -64,6 +69,17 @@ const MatchScreen = props => {
 
   const { Provider, Droppable, Draggable } = createDndContext()
 
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+    try {
+      await props.firebase.updateDB(match, 'matches', match.uid)
+      // props.navigation.pop()
+    } catch (err) {
+      console.log(err)
+    }
+    setIsSubmitting(false)
+  }
+
   const generateRows = (team, teamName) => {
     return (
       <>
@@ -79,17 +95,9 @@ const MatchScreen = props => {
             {Object.keys(team[line]).map(position => (
               <>
                 {team[line][position].filled ? (
-                  <View style={{ justifyContent: 'center' }}>
-                    <AvatarWithPicker
-                      key={`${position}-droppable`}
-                      rounded
-                      editButton={{
-                        name: 'cancel',
-                        type: 'material',
-                        color: 'black',
-                        underlayColor: '#000',
-                      }}
-                      onEditPress={() => {
+                  <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <TouchableOpacity
+                      onPress={() => {
                         const updatedFormation = { ...match }
                         const players = [...playersContainer]
                         players.push(updatedFormation[teamName][line][position])
@@ -98,28 +106,36 @@ const MatchScreen = props => {
                             p.dragged = false
                             delete p.line
                             delete p.position
+                            delete p.team
                           }
                         })
                         updatedFormation[teamName][line][position] = cleanPosition
                         setPlayersContainer(players)
                         setMatch(updatedFormation)
+                        handleSubmit()
                       }}
-                      containerStyle={[
-                        styles.avatar,
-                        {
-                          borderColor: getLabelPostionByValue(
-                            team[line][position].principalPosition
-                          ).color,
-                        },
-                      ]}
-                      showEditButton
-                      setImage={props.setImage}
-                      size="medium"
-                      source={{
-                        uri: team[line][position].imgProfile,
-                      }}
-                    />
-                    <Text>{team[line][position].name}</Text>
+                    >
+                      <AvatarWithPicker
+                        key={`${position}-droppable`}
+                        rounded
+                        containerStyle={[
+                          styles.avatar,
+                          {
+                            borderColor: getLabelPostionByValue(
+                              team[line][position].principalPosition
+                            ).color,
+                          },
+                        ]}
+                        setImage={props.setImage}
+                        size="small"
+                        source={{
+                          uri: team[line][position].imgProfile,
+                        }}
+                      />
+                    </TouchableOpacity>
+                    <TextC textAlignVertical="center" style={styles.avatarText}>
+                      {team[line][position].name}
+                    </TextC>
                   </View>
                 ) : (
                   <Droppable
@@ -133,28 +149,20 @@ const MatchScreen = props => {
                           p.dragged = true
                           p.line = line
                           p.position = position
+                          p.team = teamName
                         }
                       })
                       setPlayersContainer(players.filter(p => p.uid !== payload.uid))
                       setMatch(updatedFormation)
+                      handleSubmit()
                     }}
                   >
                     {({ viewProps }) => {
                       return (
                         <Animated.View {...viewProps}>
                           <View style={{ alignItems: 'center' }}>
-                            <View
-                              style={{
-                                width: 40,
-                                height: 40,
-                                borderStyle: 'dashed',
-                                borderColor: 'black',
-                                borderWidth: 2,
-                                borderRadius: 100,
-                                backgroundColor: 'rgba(127, 127, 127, 0.4)',
-                              }}
-                            />
-                            <Text>{position.substring(2)}</Text>
+                            <View style={styles.emptyPlayer} />
+                            <TextC>{position.substring(2)}</TextC>
                           </View>
                         </Animated.View>
                       )
@@ -182,17 +190,6 @@ const MatchScreen = props => {
       }
     }
   }, [user])
-
-  const handleSubmit = async () => {
-    setIsSubmitting(true)
-    try {
-      await props.firebase.updateDB(match, 'matches', match.uid)
-      props.navigation.pop()
-    } catch (err) {
-      console.log(err)
-    }
-    setIsSubmitting(false)
-  }
 
   const Formacion = ({ team, teamName, reverse }) => {
     return (
@@ -236,7 +233,7 @@ const MatchScreen = props => {
         )}
       >
         <View style={{ flex: 1, justifyContent: 'flex-start', paddingHorizontal: 10 }}>
-          <View style={styles.fieldContainer}>
+          <Card>
             <View>
               {match && (
                 <>
@@ -316,7 +313,7 @@ const MatchScreen = props => {
                 </>
               )}
             </View>
-          </View>
+          </Card>
           <FormButton
             onPress={handleSubmit}
             style={{
