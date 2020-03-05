@@ -1,12 +1,16 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen'
+
 import { Icon, Image } from 'react-native-elements'
 import TextC from './customContainers/TextC'
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: 180,
+    height: hp('25%'),
     backgroundColor: 'white',
     borderRadius: 5,
     marginBottom: 5,
@@ -32,7 +36,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   bottomItem: {
-    width: 80,
+    width: wp('22%'),
+    height: hp('4%'),
     borderColor: '#f2f2f2',
     borderRadius: 5,
     borderWidth: 1,
@@ -54,7 +59,7 @@ const styles = StyleSheet.create({
 
   // },
   imageContainer: {
-    flex: 1,
+    flex: 1.3,
     padding: 5,
   },
   image: {
@@ -80,11 +85,15 @@ const styles = StyleSheet.create({
   },
 })
 
-const BottomItem = ({ texto, color }) => {
+const BottomItem = ({ texto, color = 'white' }) => {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
+    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
       <TextC
-        style={{ textAlign: 'center', color, fontWeight: 'bold', fontSize: 18, paddingVertical: 5 }}
+        style={{
+          color,
+          fontWeight: 'bold',
+          fontSize: hp('1.8%'),
+        }}
       >
         {texto}
       </TextC>
@@ -144,7 +153,12 @@ const MatchCard = ({ match, userUID, assist, noassist, element }) => {
         </View>
       </View>
       <View style={styles.bottomSection}>
-        <View style={[styles.bottomItem, { backgroundColor: '#4eaa4c' }]}>
+        <View
+          style={[
+            styles.bottomItem,
+            { backgroundColor: '#4eaa4c', justifyContent: 'center', alignItems: 'center' },
+          ]}
+        >
           <BottomItem texto={match.assistance || 0} color="white" />
         </View>
         <TouchableOpacity onPress={() => assist()}>
@@ -155,7 +169,9 @@ const MatchCard = ({ match, userUID, assist, noassist, element }) => {
               { justifyContent: 'center', alignItems: 'center' },
             ]}
           >
-            <TextC style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}>Asistir</TextC>
+            <TextC style={{ color: 'white', fontWeight: 'bold', fontSize: hp('1.3%') }}>
+              Asistir
+            </TextC>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => noassist()}>
@@ -167,10 +183,17 @@ const MatchCard = ({ match, userUID, assist, noassist, element }) => {
               { justifyContent: 'center', alignItems: 'center' },
             ]}
           >
-            <TextC style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}>No asistir</TextC>
+            <TextC style={{ color: 'white', fontWeight: 'bold', fontSize: hp('1.3%') }}>
+              No asistir
+            </TextC>
           </View>
         </TouchableOpacity>
-        <View style={[styles.bottomItem, { backgroundColor: '#CC1034' }]}>
+        <View
+          style={[
+            styles.bottomItem,
+            { backgroundColor: '#CC1034', justifyContent: 'center', alignItems: 'center' },
+          ]}
+        >
           <BottomItem texto={match.players.length - match.assistance || 0} color="white" />
         </View>
       </View>

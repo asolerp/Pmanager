@@ -7494,6 +7494,11 @@ react-native-reanimated@^1.7.0:
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.7.0.tgz#896db2576552ac59d288a1f6c7f00afc171f240c"
   integrity sha512-FQWSqP605eQVJumuK2HpR+7heF0ZI+qfy4jNguv3Xv8nPFHeIgZaRTXHCEQL2AcuSIj50zy8jGJf5l134QMQWQ==
 
+react-native-responsive-screen@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-responsive-screen/-/react-native-responsive-screen-1.4.0.tgz#c7d90c173edba28c023c665975c0de85fd60eaba"
+  integrity sha512-qhT4+ATQbqV1GYaCzit560HnBNoZD7WahiZKAZebJlgBl6D8uY+kYuGwBl3rIamP5CsMfwyUJnoI5Z79JU2yyA==
+
 react-native-safe-area-context@^0.6.4:
   version "0.6.4"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-0.6.4.tgz#624bd50cebc9f47853f179373501511931d2a0c3"
