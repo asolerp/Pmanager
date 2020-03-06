@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     marginRight: 10,
+    marginVertical: 10,
     backgroundColor: 'white',
   },
   searchBarContainer: {
@@ -232,8 +233,8 @@ const FriendListScreen = props => {
                 <AvatarWithPicker
                   key={friend.uid}
                   rounded
-                  showEditButton
-                  onEditPress={() => removePlayerFromSelection(friend)}
+                  showEditButton={props.removableSelection}
+                  onEditPress={() => props.removableSelection && removePlayerFromSelection(friend)}
                   editButton={{
                     name: 'cancel',
                     type: 'material',

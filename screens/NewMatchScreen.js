@@ -1,6 +1,6 @@
 // MODULE
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, SafeAreaView, ScrollView, Modal, View, Text, Button } from 'react-native'
+import { StyleSheet, SafeAreaView, ScrollView, Modal, View, Text } from 'react-native'
 
 // UI
 import { Formik } from 'formik'
@@ -139,6 +139,7 @@ function NewMatchScreen(props) {
           }}
         >
           <FriendListScreen
+            removableSelection
             listSelectedPlayers={container}
             handlePlayerSelection={players => {
               selector(players)

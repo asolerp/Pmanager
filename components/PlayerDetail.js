@@ -26,7 +26,7 @@ function PlayerDetail({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 15,
+    marginBottom: 0,
   },
   title: {
     color: 'black',
