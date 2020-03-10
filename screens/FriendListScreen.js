@@ -74,7 +74,7 @@ const FriendListScreen = props => {
   const globalState = useContext(store)
   const { state } = globalState
   // const [friends, setFriends] = useState()
-  const [sFriends, setSfriends] = useState(props.playersList)
+  const [sFriends, setSfriends] = useState()
   const [searchText, setSearchText] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -84,6 +84,15 @@ const FriendListScreen = props => {
   const handlePress = item => {
     setSelectedFrind(item)
   }
+
+  useEffect(() => {
+    console.log(props.playersList)
+    if (props.playersList) {
+      const index = props.playersList.findIndex(a => a.uid === state.user.uid)
+      props.playersList[index].active = true
+      setSfriends(props.playersList)
+    }
+  }, [])
 
   useEffect(() => {
     if (selectedFriend) {
@@ -107,6 +116,7 @@ const FriendListScreen = props => {
   }, [selectedFriend])
 
   const updateSearch = async s => {
+    console.log('hola')
     setLoading(true)
     setSearchText(s)
     const searchedUsers = []
@@ -135,26 +145,29 @@ const FriendListScreen = props => {
   }
 
   const findeOnList = s => {
+    console.log('Players', props.playersList)
     setLoading(true)
     setSearchText(s)
-    let currentList = []
-    let newList = []
+    let searchedUsers = []
     if (s.length > 0) {
-      currentList = props.playersList
-      newList = currentList.filter(p => {
+      searchedUsers = props.playersList.filter(p => {
         const lc = p.name.toLowerCase()
         const filter = s.toLowerCase()
         return lc.includes(filter)
       })
 
-      const merged = newList.map(deflt => ({
+      const merged = searchedUsers.map(deflt => ({
         ...deflt,
         ...list.find(l => l.uid === deflt.uid),
       }))
       setSfriends(merged)
     } else {
-      newList = props.playersList
-      setSfriends(newList)
+      setSfriends(
+        props.playersList.map(deflt => ({
+          ...deflt,
+          ...list.find(l => l.uid === deflt.uid),
+        }))
+      )
     }
     setLoading(false)
   }

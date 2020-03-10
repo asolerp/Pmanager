@@ -103,6 +103,7 @@ function Home(props) {
             {matches &&
               matches.map((match, i) => (
                 <TouchableHighlight
+                  key={match.uid}
                   onPress={() => props.navigation.navigate('MatchPage', { match })}
                 >
                   <MatchCard

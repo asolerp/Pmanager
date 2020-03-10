@@ -118,7 +118,7 @@ const MatchScreen = props => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     try {
-      await props.firebase.updateDB(match, 'matches', match.uid)
+      await props.firebase.updateDB({ ...match, admins }, 'matches', match.uid)
       // props.navigation.pop()
     } catch (err) {
       console.log(err)
@@ -276,6 +276,7 @@ const MatchScreen = props => {
       >
         <FriendListScreen
           listSelectedPlayers={container}
+          mode={mode}
           playersList={match && mode === 'admin' ? match.players : []}
           removableSelection={false}
           handlePlayerSelection={players => {
