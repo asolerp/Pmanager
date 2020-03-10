@@ -1,3 +1,7 @@
+if(__DEV__) {
+  import('./ReactotronConfig').then(() => console.log('Reactotron Configured'))
+}
+
 import React, { useState, useEffect } from 'react'
 import { YellowBox, Platform, StatusBar, StyleSheet, View } from 'react-native'
 import { AppLoading } from 'expo'
@@ -9,6 +13,9 @@ import * as Permissions from 'expo-permissions'
 import AppNavigator from './navigation/AppNavigator'
 import { UserProvider } from './config/User/UserContextManagement'
 import Firebase, { FirebaseProvider, withFirebaseHOC } from './config/Firebase'
+
+import Reactotron from "reactotron-react-native"
+
 
 const initialUserState = {
   session: {
@@ -29,7 +36,10 @@ const userReducer = (state, action) => {
 }
 
 function App(props) {
+  
   const [isAssetsLoadingComplete, setLoadingComplete] = useState(false)
+
+  Reactotron.log("HELLO WORLD")
 
   const loadResourcesAsync = async () => {
     await Promise.all([

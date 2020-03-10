@@ -1,52 +1,20 @@
 import React, { useEffect } from 'react'
-import {
-  ScrollView,
-  ActivityIndicator,
-  TouchableOpacity,
-  TouchableHighlight,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native'
-import { Button, Icon } from 'react-native-elements'
+import { ScrollView, ActivityIndicator, TouchableHighlight, StyleSheet, View } from 'react-native'
 import axios from 'axios'
-import { useStateValue } from '../config/User/UserContextManagement'
 import { withFirebaseHOC } from '../config/Firebase'
 import subscribeUserData from '../hooks/subscribeUserData'
 import subscribePlayerMatches from '../hooks/subscribePlayerMatches'
-import StatsDetail from '../components/StatsDetail'
-import PositionLabel from '../components/PositionLabel'
-import { getLabelPostionByValue } from '../constants/Player'
 import PageBlank from '../components/PageBlank'
 import AvatarWithPicker from '../components/Avatar'
 import MatchCard from '../components/MatchCard'
 import NOTIFICATIONS_TYPE from '../constants/Notifications'
+import FloatingButton from '../components/FloatingButton'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  newMatchButton: {
-    width: 60,
-    height: 60,
-    position: 'absolute',
-    bottom: 50,
-    right: 10,
-    backgroundColor: 'black',
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignContent: 'center',
-    shadowColor: '#aaaaaa',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.29,
-    shadowRadius: 4.65,
-    elevation: 7,
-    zIndex: 5,
   },
   positionLabelContainer: {
     flex: 1,
@@ -95,11 +63,13 @@ function Home(props) {
   }
   return (
     <>
-      <View style={styles.newMatchButton}>
-        <TouchableOpacity onPress={() => props.navigation.navigate('NewMatch')}>
-          <Icon name="futbol-o" type="font-awesome" color="white" size={30} />
-        </TouchableOpacity>
-      </View>
+      <FloatingButton
+        page="NewMatch"
+        containerStyle={{ backgroundColor: '#072357' }}
+        iconColor="white"
+        iconName="futbol-o"
+        iconType="font-awesome"
+      />
       <PageBlank
         title="PANAMA MANAGER"
         titleColor="white"
