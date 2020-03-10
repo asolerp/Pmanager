@@ -111,6 +111,7 @@ const MatchScreen = props => {
   const [selectedPlayers, setSelectedPlayers] = useState([])
   const [admins, setAdmins] = useState([])
   const [selector, setSelector] = useState()
+  const [mode, setMode] = useState('')
 
   const { Provider, Droppable, Draggable } = createDndContext()
 
@@ -231,9 +232,12 @@ const MatchScreen = props => {
 
   useEffect(() => {
     const matchSelected = props.navigation.getParam('match')
-    setPlayersContainer(matchSelected.players.filter(p => !p.dragged))
     setMatch(matchSelected)
   }, [])
+
+  useEffect(() => {
+    setPlayersContainer(selectedPlayers.filter(p => !p.dragged))
+  }, [selectedPlayers])
 
   useEffect(() => {
     if (user && match) {
@@ -272,6 +276,7 @@ const MatchScreen = props => {
       >
         <FriendListScreen
           listSelectedPlayers={container}
+          playersList={match && mode === 'admin' ? match.players : []}
           removableSelection={false}
           handlePlayerSelection={players => {
             selector(players)
@@ -287,6 +292,7 @@ const MatchScreen = props => {
         iconType="font-awesome"
         handleClick={() => {
           setActiveModal(true)
+          setMode('players')
           setSelector(() => setSelectedPlayers)
           setContainer(selectedPlayers)
         }}
@@ -473,6 +479,7 @@ const MatchScreen = props => {
                       <TouchableOpacity
                         onPress={() => {
                           setActiveModal(true)
+                          setMode('admin')
                           setSelector(() => setAdmins)
                           setContainer(admins)
                         }}
@@ -481,10 +488,13 @@ const MatchScreen = props => {
                       </TouchableOpacity>
                     }
                   />
-                  <View style={{ paddingHorizontal: 10, paddingVertical: 10 }}>
-                    {match.admins.map(ad => (
+                  <View
+                    style={{ paddingHorizontal: 10, paddingVertical: 10, flexDirection: 'row' }}
+                  >
+                    {admins.map(ad => (
                       <AvatarWithPicker
                         key={`${ad.uid}-admin`}
+                        containerStyle={{ marginRight: 10 }}
                         rounded
                         setImage={props.setImage}
                         size="small"

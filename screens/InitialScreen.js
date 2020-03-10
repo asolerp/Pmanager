@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { Notifications } from 'expo'
 import * as Permissions from 'expo-permissions'
-import { useStateValue } from '../config/User/UserContextManagement'
+
 import { withFirebaseHOC } from '../config/Firebase'
 
+// Global Store
+import { store } from '../store/store'
+
 function Initial(props) {
-  const [{ user }, dispatch] = useStateValue()
+  const globalState = useContext(store)
+  const { dispatch } = globalState
 
   const registerForPushNotificationsAsync = async userUID => {
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)
@@ -31,10 +35,8 @@ function Initial(props) {
           if (user) {
             const userProfile = await props.firebase.getUserProfile(user.uid)
             dispatch({
-              type: 'updateProfile',
-              userProfile: {
-                uid: userProfile.data().uid,
-              },
+              type: 'set_user',
+              value: userProfile.data(),
             })
             registerForPushNotificationsAsync(user.uid)
             if (userProfile.data().profileFilled === false) {

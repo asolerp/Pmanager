@@ -13,6 +13,7 @@ import * as Permissions from 'expo-permissions'
 import AppNavigator from './navigation/AppNavigator'
 import { UserProvider } from './config/User/UserContextManagement'
 import Firebase, { FirebaseProvider, withFirebaseHOC } from './config/Firebase'
+import { StateProvider } from './store/store';
 
 import Reactotron from "reactotron-react-native"
 
@@ -95,14 +96,16 @@ function App(props) {
   }
 
   return (
-    <View style={styles.container}>
-      {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-      <UserProvider initialState={initialUserState} reducer={userReducer}>
-        <FirebaseProvider value={Firebase}>
-          <AppNavigator />
-        </FirebaseProvider>
-      </UserProvider>
-    </View>
+    <StateProvider>
+      <View style={styles.container}>
+        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        <UserProvider initialState={initialUserState} reducer={userReducer}>
+          <FirebaseProvider value={Firebase}>
+            <AppNavigator />
+          </FirebaseProvider>
+        </UserProvider>
+      </View>
+    </StateProvider>
   )
 }
 
