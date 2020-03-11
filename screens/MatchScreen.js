@@ -10,7 +10,6 @@ import {
 } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { createDndContext } from 'react-native-easy-dnd'
-import _ from 'lodash'
 import Images from '../constants/Images'
 import useStateWrapper from '../ReactotronConfig'
 
@@ -131,7 +130,7 @@ const MatchScreen = props => {
       <>
         {Object.keys(team).map(line => (
           <View
-            key={line}
+            key={`${line}_123`}
             style={{
               flex: 1,
               justifyContent: 'space-around',
@@ -139,7 +138,7 @@ const MatchScreen = props => {
             }}
           >
             {Object.keys(team[line]).map(position => (
-              <>
+              <React.Fragment key={`${position}_123`}>
                 {team[line][position].filled ? (
                   <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <TouchableOpacity
@@ -162,7 +161,7 @@ const MatchScreen = props => {
                       }}
                     >
                       <AvatarWithPicker
-                        key={`${position}-droppable`}
+                        key={`${position}_droppable_123`}
                         rounded
                         containerStyle={[
                           styles.avatar,
@@ -185,7 +184,7 @@ const MatchScreen = props => {
                   </View>
                 ) : (
                   <Droppable
-                    key={`${position}-droppable`}
+                    key={`${position}_droppable`}
                     onDrop={({ payload }) => {
                       const updatedFormation = { ...match }
                       const players = [...playersContainer]
@@ -205,7 +204,7 @@ const MatchScreen = props => {
                   >
                     {({ viewProps }) => {
                       return (
-                        <Animated.View {...viewProps}>
+                        <Animated.View key={`${position.substring(2)}_654`} {...viewProps}>
                           <View style={{ alignItems: 'center' }}>
                             <View style={styles.emptyPlayer} />
                             <TextC>{position.substring(2)}</TextC>
@@ -215,7 +214,7 @@ const MatchScreen = props => {
                     }}
                   </Droppable>
                 )}
-              </>
+              </React.Fragment>
             ))}
           </View>
         ))}
@@ -337,8 +336,8 @@ const MatchScreen = props => {
                           <TextC>0</TextC>
                         </View>
                       </View> */}
-                          <Formacion team={match.teamA} teamName="teamA" />
-                          <Formacion team={match.teamB} teamName="teamB" reverse />
+                          <Formacion key="teamA_123" team={match.teamA} teamName="teamA" />
+                          <Formacion key="teamB_321" team={match.teamB} teamName="teamB" reverse />
                           <Image
                             style={{
                               position: 'absolute',
@@ -373,12 +372,9 @@ const MatchScreen = props => {
                                   playersContainer
                                     .filter(p => match.participation[p.uid])
                                     .map(player => (
-                                      <>
+                                      <React.Fragment key={`${player.uid}_draggable`}>
                                         {admin ? (
-                                          <Draggable
-                                            key={`${player.uid}-draggable`}
-                                            payload={player}
-                                          >
+                                          <Draggable payload={player}>
                                             {({ viewProps }) => {
                                               return (
                                                 <Animated.View
@@ -391,9 +387,12 @@ const MatchScreen = props => {
                                             }}
                                           </Draggable>
                                         ) : (
-                                          <PlayerDrag player={player} />
+                                          <PlayerDrag
+                                            key={`${player.uid}_no_draggable`}
+                                            player={player}
+                                          />
                                         )}
-                                      </>
+                                      </React.Fragment>
                                     ))}
                               </View>
                             </View>
@@ -418,7 +417,12 @@ const MatchScreen = props => {
                                 {playersContainer &&
                                   playersContainer
                                     .filter(p => !match.participation[p.uid])
-                                    .map(player => <PlayerDrag player={player} />)}
+                                    .map(player => (
+                                      <PlayerDrag
+                                        key={`${player.uid}_no_participate`}
+                                        player={player}
+                                      />
+                                    ))}
                               </View>
                             </View>
                           )}
@@ -494,7 +498,7 @@ const MatchScreen = props => {
                   >
                     {admins.map(ad => (
                       <AvatarWithPicker
-                        key={`${ad.uid}-admin`}
+                        key={`${ad.uid}_admin`}
                         containerStyle={{ marginRight: 10 }}
                         rounded
                         setImage={props.setImage}
