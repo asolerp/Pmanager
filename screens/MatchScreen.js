@@ -115,12 +115,7 @@ const MatchScreen = props => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     try {
-      Reactotron.display({
-        name: 'LOG',
-        preview: 'Who?',
-        value: admins.map(a => ({ uid: a.uid, imgProfile: a.imgProfile })),
-        important: true,
-      })
+      console.log(admins.map(a => ({ uid: a.uid, imgProfile: a.imgProfile })))
       // await props.firebase.updateDB({ ...match, admins }, 'matches', match.uid)
       // props.navigation.pop()
     } catch (err) {

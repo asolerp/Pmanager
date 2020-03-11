@@ -1,7 +1,3 @@
-if(__DEV__) {
-  import('./ReactotronConfig').then(() => console.log('Reactotron Configured'))
-}
-
 import React, { useState, useEffect } from 'react'
 import { YellowBox, Platform, StatusBar, StyleSheet, View } from 'react-native'
 import { AppLoading } from 'expo'
@@ -10,14 +6,14 @@ import Constants from 'expo-constants'
 import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons'
 import * as Permissions from 'expo-permissions'
+import LogConfig from './ReactotronConfig'
+// import Reactotron from 'reactotron-react-native'
+
 import AppNavigator from './navigation/AppNavigator'
 import { UserProvider } from './config/User/UserContextManagement'
 import Firebase, { FirebaseProvider, withFirebaseHOC } from './config/Firebase'
-import { StateProvider } from './store/store';
+import { StateProvider } from './store/store'
 import './utils/fixSetTimer'
-
-import Reactotron from "reactotron-react-native"
-
 
 const initialUserState = {
   session: {
@@ -25,6 +21,15 @@ const initialUserState = {
   },
 }
 
+const ReactotronConfig = new LogConfig()
+
+ReactotronConfig.configure({ enableLog: true })
+
+// Reactotron.configure({
+//   name: 'App',
+//   host: '192.168.1.75',
+// }).connect()
+// LogConfig.configure({ enableLog: true })
 const userReducer = (state, action) => {
   switch (action.type) {
     case 'updateProfile':
@@ -38,9 +43,7 @@ const userReducer = (state, action) => {
 }
 
 function App(props) {
-  
   const [isAssetsLoadingComplete, setLoadingComplete] = useState(false)
-
 
   const loadResourcesAsync = async () => {
     await Promise.all([
