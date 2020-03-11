@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native'
 Reactotron.setAsyncStorageHandler(AsyncStorage)
   .configure({
     name: 'Reactotron In Expo demo',
-    host: '192.168.1.24',
+    host: '192.168.1.33',
   })
   .useReactNative({
     asyncStorage: false,

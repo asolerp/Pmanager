@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   StyleSheet,
   SafeAreaView,
@@ -15,10 +15,14 @@ import AvatarWithPicker from '../components/Avatar'
 import PageBlank from '../components/PageBlank'
 import PositionLabel from '../components/PositionLabel'
 import StatsDetail from '../components/StatsDetail'
+
 // Utils
 import 'firebase/auth'
 import 'firebase/firestore'
 import { getLabelPostionByValue } from '../constants/Player'
+
+// Global Store
+import { store } from '../store/store'
 
 const screenWidth = Math.round(Dimensions.get('window').width)
 
@@ -67,6 +71,8 @@ const styles = StyleSheet.create({
 })
 
 const FriendListScreen = props => {
+  const globalState = useContext(store)
+  const { state } = globalState
   // const [friends, setFriends] = useState()
   const [sFriends, setSfriends] = useState()
   const [searchText, setSearchText] = useState('')
@@ -78,6 +84,14 @@ const FriendListScreen = props => {
   const handlePress = item => {
     setSelectedFrind(item)
   }
+
+  useEffect(() => {
+    if (props.playersList) {
+      const index = props.playersList.findIndex(a => a.uid === state.user.uid)
+      props.playersList[index].active = true
+      setSfriends(props.playersList)
+    }
+  }, [])
 
   useEffect(() => {
     if (selectedFriend) {
@@ -124,6 +138,33 @@ const FriendListScreen = props => {
       }
     } else {
       setSfriends(undefined)
+    }
+    setLoading(false)
+  }
+
+  const findeOnList = s => {
+    setLoading(true)
+    setSearchText(s)
+    let searchedUsers = []
+    if (s.length > 0) {
+      searchedUsers = props.playersList.filter(p => {
+        const lc = p.name.toLowerCase()
+        const filter = s.toLowerCase()
+        return lc.includes(filter)
+      })
+
+      const merged = searchedUsers.map(deflt => ({
+        ...deflt,
+        ...list.find(l => l.uid === deflt.uid),
+      }))
+      setSfriends(merged)
+    } else {
+      setSfriends(
+        props.playersList.map(deflt => ({
+          ...deflt,
+          ...list.find(l => l.uid === deflt.uid),
+        }))
+      )
     }
     setLoading(false)
   }
@@ -210,7 +251,9 @@ const FriendListScreen = props => {
           placeholder="Escribe el nombre del jugador..."
           containerStyle={{ backgroundColor: 'white', borderWidth: 0 }}
           inputContainerStyle={{ backgroundColor: 'white' }}
-          onChangeText={updateSearch}
+          onChangeText={
+            props.mode === 'admin' || props.mode === 'players' ? findeOnList : updateSearch
+          }
           value={searchText}
           lightTheme
           round
@@ -233,8 +276,8 @@ const FriendListScreen = props => {
                 <AvatarWithPicker
                   key={friend.uid}
                   rounded
-                  showEditButton={props.removableSelection}
-                  onEditPress={() => props.removableSelection && removePlayerFromSelection(friend)}
+                  showEditButton={state.user.uid !== friend.uid}
+                  onEditPress={() => removePlayerFromSelection(friend)}
                   editButton={{
                     name: 'cancel',
                     type: 'material',

@@ -1,4 +1,4 @@
-import React, { useState as useStateOverride, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Animated,
   ScrollView,
@@ -10,9 +10,8 @@ import {
 } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { createDndContext } from 'react-native-easy-dnd'
-import _ from 'lodash'
+import Reactotron from 'reactotron-react-native'
 import Images from '../constants/Images'
-import useStateWrapper from '../ReactotronConfig'
 
 // UI
 import PageBlank from '../components/PageBlank'
@@ -32,8 +31,6 @@ import subscribeUserData from '../hooks/subscribeUserData'
 // PAGES
 import FriendListScreen from './FriendListScreen'
 import FloatingButton from '../components/FloatingButton'
-
-const useState = useStateWrapper(useStateOverride)
 
 const styles = StyleSheet.create({
   scoreContainer: {
@@ -111,16 +108,23 @@ const MatchScreen = props => {
   const [selectedPlayers, setSelectedPlayers] = useState([])
   const [admins, setAdmins] = useState([])
   const [selector, setSelector] = useState()
+  const [mode, setMode] = useState('')
 
   const { Provider, Droppable, Draggable } = createDndContext()
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
     try {
-      await props.firebase.updateDB(match, 'matches', match.uid)
+      Reactotron.display({
+        name: 'LOG',
+        preview: 'Who?',
+        value: admins.map(a => ({ uid: a.uid, imgProfile: a.imgProfile })),
+        important: true,
+      })
+      // await props.firebase.updateDB({ ...match, admins }, 'matches', match.uid)
       // props.navigation.pop()
     } catch (err) {
-      console.log(err)
+      Reactotron.log(err)
     }
     setIsSubmitting(false)
   }
@@ -130,7 +134,7 @@ const MatchScreen = props => {
       <>
         {Object.keys(team).map(line => (
           <View
-            key={line}
+            key={`${line}_123`}
             style={{
               flex: 1,
               justifyContent: 'space-around',
@@ -138,7 +142,7 @@ const MatchScreen = props => {
             }}
           >
             {Object.keys(team[line]).map(position => (
-              <>
+              <React.Fragment key={`${position}_123`}>
                 {team[line][position].filled ? (
                   <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <TouchableOpacity
@@ -161,7 +165,7 @@ const MatchScreen = props => {
                       }}
                     >
                       <AvatarWithPicker
-                        key={`${position}-droppable`}
+                        key={`${position}_droppable_123`}
                         rounded
                         containerStyle={[
                           styles.avatar,
@@ -184,7 +188,7 @@ const MatchScreen = props => {
                   </View>
                 ) : (
                   <Droppable
-                    key={`${position}-droppable`}
+                    key={`${position}_droppable`}
                     onDrop={({ payload }) => {
                       const updatedFormation = { ...match }
                       const players = [...playersContainer]
@@ -204,7 +208,7 @@ const MatchScreen = props => {
                   >
                     {({ viewProps }) => {
                       return (
-                        <Animated.View {...viewProps}>
+                        <Animated.View key={`${position.substring(2)}_654`} {...viewProps}>
                           <View style={{ alignItems: 'center' }}>
                             <View style={styles.emptyPlayer} />
                             <TextC>{position.substring(2)}</TextC>
@@ -214,7 +218,7 @@ const MatchScreen = props => {
                     }}
                   </Droppable>
                 )}
-              </>
+              </React.Fragment>
             ))}
           </View>
         ))}
@@ -231,9 +235,12 @@ const MatchScreen = props => {
 
   useEffect(() => {
     const matchSelected = props.navigation.getParam('match')
-    setPlayersContainer(matchSelected.players.filter(p => !p.dragged))
     setMatch(matchSelected)
   }, [])
+
+  useEffect(() => {
+    setPlayersContainer(selectedPlayers.filter(p => !p.dragged))
+  }, [selectedPlayers])
 
   useEffect(() => {
     if (user && match) {
@@ -272,6 +279,8 @@ const MatchScreen = props => {
       >
         <FriendListScreen
           listSelectedPlayers={container}
+          mode={mode}
+          playersList={match && mode === 'admin' ? match.players : []}
           removableSelection={false}
           handlePlayerSelection={players => {
             selector(players)
@@ -287,6 +296,7 @@ const MatchScreen = props => {
         iconType="font-awesome"
         handleClick={() => {
           setActiveModal(true)
+          setMode('players')
           setSelector(() => setSelectedPlayers)
           setContainer(selectedPlayers)
         }}
@@ -323,15 +333,15 @@ const MatchScreen = props => {
                       <>
                         <View style={{ flexDirection: 'row', height: 300 }}>
                           {/* <View style={styles.scoreContainer}>
-                        <View style={styles.score}>
-                          <TextC>0</TextC>
-                        </View>
-                        <View style={styles.score}>
-                          <TextC>0</TextC>
-                        </View>
-                      </View> */}
-                          <Formacion team={match.teamA} teamName="teamA" />
-                          <Formacion team={match.teamB} teamName="teamB" reverse />
+                                <View style={styles.score}>
+                                  <TextC>0</TextC>
+                                </View>
+                                <View style={styles.score}>
+                                  <TextC>0</TextC>
+                                </View>
+                              </View> */}
+                          <Formacion key="teamA_123" team={match.teamA} teamName="teamA" />
+                          <Formacion key="teamB_321" team={match.teamB} teamName="teamB" reverse />
                           <Image
                             style={{
                               position: 'absolute',
@@ -366,12 +376,9 @@ const MatchScreen = props => {
                                   playersContainer
                                     .filter(p => match.participation[p.uid])
                                     .map(player => (
-                                      <>
+                                      <React.Fragment key={`${player.uid}_draggable`}>
                                         {admin ? (
-                                          <Draggable
-                                            key={`${player.uid}-draggable`}
-                                            payload={player}
-                                          >
+                                          <Draggable payload={player}>
                                             {({ viewProps }) => {
                                               return (
                                                 <Animated.View
@@ -384,9 +391,12 @@ const MatchScreen = props => {
                                             }}
                                           </Draggable>
                                         ) : (
-                                          <PlayerDrag player={player} />
+                                          <PlayerDrag
+                                            key={`${player.uid}_no_draggable`}
+                                            player={player}
+                                          />
                                         )}
-                                      </>
+                                      </React.Fragment>
                                     ))}
                               </View>
                             </View>
@@ -411,7 +421,12 @@ const MatchScreen = props => {
                                 {playersContainer &&
                                   playersContainer
                                     .filter(p => !match.participation[p.uid])
-                                    .map(player => <PlayerDrag player={player} />)}
+                                    .map(player => (
+                                      <PlayerDrag
+                                        key={`${player.uid}_no_participate`}
+                                        player={player}
+                                      />
+                                    ))}
                               </View>
                             </View>
                           )}
@@ -473,6 +488,7 @@ const MatchScreen = props => {
                       <TouchableOpacity
                         onPress={() => {
                           setActiveModal(true)
+                          setMode('admin')
                           setSelector(() => setAdmins)
                           setContainer(admins)
                         }}
@@ -481,10 +497,13 @@ const MatchScreen = props => {
                       </TouchableOpacity>
                     }
                   />
-                  <View style={{ paddingHorizontal: 10, paddingVertical: 10 }}>
-                    {match.admins.map(ad => (
+                  <View
+                    style={{ paddingHorizontal: 10, paddingVertical: 10, flexDirection: 'row' }}
+                  >
+                    {admins.map(ad => (
                       <AvatarWithPicker
-                        key={`${ad.uid}-admin`}
+                        key={`${ad.uid}_admin`}
+                        containerStyle={{ marginRight: 10 }}
                         rounded
                         setImage={props.setImage}
                         size="small"

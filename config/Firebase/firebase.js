@@ -120,7 +120,6 @@ const Firebase = {
   },
 
   getPlayerMatches: userUID => {
-    console.log(userUID, 'UserUID')
     return firebase
       .firestore()
       .collection('users')

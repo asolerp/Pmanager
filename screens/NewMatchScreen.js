@@ -167,7 +167,6 @@ function NewMatchScreen(props) {
               participation,
             }
             props.firebase.insertDB(newMatch, 'matches').then(docRef => {
-              console.log(docRef)
               return props.firebase
                 .uriToBlob(imageMatch)
                 .then(blob => props.firebase.uploadToFirebase(blob, `match/${docRef.id}`, 'match'))
