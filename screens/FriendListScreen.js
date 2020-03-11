@@ -86,7 +86,6 @@ const FriendListScreen = props => {
   }
 
   useEffect(() => {
-    console.log(props.playersList)
     if (props.playersList) {
       const index = props.playersList.findIndex(a => a.uid === state.user.uid)
       props.playersList[index].active = true
@@ -116,7 +115,6 @@ const FriendListScreen = props => {
   }, [selectedFriend])
 
   const updateSearch = async s => {
-    console.log('hola')
     setLoading(true)
     setSearchText(s)
     const searchedUsers = []
@@ -145,7 +143,6 @@ const FriendListScreen = props => {
   }
 
   const findeOnList = s => {
-    console.log('Players', props.playersList)
     setLoading(true)
     setSearchText(s)
     let searchedUsers = []

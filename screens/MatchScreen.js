@@ -1,4 +1,4 @@
-import React, { useState as useStateOverride, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Animated,
   ScrollView,
@@ -10,8 +10,8 @@ import {
 } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { createDndContext } from 'react-native-easy-dnd'
+import Reactotron from 'reactotron-react-native'
 import Images from '../constants/Images'
-import useStateWrapper from '../ReactotronConfig'
 
 // UI
 import PageBlank from '../components/PageBlank'
@@ -31,8 +31,6 @@ import subscribeUserData from '../hooks/subscribeUserData'
 // PAGES
 import FriendListScreen from './FriendListScreen'
 import FloatingButton from '../components/FloatingButton'
-
-const useState = useStateWrapper(useStateOverride)
 
 const styles = StyleSheet.create({
   scoreContainer: {
@@ -117,10 +115,16 @@ const MatchScreen = props => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     try {
-      await props.firebase.updateDB({ ...match, admins }, 'matches', match.uid)
+      Reactotron.display({
+        name: 'LOG',
+        preview: 'Who?',
+        value: admins.map(a => ({ uid: a.uid, imgProfile: a.imgProfile })),
+        important: true,
+      })
+      // await props.firebase.updateDB({ ...match, admins }, 'matches', match.uid)
       // props.navigation.pop()
     } catch (err) {
-      console.log(err)
+      Reactotron.log(err)
     }
     setIsSubmitting(false)
   }
@@ -329,13 +333,13 @@ const MatchScreen = props => {
                       <>
                         <View style={{ flexDirection: 'row', height: 300 }}>
                           {/* <View style={styles.scoreContainer}>
-                        <View style={styles.score}>
-                          <TextC>0</TextC>
-                        </View>
-                        <View style={styles.score}>
-                          <TextC>0</TextC>
-                        </View>
-                      </View> */}
+                                <View style={styles.score}>
+                                  <TextC>0</TextC>
+                                </View>
+                                <View style={styles.score}>
+                                  <TextC>0</TextC>
+                                </View>
+                              </View> */}
                           <Formacion key="teamA_123" team={match.teamA} teamName="teamA" />
                           <Formacion key="teamB_321" team={match.teamB} teamName="teamB" reverse />
                           <Image

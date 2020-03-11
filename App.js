@@ -14,6 +14,7 @@ import AppNavigator from './navigation/AppNavigator'
 import { UserProvider } from './config/User/UserContextManagement'
 import Firebase, { FirebaseProvider, withFirebaseHOC } from './config/Firebase'
 import { StateProvider } from './store/store';
+import './utils/fixSetTimer'
 
 import Reactotron from "reactotron-react-native"
 
@@ -40,7 +41,6 @@ function App(props) {
   
   const [isAssetsLoadingComplete, setLoadingComplete] = useState(false)
 
-  Reactotron.log("HELLO WORLD")
 
   const loadResourcesAsync = async () => {
     await Promise.all([

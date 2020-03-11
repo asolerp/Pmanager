@@ -38,15 +38,7 @@ function Home(props) {
   useEffect(() => {}, [])
 
   useEffect(() => {
-    console.log(JSON.stringify(user))
-    const getPlayerMatches = async userUID => {
-      const arrayOfMatches = await props.firebase.getPlayerMatches(userUID)
-      arrayOfMatches.forEach(match => console.log('Partido', match.data()))
-    }
     props.navigation.setParams({ titulo: 'Alberto Soler', tabBar: false })
-    // if (user) {
-    //   getPlayerMatches(user.uid)
-    // }
   }, [user])
 
   const sendNotification = async (u, matchUID) => {

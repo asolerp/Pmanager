@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
 })
 
 const FriendItem = ({ user, addFriend, active, ...rest }) => {
-  console.log('User', user)
   const { imgProfile, name, principalPosition, uid } = user
   const navigation = useContext(NavigationContext)
 
