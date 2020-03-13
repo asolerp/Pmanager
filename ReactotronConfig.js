@@ -9,6 +9,7 @@
  * - able to customize the message
  */
 import Reactotron from 'reactotron-react-native'
+import { AsyncStorage } from 'react-native'
 
 class LogConfig {
   constructor() {
@@ -18,17 +19,27 @@ class LogConfig {
   /**
    * Configure Reactotron and redirect console.log to Reactotron.log
    */
-  configure(options) {
-    this.isLogEnable = options.enableLog ? options.enableLog : false
+  configure() {
     this.configureReactotron()
     this.connectConsoleToReactotron()
   }
 
   configureReactotron() {
-    Reactotron.configure({
-      name: 'App',
-      host: '192.168.1.75',
-    }).connect()
+    Reactotron.setAsyncStorageHandler(AsyncStorage)
+      .configure({
+        name: 'Reactotron In Expo demo',
+        host: '192.168.1.24',
+      })
+      .useReactNative({
+        asyncStorage: false,
+        networking: {
+          ignoreUrls: /symbolicate|127.0.0.1/,
+        },
+        editor: false,
+        errors: { veto: stackFrame => false },
+        overlay: false,
+      })
+      .connect()
 
     // clear log on start
     Reactotron.clear()
@@ -42,8 +53,7 @@ class LogConfig {
   }
 
   log(message, ...args) {
-    if (!this.isLogEnable) return
-    Reactotron.display({
+    return Reactotron.display({
       name: 'LOG',
       preview: message,
       value: { message, args },
@@ -51,8 +61,7 @@ class LogConfig {
   }
 
   info(message, ...args) {
-    if (!this.isLogEnable) return
-    Reactotron.display({
+    return Reactotron.display({
       name: 'INFO',
       preview: message,
       value: { message, args },
@@ -60,8 +69,7 @@ class LogConfig {
   }
 
   warn(message, ...args) {
-    if (!this.isLogEnable) return
-    Reactotron.display({
+    return Reactotron.display({
       name: 'WARN',
       preview: message,
       value: { message, args },
@@ -70,8 +78,7 @@ class LogConfig {
   }
 
   error(message, ...args) {
-    if (!this.isLogEnable) return
-    Reactotron.display({
+    return Reactotron.display({
       name: 'ERROR',
       preview: message,
       value: { message, args },

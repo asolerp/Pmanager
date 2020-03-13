@@ -101,7 +101,7 @@ const MatchScreen = props => {
 
   const [activeModal, setActiveModal] = useState(false)
   const [match, setMatch] = useState()
-  const [admin, setAdmin] = useState()
+  const [admin, setAdmin] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [playersContainer, setPlayersContainer] = useState()
   const [container, setContainer] = useState([])
@@ -115,8 +115,11 @@ const MatchScreen = props => {
   const handleSubmit = async () => {
     setIsSubmitting(true)
     try {
-      console.log(admins.map(a => ({ uid: a.uid, imgProfile: a.imgProfile })))
-      // await props.firebase.updateDB({ ...match, admins }, 'matches', match.uid)
+      await props.firebase.updateDB(
+        { ...match, admins: admins.map(a => ({ uid: a.uid, imgProfile: a.imgProfile })) },
+        'matches',
+        match.uid
+      )
       // props.navigation.pop()
     } catch (err) {
       Reactotron.log(err)
@@ -124,101 +127,202 @@ const MatchScreen = props => {
     setIsSubmitting(false)
   }
 
-  const generateRows = (team, teamName) => {
+  const generateBanquillo = (team, teamName) => {
     return (
       <>
-        {Object.keys(team).map(line => (
-          <View
-            key={`${line}_123`}
-            style={{
-              flex: 1,
-              justifyContent: 'space-around',
-              alignItems: 'center',
-            }}
-          >
-            {Object.keys(team[line]).map(position => (
-              <React.Fragment key={`${position}_123`}>
-                {team[line][position].filled ? (
-                  <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        const updatedFormation = { ...match }
-                        const players = [...playersContainer]
-                        players.push(updatedFormation[teamName][line][position])
-                        updatedFormation.players.forEach(p => {
-                          if (p.uid === team[line][position].uid) {
-                            p.dragged = false
-                            delete p.line
-                            delete p.position
-                            delete p.team
-                          }
-                        })
-                        updatedFormation[teamName][line][position] = cleanPosition
-                        setPlayersContainer(players)
-                        setMatch(updatedFormation)
-                        handleSubmit()
-                      }}
-                    >
-                      <AvatarWithPicker
-                        key={`${position}_droppable_123`}
-                        rounded
-                        containerStyle={[
-                          styles.avatar,
-                          {
-                            borderColor: getLabelPostionByValue(
-                              team[line][position].principalPosition
-                            ).color,
-                          },
-                        ]}
-                        setImage={props.setImage}
-                        size="small"
-                        source={{
-                          uri: team[line][position].imgProfile,
-                        }}
-                      />
-                    </TouchableOpacity>
-                    <TextC textAlignVertical="center" style={styles.avatarText}>
-                      {team[line][position].name}
-                    </TextC>
-                  </View>
-                ) : (
-                  <Droppable
-                    key={`${position}_droppable`}
-                    onDrop={({ payload }) => {
+        {Object.keys(team[4]).map(position => (
+          <React.Fragment key={`${position}_banquillo_${team}`}>
+            {team['4'][position].filled ? (
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (admin) {
                       const updatedFormation = { ...match }
                       const players = [...playersContainer]
-                      updatedFormation[teamName][line][position] = { ...payload, filled: true }
+                      players.push(updatedFormation[teamName]['4'][position])
                       updatedFormation.players.forEach(p => {
-                        if (p.uid === payload.uid) {
-                          p.dragged = true
-                          p.line = line
-                          p.position = position
-                          p.team = teamName
+                        if (p.uid === team['4'][position].uid) {
+                          p.dragged = false
+                          delete p.line
+                          delete p.position
+                          delete p.team
                         }
                       })
-                      setPlayersContainer(players.filter(p => p.uid !== payload.uid))
+                      updatedFormation[teamName]['4'][position] = cleanPosition
+                      setPlayersContainer(players)
                       setMatch(updatedFormation)
                       handleSubmit()
+                    }
+                  }}
+                >
+                  <AvatarWithPicker
+                    key={`${position}_remove_banquillo_${team}`}
+                    rounded
+                    containerStyle={[
+                      styles.avatar,
+                      {
+                        borderColor: getLabelPostionByValue(team['4'][position].principalPosition)
+                          .color,
+                      },
+                    ]}
+                    setImage={props.setImage}
+                    size="small"
+                    source={{
+                      uri: team['4'][position].imgProfile,
                     }}
-                  >
-                    {({ viewProps }) => {
-                      return (
-                        <Animated.View key={`${position.substring(2)}_654`} {...viewProps}>
-                          <View style={{ alignItems: 'center' }}>
-                            <View style={styles.emptyPlayer} />
-                            <TextC>{position.substring(2)}</TextC>
-                          </View>
-                        </Animated.View>
-                      )
-                    }}
-                  </Droppable>
-                )}
-              </React.Fragment>
-            ))}
-          </View>
+                  />
+                </TouchableOpacity>
+                <TextC textAlignVertical="center" style={styles.avatarText}>
+                  {team['4'][position].name}
+                </TextC>
+              </View>
+            ) : (
+              <Droppable
+                key={`${position}_droppable_banquillo_${team}`}
+                onDrop={({ payload }) => {
+                  const updatedFormation = { ...match }
+                  const players = [...playersContainer]
+                  updatedFormation[teamName]['4'][position] = { ...payload, filled: true }
+                  updatedFormation.players.forEach(p => {
+                    if (p.uid === payload.uid) {
+                      p.dragged = true
+                      p.line = '4'
+                      p.position = position
+                      p.team = teamName
+                    }
+                  })
+                  setPlayersContainer(players.filter(p => p.uid !== payload.uid))
+                  setMatch(updatedFormation)
+                  handleSubmit()
+                }}
+              >
+                {({ viewProps }) => {
+                  return (
+                    <Animated.View key={`${position.substring(2)}_456`} {...viewProps}>
+                      <View style={{ alignItems: 'center' }}>
+                        <View style={styles.emptyPlayer} />
+                        <TextC>{position.substring(2)}</TextC>
+                      </View>
+                    </Animated.View>
+                  )
+                }}
+              </Droppable>
+            )}
+          </React.Fragment>
         ))}
       </>
     )
+  }
+
+  const generateRows = (team, teamName) => {
+    return (
+      <>
+        {Object.keys(team).map(line => {
+          if (line < 4) {
+            return (
+              <View
+                key={`${line}_123`}
+                style={{
+                  flex: 1,
+                  justifyContent: 'space-around',
+                  alignItems: 'center',
+                }}
+              >
+                {Object.keys(team[line]).map(position => (
+                  <React.Fragment key={`${position}_123`}>
+                    {team[line][position].filled ? (
+                      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            if (admin) {
+                              const updatedFormation = { ...match }
+                              const players = [...playersContainer]
+                              players.push(updatedFormation[teamName][line][position])
+                              updatedFormation.players.forEach(p => {
+                                if (p.uid === team[line][position].uid) {
+                                  p.dragged = false
+                                  delete p.line
+                                  delete p.position
+                                  delete p.team
+                                }
+                              })
+                              updatedFormation[teamName][line][position] = cleanPosition
+                              setPlayersContainer(players)
+                              setMatch(updatedFormation)
+                              handleSubmit()
+                            }
+                          }}
+                        >
+                          <AvatarWithPicker
+                            key={`${position}_droppable_123`}
+                            rounded
+                            containerStyle={[
+                              styles.avatar,
+                              {
+                                borderColor: getLabelPostionByValue(
+                                  team[line][position].principalPosition
+                                ).color,
+                              },
+                            ]}
+                            setImage={props.setImage}
+                            size="small"
+                            source={{
+                              uri: team[line][position].imgProfile,
+                            }}
+                          />
+                        </TouchableOpacity>
+                        <TextC textAlignVertical="center" style={styles.avatarText}>
+                          {team[line][position].name}
+                        </TextC>
+                      </View>
+                    ) : (
+                      <Droppable
+                        key={`${position}_droppable`}
+                        onDrop={({ payload }) => {
+                          const updatedFormation = { ...match }
+                          const players = [...playersContainer]
+                          updatedFormation[teamName][line][position] = { ...payload, filled: true }
+                          updatedFormation.players.forEach(p => {
+                            if (p.uid === payload.uid) {
+                              p.dragged = true
+                              p.line = line
+                              p.position = position
+                              p.team = teamName
+                            }
+                          })
+                          setPlayersContainer(players.filter(p => p.uid !== payload.uid))
+                          setMatch(updatedFormation)
+                          handleSubmit()
+                        }}
+                      >
+                        {({ viewProps }) => {
+                          return (
+                            <Animated.View key={`${position.substring(2)}_654`} {...viewProps}>
+                              <View style={{ alignItems: 'center' }}>
+                                <View style={styles.emptyPlayer} />
+                                <TextC>{position.substring(2)}</TextC>
+                              </View>
+                            </Animated.View>
+                          )
+                        }}
+                      </Droppable>
+                    )}
+                  </React.Fragment>
+                ))}
+              </View>
+            )
+          }
+        })}
+      </>
+    )
+  }
+
+  const resetActive = () => {
+    const playersCopy = [...match.players]
+    playersCopy.forEach(p => {
+      p.active = false
+    })
+    setMatch({ ...match, players: playersCopy })
   }
 
   useEffect(() => {
@@ -275,7 +379,7 @@ const MatchScreen = props => {
         <FriendListScreen
           listSelectedPlayers={container}
           mode={mode}
-          playersList={match && mode === 'admin' ? match.players : []}
+          playersList={match && (mode === 'admin' || mode === 'players') ? match.players : []}
           removableSelection={false}
           handlePlayerSelection={players => {
             selector(players)
@@ -348,6 +452,40 @@ const MatchScreen = props => {
                             }}
                             source={Images.matchField.file}
                           />
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                          <View style={{ flex: 1 }}>
+                            <View>
+                              <Section textStyle={{ fontSize: 12 }} title="Banquillo Equipo 1" />
+                              <View>
+                                <View
+                                  style={{
+                                    paddingHorizontal: 10,
+                                    paddingVertical: 10,
+                                    flexDirection: 'row',
+                                  }}
+                                >
+                                  {generateBanquillo(match.teamA, 'teamA')}
+                                </View>
+                              </View>
+                            </View>
+                          </View>
+                          <View style={{ flex: 1 }}>
+                            <View>
+                              <Section textStyle={{ fontSize: 12 }} title="Banquillo Equipo 2" />
+                              <View>
+                                <View
+                                  style={{
+                                    paddingHorizontal: 10,
+                                    paddingVertical: 10,
+                                    flexDirection: 'row',
+                                  }}
+                                >
+                                  {generateBanquillo(match.teamB, 'teamB')}
+                                </View>
+                              </View>
+                            </View>
+                          </View>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                           {playersContainer.filter(p => match.participation[p.uid]).length > 0 && (
@@ -480,16 +618,19 @@ const MatchScreen = props => {
                     textStyle={{ fontSize: 12 }}
                     title="Administradores"
                     rightElement={
-                      <TouchableOpacity
-                        onPress={() => {
-                          setActiveModal(true)
-                          setMode('admin')
-                          setSelector(() => setAdmins)
-                          setContainer(admins)
-                        }}
-                      >
-                        <TextC>Añadir</TextC>
-                      </TouchableOpacity>
+                      admin && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            resetActive()
+                            setSelector(() => setAdmins)
+                            setContainer(admins)
+                            setMode('admin')
+                            setActiveModal(true)
+                          }}
+                        >
+                          <TextC>Añadir</TextC>
+                        </TouchableOpacity>
+                      )
                     }
                   />
                   <View

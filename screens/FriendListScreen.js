@@ -86,9 +86,14 @@ const FriendListScreen = props => {
   }
 
   useEffect(() => {
-    if (props.playersList) {
-      const index = props.playersList.findIndex(a => a.uid === state.user.uid)
-      props.playersList[index].active = true
+    props.listSelectedPlayers.forEach(p => {
+      p.active = true
+    })
+    if (props.mode === 'admin') {
+      props.listSelectedPlayers.forEach(ls => {
+        const index = props.playersList.findIndex(a => a.uid === ls.uid)
+        props.playersList[index].active = true
+      })
       setSfriends(props.playersList)
     }
   }, [])
@@ -251,9 +256,7 @@ const FriendListScreen = props => {
           placeholder="Escribe el nombre del jugador..."
           containerStyle={{ backgroundColor: 'white', borderWidth: 0 }}
           inputContainerStyle={{ backgroundColor: 'white' }}
-          onChangeText={
-            props.mode === 'admin' || props.mode === 'players' ? findeOnList : updateSearch
-          }
+          onChangeText={props.mode === 'admin' ? findeOnList : updateSearch}
           value={searchText}
           lightTheme
           round
