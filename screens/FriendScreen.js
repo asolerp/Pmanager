@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { withFirebaseHOC } from '../config/Firebase'
-import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
+import BlurBackgroundWithAvatar from '../components/BlurBackground/BlurBackgroundWithAvatar'
 import { POSITIONS, MAIN_FOOT } from '../constants/Player'
 import COUNTRIES from '../constants/Countries'
 import Stat from '../components/Stat'
 import PlayerDetail from '../components/PlayerDetail'
 import PageBlank from '../components/PageBlank'
-import TShirt from '../components/form/TShirt'
-import ChipSelector from '../components/form/ChipSelector'
-import Section from '../components/form/SectionTitle'
+import TShirt from '../components/Form/TShirt'
+import ChipSelector from '../components/Form/ChipSelector'
+import Section from '../components/Form/SectionTitle'
 
 const styles = StyleSheet.create({
   container: {

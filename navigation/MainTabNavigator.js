@@ -8,7 +8,7 @@ import Profile from '../screens/ProfileScreen'
 import ProfileForm from '../screens/ProfileFormScreen'
 import FriendScreen from '../screens/FriendScreen'
 import NewMatchScreen from '../screens/NewMatchScreen'
-import MatchScreen from '../screens/MatchScreen'
+import MatchScreen from '../screens/MatchScreen/MatchScreen'
 // import FriendListScreen from '../screens/FriendListScreen'
 
 const config = Platform.select({

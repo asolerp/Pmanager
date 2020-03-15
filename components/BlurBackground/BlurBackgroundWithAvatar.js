@@ -3,7 +3,7 @@ import { ImageBackground, View, Text, TouchableOpacity } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { NavigationContext } from 'react-navigation'
 import AvatarWithPicker from '../Avatar/Avatar'
-import Styles from './BlurBackground'
+import Styles from './Styles'
 
 function BlurBackgroundWithAvatar({
   showEditButton,

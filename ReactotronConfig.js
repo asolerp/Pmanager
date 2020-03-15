@@ -28,7 +28,7 @@ class LogConfig {
     Reactotron.setAsyncStorageHandler(AsyncStorage)
       .configure({
         name: 'Reactotron In Expo demo',
-        host: '192.168.1.24',
+        host: '192.168.1.63',
       })
       .useReactNative({
         asyncStorage: false,

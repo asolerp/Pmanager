@@ -7,7 +7,6 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
   View,
-  Text,
 } from 'react-native'
 // import * as ImagePicker from 'expo-image-picker'
 import * as Yup from 'yup'
@@ -16,24 +15,22 @@ import * as Yup from 'yup'
 import { Formik } from 'formik'
 // import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
 // import BlurBackgroundWithAvatar from '../components/BlurBackgroundWithAvatar'
-import { getStatusBarHeight } from 'react-native-status-bar-height'
-import FormInput from '../components/form/FormInput'
-import FormInputSimple from '../components/form/FormInputSimple'
-import FormButton from '../components/form/FormButton'
-import FormSelect from '../components/form/FormSelect'
-import ErrorMessage from '../components/form/ErrorMessage'
-import NumberSelector from '../components/form/NumberSelector'
-import Section from '../components/form/SectionTitle'
-import RadioSelector from '../components/form/RadioSelector'
-import TShirt from '../components/form/TShirt'
+import FormInputSimple from '../components/Form/FormInputSimple'
+import FormButton from '../components/Form/FormButton'
+import FormSelect from '../components/Form/FormSelect'
+import ErrorMessage from '../components/Form/ErrorMessage'
+import NumberSelector from '../components/Form/NumberSelector'
+import Section from '../components/Form/SectionTitle'
+import RadioSelector from '../components/Form/RadioSelector'
+import TShirt from '../components/Form/TShirt'
 
 // Utils
 import { withFirebaseHOC } from '../config/Firebase'
 import { POSITIONS, MAIN_FOOT, PLAYER_STATS } from '../constants/Player'
 import COUNTRIES from '../constants/Countries'
 import PageBlank from '../components/PageBlank'
-import AvatarWithPicker from '../components/Avatar'
-import ChipSelector from '../components/form/ChipSelector'
+import AvatarWithPicker from '../components/Avatar/Avatar'
+import ChipSelector from '../components/Form/ChipSelector'
 
 const styles = StyleSheet.create({
   container: {

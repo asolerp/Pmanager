@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
-import { StyleSheet, SafeAreaView, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, SafeAreaView, View } from 'react-native'
 import { Button, CheckBox } from 'react-native-elements'
-import { Ionicons } from '@expo/vector-icons'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
-import FormInput from '../components/form/FormInput'
-import FormButton from '../components/form/FormButton'
-import ErrorMessage from '../components/form/ErrorMessage'
+import FormInput from '../components/Form/FormInput/FormInput'
+import FormButton from '../components/Form/FormButton'
+import ErrorMessage from '../components/Form/ErrorMessage'
 import { withFirebaseHOC } from '../config/Firebase'
 import Images from '../constants/Images'
 
-import AppLogo from '../components/AppLogo'
-import BlurBackground from '../components/BlurBackground'
+import AppLogo from '../components/AppLogo/AppLogo'
+import BlurBackground from '../components/BlurBackground/BlurBackground'
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()

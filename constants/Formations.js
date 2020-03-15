@@ -42,37 +42,18 @@ const FORMATION_1 = {
       order: 1,
     },
   },
-}
-
-const FORMATION_2 = {
-  firstLine: {
-    LI: {
+  4: {
+    '0_BK': {
       imgProfile: 'https://cdn4.iconfinder.com/data/icons/game-10/22/player-profile-512.png',
       name: 'Pmanager',
+      order: 1,
     },
-    DF: {
+    '1_BK': {
       imgProfile: 'https://cdn4.iconfinder.com/data/icons/game-10/22/player-profile-512.png',
       name: 'Pmanager',
-    },
-    LD: {
-      imgProfile: 'https://cdn4.iconfinder.com/data/icons/game-10/22/player-profile-512.png',
-      name: 'Pmanager',
-    },
-  },
-  secondLine: {
-    MI: {
-      imgProfile: 'https://cdn4.iconfinder.com/data/icons/game-10/22/player-profile-512.png',
-      name: 'Pmanager',
-    },
-    MC: {
-      imgProfile: 'https://cdn4.iconfinder.com/data/icons/game-10/22/player-profile-512.png',
-      name: 'Pmanager',
-    },
-    MD: {
-      imgProfile: 'https://cdn4.iconfinder.com/data/icons/game-10/22/player-profile-512.png',
-      name: 'Pmanager',
+      order: 1,
     },
   },
 }
 
-export { FORMATION_1, FORMATION_2 }
+export { FORMATION_1 }

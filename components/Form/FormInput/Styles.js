@@ -1,39 +1,6 @@
-/* eslint react/prop-types: 0 */
+import { StyleSheet } from 'react-native'
 
-import React from 'react'
-import { StyleSheet, View, Text, TextInput } from 'react-native'
-
-const FormInput = ({
-  iconName,
-  iconColor,
-  color = 'white',
-  returnKeyType,
-  keyboardType,
-  name,
-  placeholder,
-  label,
-  value,
-  style,
-  ...rest
-}) => (
-  <View style={[styles.inputWrapper, style]}>
-    {label && (
-      <View style={styles.labelWrapper}>
-        <Text style={styles.label}>{label}</Text>
-      </View>
-    )}
-    <TextInput
-      style={[styles.input, { color }]}
-      placeholderTextColor={color}
-      name={name}
-      placeholder={placeholder}
-      value={value}
-      {...rest}
-    />
-  </View>
-)
-
-const styles = StyleSheet.create({
+const Styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -73,4 +40,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default FormInput
+export default Styles

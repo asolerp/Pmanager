@@ -5,10 +5,14 @@ import { withFirebaseHOC } from '../config/Firebase'
 import subscribeUserData from '../hooks/subscribeUserData'
 import subscribePlayerMatches from '../hooks/subscribePlayerMatches'
 import PageBlank from '../components/PageBlank'
-import AvatarWithPicker from '../components/Avatar'
-import MatchCard from '../components/MatchCard'
+import AvatarWithPicker from '../components/Avatar/Avatar'
+import MatchCard from '../components/MatchCard/MatchCard'
 import NOTIFICATIONS_TYPE from '../constants/Notifications'
-import FloatingButton from '../components/FloatingButton'
+import FloatingButton from '../components/FloatingButton/FloatingButton'
+import Section from '../components/Form/SectionTitle'
+import FinishedMatchCard from '../components/FinshedMatchCard/FinishedMatchCard'
+
+const moment = require('moment')
 
 const styles = StyleSheet.create({
   container: {
@@ -90,30 +94,57 @@ function Home(props) {
         {loading && <ActivityIndicator size="small" color="black" />}
       </PageBlank>
       <View style={{ position: 'absolute', top: 20, width: '100%', zIndex: 2, height: '100%' }}>
-        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ width: '100%' }}>
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ width: '100%', height: '100%' }}>
           <View style={{ paddingHorizontal: 10, height: '100%' }}>
             {matches &&
-              matches.map((match, i) => (
-                <TouchableHighlight
-                  key={match.uid}
-                  onPress={() => props.navigation.navigate('MatchPage', { match })}
-                >
-                  <MatchCard
-                    key={match.uid}
-                    element={i}
-                    match={match}
-                    userUID={user.uid}
-                    assist={() => {
-                      props.firebase.updatePlayerParticipation(match, user, true)
-                      sendNotification(user, match.uid)
-                    }}
-                    noassist={() => {
-                      props.firebase.updatePlayerParticipation(match, user, false)
-                      sendNotification(user, match.uid)
-                    }}
-                  />
-                </TouchableHighlight>
-              ))}
+              matches
+                .sort((a, b) => (moment(a.date) > moment(b.date) ? 1 : -1))
+                .filter(m => moment(m.date) > moment(new Date()))
+                .map((match, i) => (
+                  <TouchableHighlight
+                    key={i}
+                    onPress={() => props.navigation.navigate('MatchPage', { match })}
+                  >
+                    <MatchCard
+                      element={i}
+                      match={match}
+                      userUID={user.uid}
+                      assist={() => {
+                        props.firebase.updatePlayerParticipation(match, user, true)
+                        sendNotification(user, match.uid)
+                      }}
+                      noassist={() => {
+                        props.firebase.updatePlayerParticipation(match, user, false)
+                        sendNotification(user, match.uid)
+                      }}
+                    />
+                  </TouchableHighlight>
+                ))}
+            {matches && matches.filter(m => moment(m.date) < moment(new Date())).length > 0 && (
+              <Section
+                textStyle={{ fontSize: 12, textAlign: 'center', color: 'white' }}
+                customStyle={{
+                  backgroundColor: '#CC1034',
+                  borderRadius: 5,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: 5,
+                }}
+                title="Finalizados"
+              />
+            )}
+            {matches &&
+              matches
+                .sort((a, b) => (moment(a.date) > moment(b.date) ? 1 : -1))
+                .filter(m => moment(m.date) < moment(new Date()))
+                .map((match, i) => (
+                  <TouchableHighlight
+                    key={i}
+                    onPress={() => props.navigation.navigate('MatchPage', { match })}
+                  >
+                    <FinishedMatchCard match={match} />
+                  </TouchableHighlight>
+                ))}
           </View>
         </ScrollView>
       </View>

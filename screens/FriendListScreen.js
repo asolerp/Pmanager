@@ -19,6 +19,7 @@ import StatsDetail from '../components/StatsDetail'
 // Utils
 import 'firebase/auth'
 import 'firebase/firestore'
+import { isEmpty } from '../utils/validations'
 import { getLabelPostionByValue } from '../constants/Player'
 
 // Global Store
@@ -212,7 +213,7 @@ const FriendListScreen = props => {
         title={item.name}
         subtitle={
           <View style={styles.positionLabelContainer}>
-            {item.principalPosition && (
+            {!isEmpty(item.principalPosition) && (
               <PositionLabel position={getLabelPostionByValue(item.principalPosition)} />
             )}
           </View>

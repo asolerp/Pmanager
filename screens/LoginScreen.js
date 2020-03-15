@@ -3,13 +3,13 @@ import { KeyboardAvoidingView, StyleSheet, View, Text, TouchableOpacity } from '
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard'
-import FormInputSimple from '../components/form/FormInputSimple'
-import FormButton from '../components/form/FormButton'
-import ErrorMessage from '../components/form/ErrorMessage'
-import AppLogo from '../components/AppLogo'
+import FormInputSimple from '../components/Form/FormInputSimple'
+import FormButton from '../components/Form/FormButton'
+import ErrorMessage from '../components/Form/ErrorMessage'
+import AppLogo from '../components/AppLogo/AppLogo'
 import { withFirebaseHOC } from '../config/Firebase'
 
-import BlurBackground from '../components/BlurBackground'
+import BlurBackground from '../components/BlurBackground/BlurBackground'
 
 import Images from '../constants/Images'
 

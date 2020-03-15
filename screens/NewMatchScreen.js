@@ -8,13 +8,13 @@ import * as Yup from 'yup'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Ionicons } from '@expo/vector-icons'
 import { ListItem } from 'react-native-elements'
-import FormInputSimple from '../components/form/FormInputSimple'
+import FormInputSimple from '../components/Form/FormInputSimple'
 import PageBlank from '../components/PageBlank'
-import AvatarWithPicker from '../components/Avatar'
-import DatePicker from '../components/form/DatePicker'
-import Section from '../components/form/SectionTitle'
+import AvatarWithPicker from '../components/Avatar/Avatar'
+import DatePicker from '../components/Form/DatePicker'
+import Section from '../components/Form/SectionTitle'
 import PositionLabel from '../components/PositionLabel'
-import FormButton from '../components/form/FormButton'
+import FormButton from '../components/Form/FormButton'
 
 // API
 import subscribeUserData from '../hooks/subscribeUserData'
@@ -26,6 +26,7 @@ import FriendListScreen from './FriendListScreen'
 // UTILS
 import { getLabelPostionByValue } from '../constants/Player'
 import { FORMATION_1 } from '../constants/Formations'
+import { isEmpty } from '../utils/validations'
 
 const styles = StyleSheet.create({
   container: {
@@ -319,9 +320,11 @@ function NewMatchScreen(props) {
                                 alignItems: 'flex-start',
                               }}
                             >
-                              <PositionLabel
-                                position={getLabelPostionByValue(splayer.principalPosition)}
-                              />
+                              {!isEmpty(splayer.principalPosition) && (
+                                <PositionLabel
+                                  position={getLabelPostionByValue(splayer.principalPosition)}
+                                />
+                              )}
                             </View>
                           }
                           rightElement={

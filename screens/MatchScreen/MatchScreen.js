@@ -1,95 +1,29 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Animated,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Image,
-  Modal,
-} from 'react-native'
+import { Animated, ScrollView, TouchableOpacity, View, Image, Modal } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { createDndContext } from 'react-native-easy-dnd'
 import Reactotron from 'reactotron-react-native'
-import Images from '../constants/Images'
+import Images from '../../constants/Images'
+import Styles from './Styles'
 
 // UI
-import PageBlank from '../components/PageBlank'
-import AvatarWithPicker from '../components/Avatar/Avatar'
-import { getLabelPostionByValue } from '../constants/Player'
-import PlayerDrag from '../components/PlayerDrag'
-import FormButton from '../components/Form/FormButton'
-import Section from '../components/Form/SectionTitle'
-import Card from '../components/Card/Card'
-import TextC from '../components/customContainers/TextC'
-import PlayerDetail from '../components/PlayerDetail'
+import PageBlank from '../../components/PageBlank'
+import AvatarWithPicker from '../../components/Avatar/Avatar'
+import { getLabelPostionByValue } from '../../constants/Player'
+import PlayerDrag from '../../components/PlayerDrag'
+import FormButton from '../../components/Form/FormButton'
+import Section from '../../components/Form/SectionTitle'
+import Card from '../../components/Card/Card'
+import TextC from '../../components/customContainers/TextC'
+import PlayerDetail from '../../components/PlayerDetail'
 
 // API
-import { withFirebaseHOC } from '../config/Firebase'
-import subscribeUserData from '../hooks/subscribeUserData'
+import { withFirebaseHOC } from '../../config/Firebase'
+import subscribeUserData from '../../hooks/subscribeUserData'
 
 // PAGES
-import FriendListScreen from './FriendListScreen'
-import FloatingButton from '../components/FloatingButton/FloatingButton'
-
-const styles = StyleSheet.create({
-  scoreContainer: {
-    position: 'absolute',
-    left: 193 - 25 - 2.5,
-    top: -10,
-    zIndex: 10,
-    flexDirection: 'row',
-  },
-  score: {
-    width: 25,
-    height: 50,
-    borderRadius: 3,
-    marginRight: 5,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#aaaaaa',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.29,
-    shadowRadius: 4.65,
-    elevation: 7,
-  },
-  avatar: {
-    borderWidth: 2,
-    shadowColor: '#aaaaaa',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.29,
-    shadowRadius: 4.65,
-    elevation: 7,
-  },
-  avatarText: {
-    color: 'white',
-    width: '100%',
-    backgroundColor: 'black',
-    fontSize: 12,
-    paddingHorizontal: 5,
-    paddingVertical: 1,
-    marginTop: 5,
-    borderRadius: 5,
-    height: 20,
-  },
-  emptyPlayer: {
-    width: 40,
-    height: 40,
-    borderStyle: 'dashed',
-    borderColor: 'black',
-    borderWidth: 2,
-    borderRadius: 100,
-    backgroundColor: 'rgba(127, 127, 127, 0.4)',
-    zIndex: 0,
-  },
-})
+import FriendListScreen from '../FriendListScreen'
+import FloatingButton from '../../components/FloatingButton/FloatingButton'
 
 const cleanPosition = {
   imgProfile: 'https://cdn4.iconfinder.com/data/icons/game-10/22/player-profile-512.png',
@@ -116,7 +50,12 @@ const MatchScreen = props => {
     setIsSubmitting(true)
     try {
       await props.firebase.updateDB(
-        { ...match, admins: admins.map(a => ({ uid: a.uid, imgProfile: a.imgProfile })) },
+        {
+          ...match,
+          admins: admins.map(a => ({ uid: a.uid, imgProfile: a.imgProfile })),
+          players: selectedPlayers,
+          playersUID: [...selectedPlayers.map(sp => sp.uid)],
+        },
         'matches',
         match.uid
       )
@@ -159,7 +98,7 @@ const MatchScreen = props => {
                     key={`${position}_remove_banquillo_${team}`}
                     rounded
                     containerStyle={[
-                      styles.avatar,
+                      Styles.avatar,
                       {
                         borderColor: getLabelPostionByValue(team['4'][position].principalPosition)
                           .color,
@@ -172,7 +111,7 @@ const MatchScreen = props => {
                     }}
                   />
                 </TouchableOpacity>
-                <TextC textAlignVertical="center" style={styles.avatarText}>
+                <TextC textAlignVertical="center" style={Styles.avatarText}>
                   {team['4'][position].name}
                 </TextC>
               </View>
@@ -200,7 +139,7 @@ const MatchScreen = props => {
                   return (
                     <Animated.View key={`${position.substring(2)}_456`} {...viewProps}>
                       <View style={{ alignItems: 'center' }}>
-                        <View style={styles.emptyPlayer} />
+                        <View style={Styles.emptyPlayer} />
                         <TextC>{position.substring(2)}</TextC>
                       </View>
                     </Animated.View>
@@ -257,7 +196,7 @@ const MatchScreen = props => {
                             key={`${position}_droppable_123`}
                             rounded
                             containerStyle={[
-                              styles.avatar,
+                              Styles.avatar,
                               {
                                 borderColor: getLabelPostionByValue(
                                   team[line][position].principalPosition
@@ -271,7 +210,7 @@ const MatchScreen = props => {
                             }}
                           />
                         </TouchableOpacity>
-                        <TextC textAlignVertical="center" style={styles.avatarText}>
+                        <TextC textAlignVertical="center" style={Styles.avatarText}>
                           {team[line][position].name}
                         </TextC>
                       </View>
@@ -299,7 +238,7 @@ const MatchScreen = props => {
                           return (
                             <Animated.View key={`${position.substring(2)}_654`} {...viewProps}>
                               <View style={{ alignItems: 'center' }}>
-                                <View style={styles.emptyPlayer} />
+                                <View style={Styles.emptyPlayer} />
                                 <TextC>{position.substring(2)}</TextC>
                               </View>
                             </Animated.View>
@@ -387,19 +326,21 @@ const MatchScreen = props => {
           }}
         />
       </Modal>
-      <FloatingButton
-        page="NewMatch"
-        containerStyle={{ backgroundColor: '#072357' }}
-        iconColor="white"
-        iconName="user-circle-o"
-        iconType="font-awesome"
-        handleClick={() => {
-          setActiveModal(true)
-          setMode('players')
-          setSelector(() => setSelectedPlayers)
-          setContainer(selectedPlayers)
-        }}
-      />
+      {admin && (
+        <FloatingButton
+          page="NewMatch"
+          containerStyle={{ backgroundColor: '#072357' }}
+          iconColor="white"
+          iconName="user-circle-o"
+          iconType="font-awesome"
+          handleClick={() => {
+            setActiveModal(true)
+            setMode('players')
+            setSelector(() => setSelectedPlayers)
+            setContainer(selectedPlayers)
+          }}
+        />
+      )}
       <Provider>
         <PageBlank
           title={match && match.name}
@@ -650,16 +591,18 @@ const MatchScreen = props => {
                     ))}
                   </View>
                 </Card>
-                <FormButton
-                  onPress={handleSubmit}
-                  style={{
-                    backgroundColor: 'transparent',
-                  }}
-                  title="Guardar"
-                  buttonColor="black"
-                  // disabled={!isValid}
-                  loading={isSubmitting}
-                />
+                {admin && (
+                  <FormButton
+                    onPress={handleSubmit}
+                    style={{
+                      backgroundColor: 'transparent',
+                    }}
+                    title="Guardar"
+                    buttonColor="black"
+                    // disabled={!isValid}
+                    loading={isSubmitting}
+                  />
+                )}
               </View>
             </ScrollView>
           )}
