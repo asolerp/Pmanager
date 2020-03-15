@@ -1,89 +1,10 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen'
+import { TouchableOpacity, View } from 'react-native'
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 import { Icon, Image } from 'react-native-elements'
-import TextC from './customContainers/TextC'
-
-const styles = StyleSheet.create({
-  container: {
-    height: hp('25%'),
-    backgroundColor: 'white',
-    borderRadius: 5,
-    marginBottom: 5,
-  },
-  cardMatch: {
-    shadowColor: '#aaaaaa',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.29,
-    shadowRadius: 4.65,
-    elevation: 7,
-  },
-  topSection: {
-    flex: 5,
-    flexDirection: 'row',
-  },
-  bottomSection: {
-    flex: 1,
-    flexDirection: 'row',
-    paddingVertical: 5,
-    justifyContent: 'space-around',
-  },
-  bottomItem: {
-    width: wp('22%'),
-    height: hp('4%'),
-    borderColor: '#f2f2f2',
-    borderRadius: 5,
-    borderWidth: 1,
-    padding: 5,
-  },
-  bottomAssistActive: {
-    backgroundColor: '#8eea75',
-  },
-  bottomAssist: {
-    backgroundColor: '#4eaa4c',
-  },
-  bottomNoAssistActive: {
-    backgroundColor: '#ed7474',
-  },
-  bottomNoAssist: {
-    backgroundColor: '#CC1034',
-  },
-  // bottomNoAssist:  {
-
-  // },
-  imageContainer: {
-    flex: 1.3,
-    padding: 5,
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 5,
-  },
-  infoContainer: {
-    flex: 2,
-    justifyContent: 'space-between',
-    padding: 10,
-  },
-  topInfo: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 15,
-  },
-  dateTimeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignContent: 'center',
-  },
-})
+import TextC from '../customContainers/TextC'
+import Styles from './Styles'
 
 const BottomItem = ({ texto, color = 'white' }) => {
   return (
@@ -103,18 +24,9 @@ const BottomItem = ({ texto, color = 'white' }) => {
 
 const MatchCard = ({ match, userUID, assist, noassist, element }) => {
   return (
-    <View
-      style={[
-        styles.container,
-        styles.cardMatch,
-        element === 0 && { marginTop: 100 },
-        // match.participation[userUID]
-        //   ? { backgroundColor: 'rgba(124, 173, 139, .5)' }
-        //   : { backgroundColor: 'rgba(211, 122, 122, .5)' },
-      ]}
-    >
-      <View style={styles.topSection}>
-        <View style={styles.imageContainer}>
+    <View style={[Styles.container, Styles.cardMatch, element === 0 && { marginTop: 100 }]}>
+      <View style={Styles.topSection}>
+        <View style={Styles.imageContainer}>
           <Image
             style={{ width: '100%', height: '100%', borderRadius: 5 }}
             source={{
@@ -122,14 +34,14 @@ const MatchCard = ({ match, userUID, assist, noassist, element }) => {
             }}
           />
         </View>
-        <View style={styles.infoContainer}>
-          <View style={styles.topInfo}>
-            <TextC style={styles.title}>{match.name}</TextC>
+        <View style={Styles.infoContainer}>
+          <View style={Styles.topInfo}>
+            <TextC style={Styles.title}>{match.name}</TextC>
             <TextC>{match.description}</TextC>
             <TextC>{match.place}</TextC>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <View style={[styles.dateTimeContainer, { marginRight: 10 }]}>
+            <View style={[Styles.dateTimeContainer, { marginRight: 10 }]}>
               <Icon
                 iconStyle={{ marginRight: 5 }}
                 name="calendar"
@@ -139,7 +51,7 @@ const MatchCard = ({ match, userUID, assist, noassist, element }) => {
               />
               <TextC>{match.date}</TextC>
             </View>
-            <View style={styles.dateTimeContainer}>
+            <View style={Styles.dateTimeContainer}>
               <Icon
                 iconStyle={{ marginRight: 5 }}
                 name="clock-o"
@@ -152,10 +64,10 @@ const MatchCard = ({ match, userUID, assist, noassist, element }) => {
           </View>
         </View>
       </View>
-      <View style={styles.bottomSection}>
+      <View style={Styles.bottomSection}>
         <View
           style={[
-            styles.bottomItem,
+            Styles.bottomItem,
             { backgroundColor: '#4eaa4c', justifyContent: 'center', alignItems: 'center' },
           ]}
         >
@@ -164,8 +76,8 @@ const MatchCard = ({ match, userUID, assist, noassist, element }) => {
         <TouchableOpacity onPress={() => assist()}>
           <View
             style={[
-              styles.bottomItem,
-              match.participation[userUID] ? styles.bottomAssist : styles.bottomAssistActive,
+              Styles.bottomItem,
+              match.participation[userUID] ? Styles.bottomAssist : Styles.bottomAssistActive,
               { justifyContent: 'center', alignItems: 'center' },
             ]}
           >
@@ -177,8 +89,8 @@ const MatchCard = ({ match, userUID, assist, noassist, element }) => {
         <TouchableOpacity onPress={() => noassist()}>
           <View
             style={[
-              styles.bottomItem,
-              !match.participation[userUID] ? styles.bottomNoAssist : styles.bottomNoAssistActive,
+              Styles.bottomItem,
+              !match.participation[userUID] ? Styles.bottomNoAssist : Styles.bottomNoAssistActive,
 
               { justifyContent: 'center', alignItems: 'center' },
             ]}
@@ -190,7 +102,7 @@ const MatchCard = ({ match, userUID, assist, noassist, element }) => {
         </TouchableOpacity>
         <View
           style={[
-            styles.bottomItem,
+            Styles.bottomItem,
             { backgroundColor: '#CC1034', justifyContent: 'center', alignItems: 'center' },
           ]}
         >

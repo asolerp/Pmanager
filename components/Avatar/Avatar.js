@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal, TouchableOpacity, Text } from 'react-native'
+import { Modal, TouchableOpacity } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { Avatar } from 'react-native-elements'
 import ImageViewer from 'react-native-image-zoom-viewer'

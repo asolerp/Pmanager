@@ -15,12 +15,12 @@ import Images from '../constants/Images'
 
 // UI
 import PageBlank from '../components/PageBlank'
-import AvatarWithPicker from '../components/Avatar'
+import AvatarWithPicker from '../components/Avatar/Avatar'
 import { getLabelPostionByValue } from '../constants/Player'
 import PlayerDrag from '../components/PlayerDrag'
-import FormButton from '../components/form/FormButton'
-import Section from '../components/form/SectionTitle'
-import Card from '../components/Card'
+import FormButton from '../components/Form/FormButton'
+import Section from '../components/Form/SectionTitle'
+import Card from '../components/Card/Card'
 import TextC from '../components/customContainers/TextC'
 import PlayerDetail from '../components/PlayerDetail'
 
@@ -30,7 +30,7 @@ import subscribeUserData from '../hooks/subscribeUserData'
 
 // PAGES
 import FriendListScreen from './FriendListScreen'
-import FloatingButton from '../components/FloatingButton'
+import FloatingButton from '../components/FloatingButton/FloatingButton'
 
 const styles = StyleSheet.create({
   scoreContainer: {

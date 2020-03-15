@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import { getLabelPostionByValue } from '../constants/Player'
 
 // UI
-import AvatarWithPicker from './Avatar'
+import AvatarWithPicker from './Avatar/Avatar'
 import PositionLabel from './PositionLabel'
 import TextC from './customContainers/TextC'
 
