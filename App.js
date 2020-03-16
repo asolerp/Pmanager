@@ -60,6 +60,7 @@ function App(props) {
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
         'montserrat-regular': require('./assets/fonts/Montserrat-Regular.ttf'),
         'montserrat-light': require('./assets/fonts/Montserrat-ExtraLight.ttf'),
+        digit: require('./assets/fonts/digital-7.ttf'),
       }),
       getPermissionAsync(),
     ])

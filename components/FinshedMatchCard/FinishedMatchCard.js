@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { Image } from 'react-native-elements'
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import TextC from '../customContainers/TextC'
@@ -8,6 +8,7 @@ const Styles = StyleSheet.create({
   mainContainer: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
     backgroundColor: 'white',
     borderRadius: 5,
     marginBottom: 5,
@@ -27,6 +28,18 @@ const Styles = StyleSheet.create({
   textContainer: {
     flex: 4,
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  scoreContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  scoreStyle: {
+    fontSize: 40,
+    fontFamily: 'digit',
   },
 })
 
@@ -44,7 +57,11 @@ const FinishedMatchCard = ({ match }) => {
       <View style={Styles.textContainer}>
         <TextC>{match.name}</TextC>
       </View>
-      <View />
+      <View style={Styles.scoreContainer}>
+        <Text style={Styles.scoreStyle}>2</Text>
+        <Text style={Styles.scoreStyle}>:</Text>
+        <Text style={Styles.scoreStyle}>0</Text>
+      </View>
     </View>
   )
 }
