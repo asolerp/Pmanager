@@ -48,13 +48,33 @@ const MatchScreen = props => {
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
+
+    const filteredParticipation = Object.keys(match.participation)
+      .filter(key => match.playersUID.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = match.participation[key]
+        return obj
+      }, {})
+
+    const merged = []
+
+    for (let i = 0; i < selectedPlayers.length; i++) {
+      merged.push({
+        ...selectedPlayers[i],
+        ...match.players.find(itmInner => itmInner.uid === selectedPlayers[i].uid),
+      })
+    }
+
     try {
       await props.firebase.updateDB(
         {
           ...match,
           admins: admins.map(a => ({ uid: a.uid, imgProfile: a.imgProfile })),
-          players: selectedPlayers,
-          playersUID: [...selectedPlayers.map(sp => sp.uid)],
+          players: merged,
+          teamA: match.teamA,
+          teamB: match.teamB,
+          participation: filteredParticipation,
+          playersUID: [...merged.map(sp => sp.uid)],
         },
         'matches',
         match.uid
@@ -64,6 +84,19 @@ const MatchScreen = props => {
       Reactotron.log(err)
     }
     setIsSubmitting(false)
+  }
+
+  const cleanField = (team, teamName, line, position) => {
+    const player = match.players.find(mp => mp.uid === team[line][position].uid)
+    if (player) {
+      return true
+    }
+    match[teamName][line][position] = {
+      imgProfile: 'https://cdn4.iconfinder.com/data/icons/game-10/22/player-profile-512.png',
+      name: 'Pmanager',
+      order: 1,
+    }
+    return false
   }
 
   const generateBanquillo = (team, teamName) => {
@@ -169,7 +202,7 @@ const MatchScreen = props => {
               >
                 {Object.keys(team[line]).map(position => (
                   <React.Fragment key={`${position}_123`}>
-                    {team[line][position].filled ? (
+                    {cleanField(team, teamName, line, position) && team[line][position].filled ? (
                       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                         <TouchableOpacity
                           onPress={() => {
@@ -372,14 +405,6 @@ const MatchScreen = props => {
                     {match && (
                       <>
                         <View style={{ flexDirection: 'row', height: 300 }}>
-                          {/* <View style={styles.scoreContainer}>
-                                <View style={styles.score}>
-                                  <TextC>0</TextC>
-                                </View>
-                                <View style={styles.score}>
-                                  <TextC>0</TextC>
-                                </View>
-                              </View> */}
                           <Formacion key="teamA_123" team={match.teamA} teamName="teamA" />
                           <Formacion key="teamB_321" team={match.teamB} teamName="teamB" reverse />
                           <Image
